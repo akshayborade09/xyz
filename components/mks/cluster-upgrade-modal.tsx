@@ -20,21 +20,19 @@ export function ClusterUpgradeModal({ cluster, isOpen, onClose, onConfirm }: Clu
   const [showScrollIndicator, setShowScrollIndicator] = useState(false)
   const scrollRef = useRef<HTMLDivElement>(null)
   
-  if (!cluster) return null
-  
-  const nextVersion = getNextK8sVersion(cluster.k8sVersion)
+  const nextVersion = cluster ? getNextK8sVersion(cluster.k8sVersion) : null
   const canUpgrade = nextVersion !== null
-  const isLatestVersion = cluster.k8sVersion === '1.33.0'
+  const isLatestVersion = cluster?.k8sVersion === '1.33.0'
   
   // Get enabled add-ons and their upgrade information
-  const enabledAddons = cluster.addOns.filter(addon => addon.isEnabled)
+  const enabledAddons = cluster ? cluster.addOns.filter(addon => addon.isEnabled) : []
   const addonUpgrades = enabledAddons.map(addon => ({
     addon,
     nextVersion: getNextAddonVersion(addon.id, addon.version)
   })).filter(upgrade => upgrade.nextVersion !== null)
   
   const handleUpgrade = async () => {
-    if (!nextVersion) return
+    if (!nextVersion || !cluster) return
     
     setIsUpgrading(true)
     try {
@@ -60,6 +58,8 @@ export function ClusterUpgradeModal({ cluster, isOpen, onClose, onConfirm }: Clu
       setShowScrollIndicator(scrollHeight > clientHeight)
     }
   }, [isOpen, cluster])
+
+  if (!cluster) return null
   
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
