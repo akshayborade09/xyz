@@ -43,87 +43,41 @@ export function ScriptsTagsSection({
 }: ScriptsTagsSectionProps) {
   return (
     <>
-      {/* SSH Key & Startup Script */}
+      {/* SSH Key */}
       <div className="space-y-4">
-        <Label className="text-base font-medium">SSH Key & Startup Script</Label>
-        <div className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="sshKey">Select SSH Key</Label>
-            <Select value={sshKey} onValueChange={onUpdateSshKey}>
-              <SelectTrigger>
-                <SelectValue placeholder="Choose SSH key" />
-              </SelectTrigger>
-              <SelectContent>
-                {sshKeys.map(key => (
-                  <SelectItem key={key.value} value={key.value}>
-                    {key.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="startupScript">
-              Startup Script
-              <TooltipWrapper content="Only bash format is supported. Script will run on first boot.">
-                <HelpCircle className="h-4 w-4 ml-1 text-muted-foreground" />
-              </TooltipWrapper>
-            </Label>
-            <Textarea
-              id="startupScript"
-              placeholder="#!/bin/bash&#10;# Your startup script here..."
-              value={startupScript}
-              onChange={(e) => onUpdateStartupScript(e.target.value)}
-              rows={6}
-            />
-            <p className="text-xs text-muted-foreground">
-              Only bash format is supported. Script will run on first boot.
-            </p>
-          </div>
+        <div className="space-y-2">
+          <Label htmlFor="sshKey">
+            SSH Key <span className="text-red-500">*</span>
+          </Label>
+          <Select value={sshKey} onValueChange={onUpdateSshKey}>
+            <SelectTrigger>
+              <SelectValue placeholder="Select SSH Key to securely access your VMs" />
+            </SelectTrigger>
+            <SelectContent>
+              {sshKeys.map(key => (
+                <SelectItem key={key.value} value={key.value}>
+                  {key.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
       </div>
 
-      {/* Tags */}
+      {/* Startup Script */}
       <div className="space-y-4">
-        <Label className="text-base font-medium">Tags</Label>
-        <div className="space-y-3">
-          {tags.map((tag, index) => (
-            <div key={index} className="grid grid-cols-2 gap-3">
-              <Input
-                placeholder="Key"
-                value={tag.key}
-                onChange={(e) => onUpdateTag(index, 'key', e.target.value)}
-              />
-              <div className="flex gap-2">
-                <Input
-                  placeholder="Value"
-                  value={tag.value}
-                  onChange={(e) => onUpdateTag(index, 'value', e.target.value)}
-                />
-                {index === tags.length - 1 ? (
-                  <Button 
-                    type="button" 
-                    variant="outline" 
-                    size="sm"
-                    onClick={onAddTag}
-                  >
-                    Add
-                  </Button>
-                ) : (
-                  <Button 
-                    type="button" 
-                    variant="outline" 
-                    size="sm"
-                    onClick={() => onRemoveTag(index)}
-                    className="px-2"
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                )}
-              </div>
-            </div>
-          ))}
+        <div className="space-y-2">
+          <Label htmlFor="startupScript">Startup Script</Label>
+          <Textarea
+            id="startupScript"
+            placeholder="#!/bin/bash&#10;# Enter your bash script here"
+            value={startupScript}
+            onChange={(e) => onUpdateStartupScript(e.target.value)}
+            rows={6}
+          />
+          <p className="text-xs text-muted-foreground">
+            Only bash format is supported. Script will run on first boot.
+          </p>
         </div>
       </div>
     </>

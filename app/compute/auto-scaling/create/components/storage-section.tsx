@@ -50,7 +50,12 @@ export function StorageSection({
     <>
       {/* Bootable Volume */}
       <div className="space-y-4">
-        <Label className="text-base font-medium">Bootable Volume</Label>
+        <div className="flex items-center gap-2">
+          <Label className="text-base font-medium">Create a new bootable volume</Label>
+          <div className="w-4 h-4 bg-gray-200 rounded-full flex items-center justify-center">
+            <div className="w-2 h-2 bg-gray-400 rounded-full"></div>
+          </div>
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="space-y-2">
             <Label htmlFor="bootVolumeName">
@@ -58,7 +63,7 @@ export function StorageSection({
             </Label>
             <Input
               id="bootVolumeName"
-              placeholder="Enter boot volume name"
+              placeholder="Enter bootable volume name"
               value={bootVolumeName}
               onChange={(e) => onUpdateBootVolumeName(e.target.value)}
             />
@@ -77,10 +82,12 @@ export function StorageSection({
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="machineImage">Select Machine Image</Label>
+            <Label htmlFor="machineImage">
+              Machine Image <span className="text-red-500">*</span>
+            </Label>
             <Select value={machineImage} onValueChange={onUpdateMachineImage}>
               <SelectTrigger>
-                <SelectValue placeholder="Choose machine image" />
+                <SelectValue placeholder="Select machine image" />
               </SelectTrigger>
               <SelectContent>
                 {machineImages.map(image => (
@@ -94,20 +101,29 @@ export function StorageSection({
         </div>
       </div>
 
-      {/* Add Storage Volumes */}
+      {/* Storage Volumes */}
       <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <Label className="text-base font-medium">Add Storage Volumes</Label>
-          <Button size="sm" onClick={onAddStorageVolume} variant="outline">
-            <Plus className="h-4 w-4 mr-2" />
-            Add Volume
-          </Button>
+        <div>
+          <Label className="text-base font-medium">Storage Volumes</Label>
+          <p className="text-sm text-muted-foreground mt-1">
+            Configure additional storage volumes for your instances.
+          </p>
         </div>
         <div>
           {storageVolumes.length === 0 ? (
-            <p className="text-sm text-muted-foreground text-center py-4">
-              No additional storage volumes added. Click "Add Volume" to add storage.
-            </p>
+            <div className="flex flex-col items-center justify-center py-8 border border-gray-200 rounded-lg bg-gray-50">
+              <div className="w-12 h-12 bg-gray-200 rounded-lg flex items-center justify-center mb-4">
+                <div className="w-6 h-6 bg-gray-400 rounded"></div>
+                <div className="w-6 h-6 bg-gray-400 rounded -ml-2"></div>
+              </div>
+              <p className="text-sm text-muted-foreground text-center mb-4">
+                No storage volumes configured yet. Add your first storage volume to provide additional storage.
+              </p>
+              <Button size="sm" onClick={onAddStorageVolume} variant="outline">
+                <Plus className="h-4 w-4 mr-2" />
+                Add Storage Volume
+              </Button>
+            </div>
           ) : (
             <div className="space-y-4">
               {storageVolumes.map((volume, index) => (

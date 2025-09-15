@@ -31,23 +31,27 @@ export function ScalingPoliciesSection({
 }: ScalingPoliciesSectionProps) {
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <div>
-          <Label className="text-base font-medium">Auto Scaling Policies</Label>
-          <p className="text-sm text-muted-foreground mt-1">
-            Configure auto-scaling policies for CPU, memory, and scheduled actions. You can have one policy of each type (CPU, Memory, Scheduled).
-          </p>
-        </div>
-        <Button size="sm" onClick={onAddScalingPolicy} variant="outline">
-          <Plus className="h-4 w-4 mr-2" />
-          Add Policy
-        </Button>
+      <div>
+        <Label className="text-base font-medium">Auto Scaling Policies</Label>
+        <p className="text-sm text-muted-foreground mt-1">
+          Configure auto-scaling policies for CPU, memory, and scheduled actions. You can have one policy of each type (CPU, Memory, Scheduled).
+        </p>
       </div>
       <div>
         {scalingPolicies.length === 0 ? (
-          <p className="text-sm text-muted-foreground text-center py-4">
-            No scaling policies configured. Click "Add Policy" to create a policy.
-          </p>
+          <div className="flex flex-col items-center justify-center py-8 border border-gray-200 rounded-lg bg-gray-50">
+            <div className="w-12 h-12 bg-gray-200 rounded-lg flex items-center justify-center mb-4">
+              <div className="w-6 h-6 bg-gray-400 rounded"></div>
+              <div className="w-4 h-4 bg-gray-500 rounded -ml-1 mt-1"></div>
+            </div>
+            <p className="text-sm text-muted-foreground text-center mb-4">
+              No auto-scaling policies configured yet. Add your first policy to enable automatic scaling.
+            </p>
+            <Button size="sm" onClick={onAddScalingPolicy} variant="outline">
+              <Plus className="h-4 w-4 mr-2" />
+              Add Policy
+            </Button>
+          </div>
         ) : (
           <div className="space-y-6">
             {scalingPolicies.map((policy, index) => (

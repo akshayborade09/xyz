@@ -424,16 +424,16 @@ export default function CreateAutoScalingGroupPage() {
         <div className="flex-1">
           <Card>
             <CardContent className="space-y-6 pt-6">
-              {/* Basic Information */}
+              {/* ASG Configuration */}
               <div className="space-y-4">
-                <Label className="text-base font-medium">Basic Information</Label>
+                <Label className="text-base font-medium">ASG Configuration</Label>
                 <div className="space-y-2">
                   <Label htmlFor="asgName">
                     ASG Name <span className="text-red-500">*</span>
                   </Label>
                   <Input
                     id="asgName"
-                    placeholder="Enter Auto Scaling Group name"
+                    placeholder="Enter ASG name"
                     value={formData.asgName}
                     onChange={(e) => handleInputChange("asgName", e.target.value)}
                   />
@@ -448,11 +448,11 @@ export default function CreateAutoScalingGroupPage() {
                   >
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="scratch" id="scratch" />
-                      <Label htmlFor="scratch">From Scratch</Label>
+                      <Label htmlFor="scratch">From scratch</Label>
                     </div>
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="template" id="template" />
-                      <Label htmlFor="template">Use Template</Label>
+                      <Label htmlFor="template">Use template</Label>
                     </div>
                   </RadioGroup>
                 </div>
@@ -481,237 +481,126 @@ export default function CreateAutoScalingGroupPage() {
               {/* Network Configuration */}
               <div className="space-y-4">
                 <Label className="text-base font-medium">Network Configuration</Label>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="region">
+                      Region <span className="text-red-500">*</span>
+                    </Label>
+                    <Select value={formData.region} onValueChange={(value) => handleInputChange("region", value)}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select region" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {regions.map(region => (
+                          <SelectItem key={region.value} value={region.value}>
+                            {region.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="vpc">
+                      VPC <span className="text-red-500">*</span>
+                    </Label>
+                    <div className="relative" ref={vpcSelectorRef}>
+                      <button
+                        type="button"
+                        onClick={() => setVpcSelectorOpen(!vpcSelectorOpen)}
+                        className={`w-full flex items-center justify-between px-3 py-2 border border-input rounded-md text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 ${
+                          formTouched && !formData.vpc ? 'border-red-300 bg-red-50' : 'bg-background'
+                        }`}
+                      >
+                        <span className={selectedVPC ? "text-foreground" : "!text-[#64748b]"}>
+                          {selectedVPC ? `${selectedVPC.name} (${selectedVPC.region})` : "Select region first"}
+                        </span>
+                        <ChevronDown className="h-4 w-4 opacity-50" />
+                      </button>
+                      {vpcSelectorOpen && (
+                        <div className="absolute z-50 w-full mt-1 bg-popover border border-border rounded-md shadow-md">
+                          <div className="p-2 border-b">
+                            <div className="relative">
+                              <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+                              <Input
+                                placeholder="Search VPCs..."
+                                value={vpcSearchTerm}
+                                onChange={(e) => setVpcSearchTerm(e.target.value)}
+                                className="pl-8"
+                              />
+                            </div>
+                          </div>
+                          <div className="p-1">
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setShowCreateVPCModal(true)
+                                setVpcSelectorOpen(false)
+                              }}
+                              className="w-full flex items-center px-2 py-2 text-sm hover:bg-accent hover:text-accent-foreground rounded-sm text-primary font-medium"
+                            >
+                              Create new VPC
+                            </button>
+                            {filteredVPCs.map((vpc) => (
+                              <button
+                                key={vpc.id}
+                                type="button"
+                                onClick={() => {
+                                  handleInputChange("vpc", vpc.id)
+                                  handleInputChange("subnets", []) // Reset subnets when VPC changes
+                                  handleInputChange("securityGroups", []) // Reset security groups when VPC changes
+                                  setVpcSelectorOpen(false)
+                                  setVpcSearchTerm("")
+                                }}
+                                className="w-full flex items-center justify-between px-2 py-2 text-sm hover:bg-accent hover:text-accent-foreground rounded-sm"
+                              >
+                                <div className="flex flex-col items-start">
+                                  <span className="font-medium">{vpc.name}</span>
+                                  <span className="text-xs text-muted-foreground">{vpc.id} • {vpc.region}</span>
+                                </div>
+                                {formData.vpc === vpc.id && <Check className="h-4 w-4" />}
+                              </button>
+                            ))}
+                            {filteredVPCs.length === 0 && vpcSearchTerm && (
+                              <div className="px-2 py-2 text-sm text-muted-foreground">
+                                No VPCs found matching "{vpcSearchTerm}"
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
                 <div className="space-y-2">
-                  <Label htmlFor="region">
-                    Region <span className="text-red-500">*</span>
+                  <Label htmlFor="subnet">
+                    Subnet <span className="text-red-500">*</span>
                   </Label>
-                  <Select value={formData.region} onValueChange={(value) => handleInputChange("region", value)}>
+                  <Select 
+                    value={formData.subnets[0] || ""} 
+                    onValueChange={(value) => handleInputChange("subnets", [value])}
+                    disabled={!formData.vpc}
+                  >
                     <SelectTrigger>
-                      <SelectValue placeholder="Select region" />
+                      <SelectValue placeholder={formData.vpc ? "Select VPC first" : "Select VPC first"} />
                     </SelectTrigger>
                     <SelectContent>
-                      {regions.map(region => (
-                        <SelectItem key={region.value} value={region.value}>
-                          {region.label}
+                      {availableSubnets.map(subnet => (
+                        <SelectItem key={subnet.id} value={subnet.id}>
+                          {subnet.name} ({subnet.type})
                         </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
-
-                  {/* Region Availability Display */}
-                  {formData.region && regionAvailability[formData.region as keyof typeof regionAvailability] && (
-                    <div className="mt-3 p-3 bg-white border border-gray-200 rounded-lg shadow-sm">
-                      <div className="flex items-center justify-between mb-2">
-                        <h4 className="text-xs text-gray-900">
-                          Resource Availability
-                        </h4>
-                        <span className="text-xs text-gray-500">
-                          {regionAvailability[formData.region as keyof typeof regionAvailability].name}
-                        </span>
-                      </div>
-                      <div className="space-y-2">
-                        {regionAvailability[formData.region as keyof typeof regionAvailability].resources.map((resource, index) => (
-                          <div key={index} className="flex items-center justify-between">
-                            <span className="text-xs text-gray-700">
-                              {resource.type}
-                            </span>
-                            <div className="flex items-center gap-0.5">
-                              {getAvailabilityBars(resource.availability)}
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                      <div className="mt-2 pt-2 border-t border-gray-100">
-                        <div className="flex items-center justify-between text-xs text-gray-500">
-                          <div className="flex items-center gap-3">
-                            <div className="flex items-center gap-1">
-                              <div className="h-1.5 w-1.5 bg-green-500 rounded-sm"></div>
-                              <span>High</span>
-                            </div>
-                            <div className="flex items-center gap-1">
-                              <div className="h-1.5 w-1.5 bg-yellow-500 rounded-sm"></div>
-                              <span>Medium</span>
-                            </div>
-                            <div className="flex items-center gap-1">
-                              <div className="h-1.5 w-1.5 bg-gray-400 rounded-sm"></div>
-                              <span>Low</span>
-                            </div>
-                          </div>
-                          <span>Updated 5 min ago</span>
-                        </div>
-                      </div>
-                    </div>
-                  )}
                 </div>
 
-                {/* VPC Selector */}
                 <div className="space-y-2">
-                  <div className="flex items-center gap-2">
-                    <Label className="block mb-2 font-medium">
-                      VPC <span className="text-red-500">*</span>
-                    </Label>
-                    <TooltipWrapper 
-                      content="Select the Virtual Private Cloud where your Auto Scaling Group will be deployed. This determines the network scope and security boundaries."
-                    >
-                      <HelpCircle className="h-4 w-4 text-muted-foreground hover:text-foreground cursor-help" />
-                    </TooltipWrapper>
-                  </div>
-                  <div className="relative" ref={vpcSelectorRef}>
-                    <button
-                      type="button"
-                      onClick={() => setVpcSelectorOpen(!vpcSelectorOpen)}
-                      className={`w-full flex items-center justify-between px-3 py-2 border border-input rounded-md text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 ${
-                        formTouched && !formData.vpc ? 'border-red-300 bg-red-50' : 'bg-background'
-                      }`}
-                    >
-                      <span className={selectedVPC ? "text-foreground" : "!text-[#64748b]"}>
-                        {selectedVPC ? `${selectedVPC.name} (${selectedVPC.region})` : "Select VPC to isolate your Auto Scaling Group"}
-                      </span>
-                      <ChevronDown className="h-4 w-4 opacity-50" />
-                    </button>
-                    {vpcSelectorOpen && (
-                      <div className="absolute z-50 w-full mt-1 bg-popover border border-border rounded-md shadow-md">
-                        <div className="p-2 border-b">
-                          <div className="relative">
-                            <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-                            <Input
-                              placeholder="Search VPCs..."
-                              value={vpcSearchTerm}
-                              onChange={(e) => setVpcSearchTerm(e.target.value)}
-                              className="pl-8"
-                            />
-                          </div>
-                        </div>
-                        <div className="p-1">
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setShowCreateVPCModal(true)
-                              setVpcSelectorOpen(false)
-                            }}
-                            className="w-full flex items-center px-2 py-2 text-sm hover:bg-accent hover:text-accent-foreground rounded-sm text-primary font-medium"
-                          >
-                            Create new VPC
-                          </button>
-                          {filteredVPCs.map((vpc) => (
-                            <button
-                              key={vpc.id}
-                              type="button"
-                              onClick={() => {
-                                handleInputChange("vpc", vpc.id)
-                                handleInputChange("subnets", []) // Reset subnets when VPC changes
-                                handleInputChange("securityGroups", []) // Reset security groups when VPC changes
-                                setVpcSelectorOpen(false)
-                                setVpcSearchTerm("")
-                              }}
-                              className="w-full flex items-center justify-between px-2 py-2 text-sm hover:bg-accent hover:text-accent-foreground rounded-sm"
-                            >
-                              <div className="flex flex-col items-start">
-                                <span className="font-medium">{vpc.name}</span>
-                                <span className="text-xs text-muted-foreground">{vpc.id} • {vpc.region}</span>
-                              </div>
-                              {formData.vpc === vpc.id && <Check className="h-4 w-4" />}
-                            </button>
-                          ))}
-                          {filteredVPCs.length === 0 && vpcSearchTerm && (
-                            <div className="px-2 py-2 text-sm text-muted-foreground">
-                              No VPCs found matching "{vpcSearchTerm}"
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    )}
+                  <Label>Security Groups</Label>
+                  <div className="p-3 border border-gray-200 rounded-lg bg-gray-50">
+                    <p className="text-sm text-muted-foreground">No security groups selected</p>
                   </div>
                 </div>
-
-                {formData.vpc && (
-                  <div className="space-y-2">
-                    <Label>
-                      Subnets <span className="text-red-500">*</span>
-                    </Label>
-                    {availableSubnets.length === 0 ? (
-                      <div className="p-3 border border-gray-200 rounded-lg bg-gray-50">
-                        <p className="text-sm text-muted-foreground">No subnets available for this VPC</p>
-                      </div>
-                    ) : (
-                    <div className="space-y-4">
-                      {availableSubnets.map((subnet) => (
-                        <div key={subnet.id} className="flex items-start space-x-3 p-3 border border-gray-200 rounded-lg hover:border-gray-300 transition-colors">
-                          <Checkbox
-                            id={subnet.id}
-                            checked={formData.subnets.includes(subnet.id)}
-                            onCheckedChange={(checked) => {
-                              const newSubnets = checked
-                                ? [...formData.subnets, subnet.id]
-                                : formData.subnets.filter(s => s !== subnet.id)
-                              handleInputChange("subnets", newSubnets)
-                            }}
-                            className="mt-0.5"
-                          />
-                          <Label htmlFor={subnet.id} className="flex-1 cursor-pointer">
-                            <div className="flex items-center justify-between mb-1">
-                              <div>
-                                <span className="font-medium text-sm">{subnet.name}</span>
-                                <Badge 
-                                  variant="default"
-                                  className={`ml-2 text-xs ${
-                                    subnet.type === "Public" 
-                                      ? "bg-blue-100 text-blue-800 hover:bg-blue-200" 
-                                      : "bg-orange-100 text-orange-800 hover:bg-orange-200"
-                                  }`}
-                                >
-                                  {subnet.type}
-                                </Badge>
-                              </div>
-                              <div className="text-sm text-muted-foreground">
-                                {subnet.cidr} • {subnet.availabilityZone}
-                              </div>
-                            </div>
-                            <div className="text-xs text-muted-foreground">
-                              {subnet.description}
-                            </div>
-                          </Label>
-                        </div>
-                      ))}
-                    </div>
-                    )}
-                  </div>
-                )}
-
-                {formData.vpc && formData.subnets.length > 0 && (
-                  <div className="space-y-2">
-                    <Label>
-                      Security Groups <span className="text-red-500">*</span>
-                    </Label>
-                    <div className="space-y-4">
-                      {mockSecurityGroups.map((sg) => (
-                        <div key={sg.id} className="flex items-start space-x-3 p-3 border border-gray-200 rounded-lg hover:border-gray-300 transition-colors">
-                          <Checkbox
-                            id={sg.id}
-                            checked={formData.securityGroups.includes(sg.id)}
-                            onCheckedChange={(checked) => {
-                              const newSGs = checked
-                                ? [...formData.securityGroups, sg.id]
-                                : formData.securityGroups.filter(s => s !== sg.id)
-                              handleInputChange("securityGroups", newSGs)
-                            }}
-                            className="mt-0.5"
-                          />
-                          <Label htmlFor={sg.id} className="flex-1 cursor-pointer">
-                            <div className="flex items-center justify-between mb-1">
-                              <div>
-                                <span className="font-medium text-sm">{sg.name}</span>
-                              </div>
-                            </div>
-                            <div className="text-xs text-muted-foreground">
-                              {sg.description}
-                            </div>
-                          </Label>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
               </div>
 
               <Separator />
@@ -726,7 +615,7 @@ export default function CreateAutoScalingGroupPage() {
                     </Label>
                     <Input
                       id="instanceName"
-                      placeholder="Enter instance name prefix"
+                      placeholder="Enter instance name"
                       value={formData.instanceName}
                       onChange={(e) => handleInputChange("instanceName", e.target.value)}
                     />
@@ -741,29 +630,9 @@ export default function CreateAutoScalingGroupPage() {
                       onValueChange={(value) => handleInputChange("instanceType", value)}
                     >
                       <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Select Instance Type">
-                          {(() => {
-                            const selectedType = instanceTypes.find(t => t.id === formData.instanceType)
-                            if (!selectedType) return null
-                            return (
-                              <div className="flex items-center justify-between w-full pr-2">
-                                <div>
-                                  <div className="font-medium">{selectedType.name}</div>
-                                  <div className="text-muted-foreground text-sm">
-                                    {selectedType.vcpus} vCPU • {selectedType.ram} GB RAM
-                                  </div>
-                                </div>
-                                <div className="ml-auto text-right">
-                                  <span className="text-primary font-semibold text-sm">
-                                    ₹{selectedType.pricePerHour}/hr
-                                  </span>
-                                </div>
-                              </div>
-                            )
-                          })()}
-                        </SelectValue>
+                        <SelectValue placeholder="Select instance type" />
                       </SelectTrigger>
-                                              <SelectContent>
+                      <SelectContent>
                         {instanceTypes.map((type) => (
                           <SelectItem key={type.id} value={type.id}>
                             <div className="flex items-center justify-between w-full">
@@ -794,7 +663,7 @@ export default function CreateAutoScalingGroupPage() {
                 <div>
                   <Label className="text-base font-medium">Instance Scaling</Label>
                   <p className="text-sm text-muted-foreground mt-1">
-                    Configure the minimum, desired, and maximum number of instances for your Auto Scaling Group
+                    Configure the minimum, desired, and maximum number of instances for your Auto Scaling Group.
                   </p>
                 </div>
                 <div className="grid grid-cols-3 gap-4">
@@ -809,6 +678,7 @@ export default function CreateAutoScalingGroupPage() {
                       value={formData.minInstances}
                       onChange={(e) => handleInputChange("minInstances", parseInt(e.target.value) || 0)}
                     />
+                    <p className="text-xs text-muted-foreground">Minimum number of instances to maintain</p>
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="desiredInstances">
@@ -821,6 +691,7 @@ export default function CreateAutoScalingGroupPage() {
                       value={formData.desiredInstances}
                       onChange={(e) => handleInputChange("desiredInstances", parseInt(e.target.value) || 0)}
                     />
+                    <p className="text-xs text-muted-foreground">Initial number of instances to launch</p>
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="maxInstances">
@@ -833,6 +704,7 @@ export default function CreateAutoScalingGroupPage() {
                       value={formData.maxInstances}
                       onChange={(e) => handleInputChange("maxInstances", parseInt(e.target.value) || 0)}
                     />
+                    <p className="text-xs text-muted-foreground">Maximum number of instances allowed</p>
                   </div>
                 </div>
               </div>
@@ -898,11 +770,8 @@ export default function CreateAutoScalingGroupPage() {
                   onCheckedChange={(checked) => handleInputChange("saveAsTemplate", checked)}
                 />
                 <Label htmlFor="saveAsTemplate" className="text-sm">
-                  Save as template
+                  Save as Template
                 </Label>
-                <TooltipWrapper content="When selected, automatically creates a template with the same specification using the name of the ASG.">
-                  <HelpCircle className="h-4 w-4 text-muted-foreground" />
-                </TooltipWrapper>
               </div>
               <div className="flex gap-4">
                 <Button
@@ -922,17 +791,10 @@ export default function CreateAutoScalingGroupPage() {
                       : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                   }`}
                 >
-                  Create Auto Scaling Group
+                  Create ASG
                 </Button>
               </div>
             </div>
-            {formData.saveAsTemplate && formData.asgName && (
-              <div className="px-6 pb-4">
-                <p className="text-xs text-muted-foreground">
-                  Template will be created with name: "{formData.asgName} template"
-                </p>
-              </div>
-            )}
           </Card>
         </div>
 
@@ -969,8 +831,9 @@ export default function CreateAutoScalingGroupPage() {
             </CardContent>
           </Card>
 
-          {/* Price Summary */}
+          {/* Sticky Price Summary */}
           <div 
+            className="sticky top-6"
             style={{
               borderRadius: '16px',
               border: '4px solid #FFF',
