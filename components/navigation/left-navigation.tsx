@@ -142,12 +142,8 @@ const navigationConfig = {
         ],
       },
       {
-        href: "/kubernetes",
+        href: "/kubernetes/manage",
         label: "Kubernetes",
-        subItems: [
-          { href: "/kubernetes/manage", label: "Manage Kubernetes" },
-          { href: "/kubernetes/config-manager", label: "Kubernetes Configuration Manager" },
-        ],
       },
     ],
   },
