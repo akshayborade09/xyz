@@ -406,10 +406,7 @@ function TemplatesSection() {
               description="Create your first auto scaling template to standardize your instance configurations and make it easier to launch consistent auto scaling groups."
               actionText="Create Your First Template"
               onAction={() => {
-                toast({
-                  title: "Create Template",
-                  description: "Opening template creation wizard...",
-                })
+                router.push("/compute/auto-scaling/templates/create")
               }}
             />
           </CardContent>
