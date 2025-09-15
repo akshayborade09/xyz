@@ -50,7 +50,6 @@ interface TemplateFormData {
     id: string
     name: string
     size: number
-    type: string
   }>
   
   // SSH Key
@@ -62,10 +61,9 @@ interface TemplateFormData {
   // Auto Scaling Policies
   scalingPolicies: Array<{
     id: string
-    name: string
     type: "CPU" | "Memory" | "Scheduled"
-    scaleOutThreshold: number
-    scaleInThreshold: number
+    upScaleTarget: number
+    downScaleTarget: number
     scaleOutCooldown: number
     scaleInCooldown: number
   }>
@@ -138,8 +136,7 @@ export default function CreateTemplatePage() {
     const newVolume = {
       id: `volume-${Date.now()}`,
       name: "",
-      size: 10,
-      type: "gp3"
+      size: 10
     }
     setFormData(prev => ({
       ...prev,
@@ -166,10 +163,9 @@ export default function CreateTemplatePage() {
   const handleAddScalingPolicy = () => {
     const newPolicy = {
       id: `policy-${Date.now()}`,
-      name: "",
       type: "CPU" as const,
-      scaleOutThreshold: 80,
-      scaleInThreshold: 20,
+      upScaleTarget: 80,
+      downScaleTarget: 20,
       scaleOutCooldown: 300,
       scaleInCooldown: 300,
     }
