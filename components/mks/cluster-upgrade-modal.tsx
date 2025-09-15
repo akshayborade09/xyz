@@ -148,7 +148,6 @@ export function ClusterUpgradeModal({ cluster, isOpen, onClose, onConfirm }: Clu
                   <li>• Cluster will be temporarily unavailable</li>
                   <li>• Workloads will be rescheduled</li>
                   <li>• API server will be updated</li>
-                  <li>• Node pools will be upgraded sequentially</li>
                 </ul>
               </div>
             </div>
