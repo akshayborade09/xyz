@@ -21,11 +21,13 @@ export function TopNav() {
     if (segment === "") {
       setActiveItem("Home")
     } else {
-      // Find the matching nav item
-      const matchedItem = topNavItems.find((item) => item.href === `/${segment}`)
-
-      if (matchedItem) {
-        setActiveItem(matchedItem.label)
+      // Find the matching nav item by checking items within categories
+      for (const category of topNavItems) {
+        const matchedItem = category.items.find((item) => item.href === `/${segment}`)
+        if (matchedItem) {
+          setActiveItem(matchedItem.title)
+          return
+        }
       }
     }
   }, [pathname])
@@ -44,10 +46,15 @@ export function TopNav() {
 
       <div className="flex-1 flex justify-center">
         <MenuBar
-          items={topNavItems.map((item) => ({
-            ...item,
-            icon: item.icon,
-          }))}
+          items={topNavItems.flatMap(category => 
+            category.items.map(item => ({
+              icon: item.icon,
+              label: item.title,
+              href: item.href,
+              gradient: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+              iconColor: "text-blue-500"
+            }))
+          )}
           activeItem={activeItem}
           onItemClick={handleItemClick}
         />
