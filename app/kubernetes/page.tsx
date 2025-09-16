@@ -20,6 +20,7 @@ import {
 import { ClusterDeleteModal } from '@/components/mks/cluster-delete-modal';
 import { ClusterUpgradeModal } from '@/components/mks/cluster-upgrade-modal';
 import { NodePoolUpgradeModal } from '@/components/mks/node-pool-upgrade-modal';
+import { EditClusterModal } from '@/components/mks/edit-cluster-modal';
 import {
   mockMKSClusters,
   type MKSCluster,
@@ -55,6 +56,8 @@ export default function MKSDashboardPage() {
     useState(false);
   const [clusterForNodePoolUpgrade, setClusterForNodePoolUpgrade] =
     useState<MKSCluster | null>(null);
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [clusterToEdit, setClusterToEdit] = useState<MKSCluster | null>(null);
 
   // Filter clusters to only show Bangalore and Hyderabad regions
   const filteredClusters = clusters.filter(
@@ -137,10 +140,6 @@ export default function MKSDashboardPage() {
     router.push('/kubernetes/clusters/create');
   };
 
-  const handleEditCluster = (cluster: MKSCluster) => {
-    router.push(`/kubernetes/clusters/${cluster.id}/edit`);
-  };
-
   const handleDeleteCluster = (cluster: MKSCluster) => {
     setClusterToDelete(cluster);
     setDeleteModalOpen(true);
@@ -154,6 +153,21 @@ export default function MKSDashboardPage() {
   const handleUpgradeNodePools = (cluster: MKSCluster) => {
     setClusterForNodePoolUpgrade(cluster);
     setNodePoolUpgradeModalOpen(true);
+  };
+
+  const handleEditCluster = (cluster: MKSCluster) => {
+    setClusterToEdit(cluster);
+    setEditModalOpen(true);
+  };
+
+  const handleSaveClusterEdit = (updatedCluster: MKSCluster) => {
+    setClusters(prev =>
+      prev.map(cluster =>
+        cluster.id === updatedCluster.id ? updatedCluster : cluster
+      )
+    );
+    setEditModalOpen(false);
+    setClusterToEdit(null);
   };
 
   const handleDownloadKubeconfig = (cluster: MKSCluster) => {
@@ -444,7 +458,7 @@ users:
           <div className='flex justify-end'>
             <ActionMenu
               viewHref={`/kubernetes/clusters/${row.id}`}
-              editHref={`/kubernetes/clusters/${row.id}/edit`}
+              onEdit={() => handleEditCluster(row)}
               onCustomDelete={() => handleDeleteCluster(row)}
               resourceName={row.name}
               resourceType='Cluster'
@@ -543,6 +557,16 @@ users:
             onConfirm={handleConfirmNodePoolUpgrade}
           />
         )}
+
+        <EditClusterModal
+          isOpen={editModalOpen}
+          onClose={() => {
+            setEditModalOpen(false);
+            setClusterToEdit(null);
+          }}
+          cluster={clusterToEdit}
+          onSave={handleSaveClusterEdit}
+        />
       </PageShell>
     </TooltipProvider>
   );

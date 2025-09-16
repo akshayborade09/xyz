@@ -6,6 +6,7 @@ import { PageLayout } from '@/components/page-layout';
 import { DetailGrid } from '@/components/detail-grid';
 import { StatusBadge } from '@/components/status-badge';
 import { ClusterDeleteModal } from '@/components/mks/cluster-delete-modal';
+import { EditClusterModal } from '@/components/mks/edit-cluster-modal';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -73,10 +74,16 @@ export default function ClusterDetailsPage() {
     setCluster(updatedCluster);
   };
 
+  const handleSaveClusterEdit = (updatedCluster: MKSCluster) => {
+    setCluster(updatedCluster);
+    setIsEditModalOpen(false);
+  };
+
   // Modal states
   const [isUpgradeModalOpen, setIsUpgradeModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isKubeconfigModalOpen, setIsKubeconfigModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [deleteConfirmation, setDeleteConfirmation] = useState('');
   const [isDeleteLoading, setIsDeleteLoading] = useState(false);
 
@@ -107,7 +114,7 @@ export default function ClusterDetailsPage() {
   const isDeprecated = isK8sVersionDeprecated(cluster.k8sVersion);
 
   const handleEdit = () => {
-    router.push(`/kubernetes/clusters/${cluster.id}/edit`);
+    setIsEditModalOpen(true);
   };
 
   const handleDelete = async (clusterId: string) => {
@@ -507,6 +514,13 @@ export default function ClusterDetailsPage() {
         onClose={() => setIsDeleteModalOpen(false)}
         onConfirm={handleDelete}
         onEditCluster={handleEdit}
+      />
+
+      <EditClusterModal
+        isOpen={isEditModalOpen}
+        onClose={() => setIsEditModalOpen(false)}
+        cluster={cluster}
+        onSave={handleSaveClusterEdit}
       />
     </PageLayout>
   );
