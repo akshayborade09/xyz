@@ -14,14 +14,16 @@ import { VercelTabs } from "@/components/ui/vercel-tabs"
 import { useToast } from "@/hooks/use-toast"
 import { autoScalingGroups, autoScalingTemplates, type AutoScalingGroup, type AutoScalingTemplate } from "@/lib/data"
 import { filterDataForUser, getEmptyStateMessage, shouldShowEmptyState } from "@/lib/demo-data-filter"
-import { Edit, Eye, Trash2 } from "lucide-react"
+import { Edit, Eye, Trash2, TrendingUp } from "lucide-react"
 import { usePathname, useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
+import { AutoScalingSettingsModal } from "@/components/modals/auto-scaling-settings-modal"
 
 // Auto Scaling Groups Section
 function AutoScalingGroupsSection() {
   const [selectedASG, setSelectedASG] = useState<AutoScalingGroup | null>(null)
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
+  const [isScalingModalOpen, setIsScalingModalOpen] = useState(false)
   const { toast } = useToast()
 
   // Filter data based on user access
@@ -45,10 +47,15 @@ function AutoScalingGroupsSection() {
   }
 
   const handleEdit = (asg: AutoScalingGroup) => {
-    toast({
-      title: "Edit Auto Scaling Group",
-      description: `Editing ${asg.name}...`,
-    })
+    if (asg.status === "Creating") {
+      toast({
+        title: "Edit not available",
+        description: "Cannot edit Auto Scaling Group while it's being created.",
+        variant: "destructive",
+      })
+      return
+    }
+    window.location.href = `/compute/auto-scaling/groups/${asg.id}/edit`
   }
 
   const handlePause = (asg: AutoScalingGroup) => {
@@ -67,6 +74,11 @@ function AutoScalingGroupsSection() {
 
   const handleViewDetails = (asg: AutoScalingGroup) => {
     window.location.href = `/compute/auto-scaling/groups/${asg.id}`
+  }
+
+  const handleAutoScalingSettings = (asg: AutoScalingGroup) => {
+    setSelectedASG(asg)
+    setIsScalingModalOpen(true)
   }
 
   const handleSettings = (asg: AutoScalingGroup) => {
@@ -164,6 +176,20 @@ function AutoScalingGroupsSection() {
                   icon: <Eye className="mr-2 h-4 w-4" />,
                   onClick: () => handleViewDetails(asg),
                 },
+                ...(asg.status !== "Creating" ? [
+                  {
+                    label: "Edit",
+                    icon: <Edit className="mr-2 h-4 w-4" />,
+                    onClick: () => handleEdit(asg),
+                  }
+                ] : []),
+                ...(asg.status !== "Creating" ? [
+                  {
+                    label: "Auto Scaling Settings",
+                    icon: <TrendingUp className="mr-2 h-4 w-4" />,
+                    onClick: () => handleAutoScalingSettings(asg),
+                  }
+                ] : []),
                 {
                   label: "Delete",
                   icon: <Trash2 className="mr-2 h-4 w-4" />,
@@ -225,6 +251,18 @@ function AutoScalingGroupsSection() {
         resourceType="Auto Scaling Group"
         onConfirm={handleDeleteConfirm}
       />
+
+      {selectedASG && (
+        <AutoScalingSettingsModal
+          isOpen={isScalingModalOpen}
+          onClose={() => setIsScalingModalOpen(false)}
+          asgName={selectedASG.name}
+          currentVMs={selectedASG.desiredCapacity}
+          minCapacity={selectedASG.minCapacity}
+          maxCapacity={selectedASG.maxCapacity}
+          desiredCapacity={selectedASG.desiredCapacity}
+        />
+      )}
     </div>
   )
 }

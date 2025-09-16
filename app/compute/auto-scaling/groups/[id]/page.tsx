@@ -10,6 +10,7 @@ import {
   HardDrive,
   Zap,
   Users,
+  TrendingUp,
 } from 'lucide-react';
 import { PageLayout } from '@/components/page-layout';
 import { DetailGrid } from '@/components/detail-grid';
@@ -27,11 +28,13 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { AutoScalingSettingsModal } from '@/components/modals/auto-scaling-settings-modal';
 
 export default function AutoScalingGroupDetailsPage() {
   const { id } = useParams();
   const { toast } = useToast();
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isScalingModalOpen, setIsScalingModalOpen] = useState(false);
 
   const asg = autoScalingGroups.find(a => a.id === id);
 
@@ -112,10 +115,15 @@ export default function AutoScalingGroupDetailsPage() {
 
   // Action handlers
   const handleEdit = () => {
-    toast({
-      title: 'Edit Auto Scaling Group',
-      description: `Editing ${asg.name}...`,
-    });
+    if (asg.status === "Creating") {
+      toast({
+        title: "Edit not available",
+        description: "Cannot edit Auto Scaling Group while it's being created.",
+        variant: "destructive",
+      })
+      return
+    }
+    window.location.href = `/compute/auto-scaling/groups/${asg.id}/edit`;
   };
 
   const handleDelete = () => {
@@ -146,6 +154,10 @@ export default function AutoScalingGroupDetailsPage() {
     });
   };
 
+  const handleAutoScalingSettings = () => {
+    setIsScalingModalOpen(true);
+  };
+
   const handleSettings = () => {
     toast({
       title: 'Settings',
@@ -172,27 +184,40 @@ export default function AutoScalingGroupDetailsPage() {
             padding: '1.5rem',
           }}
         >
-          {/* Overlay Edit/Delete Buttons */}
-          {asg.status !== 'Failed' && (
-            <div className='absolute top-4 right-4 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10'>
+          {/* Overlay Action Buttons */}
+          <div className='absolute top-4 right-4 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10'>
+            {asg.status !== 'Creating' && (
+              <Button
+                variant='ghost'
+                size='sm'
+                onClick={handleAutoScalingSettings}
+                className='h-8 w-8 p-0 text-muted-foreground hover:text-foreground bg-white/80 hover:bg-white border border-gray-200 shadow-sm'
+                title="Auto Scaling Settings"
+              >
+                <TrendingUp className='h-4 w-4' />
+              </Button>
+            )}
+            {asg.status !== 'Creating' && (
               <Button
                 variant='ghost'
                 size='sm'
                 onClick={handleEdit}
                 className='h-8 w-8 p-0 text-muted-foreground hover:text-foreground bg-white/80 hover:bg-white border border-gray-200 shadow-sm'
+                title="Edit"
               >
                 <Edit className='h-4 w-4' />
               </Button>
-              <Button
-                variant='ghost'
-                size='sm'
-                onClick={handleDelete}
-                className='h-8 w-8 p-0 text-muted-foreground hover:text-red-600 bg-white/80 hover:bg-white border border-gray-200 shadow-sm'
-              >
-                <Trash2 className='h-4 w-4' />
-              </Button>
-            </div>
-          )}
+            )}
+            <Button
+              variant='ghost'
+              size='sm'
+              onClick={handleDelete}
+              className='h-8 w-8 p-0 text-muted-foreground hover:text-red-600 bg-white/80 hover:bg-white border border-gray-200 shadow-sm'
+              title="Delete"
+            >
+              <Trash2 className='h-4 w-4' />
+            </Button>
+          </div>
 
           <DetailGrid>
             {/* ASG Name, Type, Flavour, Status in one row */}
@@ -680,6 +705,17 @@ export default function AutoScalingGroupDetailsPage() {
         resourceName={asg.name}
         resourceType="Auto Scaling Group"
         onConfirm={handleDeleteConfirm}
+      />
+
+      {/* Auto Scaling Settings Modal */}
+      <AutoScalingSettingsModal
+        isOpen={isScalingModalOpen}
+        onClose={() => setIsScalingModalOpen(false)}
+        asgName={asg.name}
+        currentVMs={asg.desiredCapacity}
+        minCapacity={asg.minCapacity}
+        maxCapacity={asg.maxCapacity}
+        desiredCapacity={asg.desiredCapacity}
       />
     </PageLayout>
   );

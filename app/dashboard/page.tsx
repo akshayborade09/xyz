@@ -1007,7 +1007,7 @@ export default function DashboardPage() {
         {/* Welcome Message */}
         <div className='mb-2'>
           <h2 className='text-3xl font-bold text-gray-900 text-left mb-1'>
-            Hey Faria,
+            Hey Mayank,
           </h2>
           <div className='text-lg text-gray-700 font-normal text-left mb-1'>
             {isNewUser
