@@ -4,7 +4,7 @@ import type React from "react"
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { ServerIcon, GlobeAltIcon, ShieldCheckIcon, GlobeAmericasIcon, NetworkIcon } from "@heroicons/react/24/outline"
+import { ServerIcon, GlobeAltIcon, ShieldCheckIcon, GlobeAmericasIcon, CpuChipIcon } from "@heroicons/react/24/outline"
 
 interface NavItem {
   name: string
@@ -26,7 +26,7 @@ export function NavigationBar() {
     {
       name: "Virtual Private Cloud",
       href: "/networking/vpc",
-      icon: <NetworkIcon className="w-5 h-5" />,
+      icon: <CpuChipIcon className="w-5 h-5" />,
     },
     {
       name: "Subnets",

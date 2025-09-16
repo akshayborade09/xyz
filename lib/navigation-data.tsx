@@ -422,3 +422,7 @@ export function isPathActive(pathname: string, href: string): boolean {
   }
   return pathname === href || pathname.startsWith(`${href}/`)
 }
+
+// Export aliases for backward compatibility
+export const categoryItems = navigationStructure
+export const topNavItems = navigationStructure
