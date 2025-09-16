@@ -12,7 +12,8 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "validate": "npm run type-check && npm run lint && npm run format:check",
-    "prebuild": "npm run validate"
+    "validate:build": "npm run lint && npm run format:check",
+    "prebuild": "npm run validate:build"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
