@@ -34,8 +34,8 @@
  */
 export function CreditsDisplay() {
   return (
-    <div className="flex items-center">
-      <span className="text-sm font-bold">₹5,000 credits</span>
+    <div className='flex items-center'>
+      <span className='text-sm font-bold'>₹5,000 credits</span>
     </div>
-  )
+  );
 }

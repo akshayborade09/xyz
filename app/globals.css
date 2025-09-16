@@ -72,14 +72,16 @@
   }
   body {
     @apply bg-background text-foreground;
-    font-feature-settings: "rlig" 1, "calt" 1;
+    font-feature-settings:
+      'rlig' 1,
+      'calt' 1;
   }
 }
 
 /* Open Sauce Fonts */
 html,
 body {
-  font-family: "Open Sauce One", sans-serif;
+  font-family: 'Open Sauce One', sans-serif;
 }
 
 h1,
@@ -88,7 +90,7 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: "Open Sauce One", sans-serif;
+  font-family: 'Open Sauce One', sans-serif;
   font-weight: 600;
 }
 
@@ -163,6 +165,6 @@ h6 {
 }
 
 /* Ensure radio buttons use black accent color across all browsers */
-input[type="radio"] {
+input[type='radio'] {
   accent-color: #000000;
 }

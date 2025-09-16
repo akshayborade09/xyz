@@ -1,5 +1,5 @@
-import { TrustDeviceScreen } from "@/components/auth/trust-device-screen"
+import { TrustDeviceScreen } from '@/components/auth/trust-device-screen';
 
 export default function TrustDevicePage() {
-  return <TrustDeviceScreen />
+  return <TrustDeviceScreen />;
 }

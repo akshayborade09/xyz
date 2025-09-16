@@ -1,28 +1,36 @@
-"use client"
+'use client';
 
-import { createContext, useContext, useState } from "react"
+import { createContext, useContext, useState } from 'react';
 
 interface CommandPaletteContextType {
-  open: boolean
-  setOpen: (open: boolean) => void
+  open: boolean;
+  setOpen: (open: boolean) => void;
 }
 
-const CommandPaletteContext = createContext<CommandPaletteContextType | undefined>(undefined)
+const CommandPaletteContext = createContext<
+  CommandPaletteContextType | undefined
+>(undefined);
 
-export function CommandPaletteContextProvider({ children }: { children: React.ReactNode }) {
-  const [open, setOpen] = useState(false)
+export function CommandPaletteContextProvider({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const [open, setOpen] = useState(false);
 
   return (
     <CommandPaletteContext.Provider value={{ open, setOpen }}>
       {children}
     </CommandPaletteContext.Provider>
-  )
+  );
 }
 
 export function useCommandPalette() {
-  const context = useContext(CommandPaletteContext)
+  const context = useContext(CommandPaletteContext);
   if (context === undefined) {
-    throw new Error("useCommandPalette must be used within a CommandPaletteProvider")
+    throw new Error(
+      'useCommandPalette must be used within a CommandPaletteProvider'
+    );
   }
-  return context
-} 
+  return context;
+}

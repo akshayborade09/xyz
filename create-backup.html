@@ -1,110 +1,110 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Create Backup Modal</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: rgba(0, 0, 0, 0.5);
-        }
-        .modal {
-            background-color: white;
-            border-radius: 8px;
-            width: 500px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-        .modal-header {
-            padding: 15px 20px;
-            border-bottom: 1px solid #eee;
-        }
-        .modal-title {
-            margin: 0;
-            font-size: 18px;
-        }
-        .modal-body {
-            padding: 20px;
-        }
-        .form-group {
-            margin-bottom: 20px;
-        }
-        label {
-            display: block;
-            font-weight: bold;
-            margin-bottom: 8px;
-        }
-        input[type="text"], 
-        textarea,
-        select {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-        textarea {
-            height: 80px;
-            resize: vertical;
-        }
-        .modal-footer {
-            padding: 15px 20px;
-            border-top: 1px solid #eee;
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
-        }
-        .btn-cancel {
-            padding: 8px 16px;
-            background-color: #f8f8f8;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        .btn-create {
-            padding: 8px 16px;
-            background-color: #000;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: rgba(0, 0, 0, 0.5);
+      }
+      .modal {
+        background-color: white;
+        border-radius: 8px;
+        width: 500px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+      .modal-header {
+        padding: 15px 20px;
+        border-bottom: 1px solid #eee;
+      }
+      .modal-title {
+        margin: 0;
+        font-size: 18px;
+      }
+      .modal-body {
+        padding: 20px;
+      }
+      .form-group {
+        margin-bottom: 20px;
+      }
+      label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 8px;
+      }
+      input[type='text'],
+      textarea,
+      select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+      }
+      textarea {
+        height: 80px;
+        resize: vertical;
+      }
+      .modal-footer {
+        padding: 15px 20px;
+        border-top: 1px solid #eee;
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+      }
+      .btn-cancel {
+        padding: 8px 16px;
+        background-color: #f8f8f8;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      .btn-create {
+        padding: 8px 16px;
+        background-color: #000;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="modal">
-        <div class="modal-header">
-            <h3 class="modal-title">Create Instant Backup</h3>
+      <div class="modal-header">
+        <h3 class="modal-title">Create Instant Backup</h3>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="volume">Volume*</label>
+          <select id="volume">
+            <option value="">Select Volume</option>
+            <option value="volume-001">volume-001</option>
+            <option value="volume-002">volume-002</option>
+            <option value="volume-003">volume-003</option>
+          </select>
         </div>
-        <div class="modal-body">
-            <div class="form-group">
-                <label for="volume">Volume*</label>
-                <select id="volume">
-                    <option value="">Select Volume</option>
-                    <option value="volume-001">volume-001</option>
-                    <option value="volume-002">volume-002</option>
-                    <option value="volume-003">volume-003</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="name">Backup Name*</label>
-                <input type="text" id="name" placeholder="Enter backup name">
-            </div>
-            <div class="form-group">
-                <label for="description">Description</label>
-                <textarea id="description" placeholder="Enter description"></textarea>
-            </div>
+        <div class="form-group">
+          <label for="name">Backup Name*</label>
+          <input type="text" id="name" placeholder="Enter backup name" />
         </div>
-        <div class="modal-footer">
-            <button class="btn-cancel">Cancel</button>
-            <button class="btn-create">Create Backup</button>
+        <div class="form-group">
+          <label for="description">Description</label>
+          <textarea id="description" placeholder="Enter description"></textarea>
         </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel">Cancel</button>
+        <button class="btn-create">Create Backup</button>
+      </div>
     </div>
-</body>
+  </body>
 </html>

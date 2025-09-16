@@ -1,84 +1,86 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>VM Attachment Warning Modal</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: rgba(0, 0, 0, 0.5);
-        }
-        .modal {
-            background-color: white;
-            border-radius: 8px;
-            width: 500px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-        .modal-header {
-            padding: 15px 20px;
-            border-bottom: 1px solid #eee;
-            background-color: #f8d7da;
-        }
-        .modal-title {
-            margin: 0;
-            font-size: 18px;
-            color: #721c24;
-        }
-        .modal-body {
-            padding: 20px;
-        }
-        .warning-icon {
-            font-size: 48px;
-            color: #721c24;
-            text-align: center;
-            margin-bottom: 15px;
-        }
-        .warning-message {
-            text-align: center;
-            margin-bottom: 20px;
-            line-height: 1.5;
-        }
-        .highlight {
-            font-weight: bold;
-        }
-        .modal-footer {
-            padding: 15px 20px;
-            border-top: 1px solid #eee;
-            display: flex;
-            justify-content: center;
-        }
-        .btn-ok {
-            padding: 8px 16px;
-            background-color: #f8f8f8;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            cursor: pointer;
-            min-width: 100px;
-        }
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: rgba(0, 0, 0, 0.5);
+      }
+      .modal {
+        background-color: white;
+        border-radius: 8px;
+        width: 500px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+      .modal-header {
+        padding: 15px 20px;
+        border-bottom: 1px solid #eee;
+        background-color: #f8d7da;
+      }
+      .modal-title {
+        margin: 0;
+        font-size: 18px;
+        color: #721c24;
+      }
+      .modal-body {
+        padding: 20px;
+      }
+      .warning-icon {
+        font-size: 48px;
+        color: #721c24;
+        text-align: center;
+        margin-bottom: 15px;
+      }
+      .warning-message {
+        text-align: center;
+        margin-bottom: 20px;
+        line-height: 1.5;
+      }
+      .highlight {
+        font-weight: bold;
+      }
+      .modal-footer {
+        padding: 15px 20px;
+        border-top: 1px solid #eee;
+        display: flex;
+        justify-content: center;
+      }
+      .btn-ok {
+        padding: 8px 16px;
+        background-color: #f8f8f8;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        cursor: pointer;
+        min-width: 100px;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="modal">
-        <div class="modal-header">
-            <h3 class="modal-title">Volume is associated with a VM</h3>
+      <div class="modal-header">
+        <h3 class="modal-title">Volume is associated with a VM</h3>
+      </div>
+      <div class="modal-body">
+        <div class="warning-icon">⚠️</div>
+        <div class="warning-message">
+          The volume <span class="highlight">volume-001</span> is attached with
+          a VM <span class="highlight">instance-001</span>.<br />
+          Please detach the volume from the VM before proceeding with this
+          action.
         </div>
-        <div class="modal-body">
-            <div class="warning-icon">⚠️</div>
-            <div class="warning-message">
-                The volume <span class="highlight">volume-001</span> is attached with a VM <span class="highlight">instance-001</span>.<br>
-                Please detach the volume from the VM before proceeding with this action.
-            </div>
-        </div>
-        <div class="modal-footer">
-            <button class="btn-ok">OK</button>
-        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-ok">OK</button>
+      </div>
     </div>
-</body>
+  </body>
 </html>

@@ -1,8 +1,8 @@
-import type { ReactNode } from "react"
+import type { ReactNode } from 'react';
 
 interface DetailSectionProps {
-  title: string
-  children: ReactNode
+  title: string;
+  children: ReactNode;
 }
 
 /**
@@ -16,9 +16,13 @@ interface DetailSectionProps {
  */
 export function DetailSection({ title, children }: DetailSectionProps) {
   return (
-    <div className="mb-8">
-      {title && <h2 className="text-lg font-semibold mb-5 pb-2.5 border-b border-border">{title}</h2>}
+    <div className='mb-8'>
+      {title && (
+        <h2 className='text-lg font-semibold mb-5 pb-2.5 border-b border-border'>
+          {title}
+        </h2>
+      )}
       {children}
     </div>
-  )
+  );
 }

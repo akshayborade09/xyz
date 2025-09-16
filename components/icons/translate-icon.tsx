@@ -30,28 +30,28 @@
  * @todo Implement language selection dropdown when i18n system is added
  * @todo Consider adding animation for language switching
  */
-import type { SVGProps } from "react"
+import type { SVGProps } from 'react';
 
 export function TranslateIcon(props: SVGProps<SVGSVGElement>) {
   return (
     <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
+      xmlns='http://www.w3.org/2000/svg'
+      width='24'
+      height='24'
+      viewBox='0 0 24 24'
+      fill='none'
+      stroke='currentColor'
+      strokeWidth='2'
+      strokeLinecap='round'
+      strokeLinejoin='round'
       {...props}
     >
-      <path d="M5 8l6 6" />
-      <path d="M4 14h7" />
-      <path d="M2 5h12" />
-      <path d="M7 2h1" />
-      <path d="M22 22l-5-10-5 10" />
-      <path d="M14 18h6" />
+      <path d='M5 8l6 6' />
+      <path d='M4 14h7' />
+      <path d='M2 5h12' />
+      <path d='M7 2h1' />
+      <path d='M22 22l-5-10-5 10' />
+      <path d='M14 18h6' />
     </svg>
-  )
+  );
 }

@@ -1,7 +1,7 @@
-import type { ReactNode } from "react"
+import type { ReactNode } from 'react';
 
 interface DetailGridProps {
-  children: ReactNode
+  children: ReactNode;
 }
 
 /**
@@ -14,5 +14,9 @@ interface DetailGridProps {
  * </DetailGrid>
  */
 export function DetailGrid({ children }: DetailGridProps) {
-  return <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">{children}</div>
+  return (
+    <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
+      {children}
+    </div>
+  );
 }

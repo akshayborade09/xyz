@@ -1,6 +1,6 @@
 interface DetailItemProps {
-  label: string
-  value: string
+  label: string;
+  value: string;
 }
 
 /**
@@ -13,8 +13,10 @@ interface DetailItemProps {
 export function DetailItem({ label, value }: DetailItemProps) {
   return (
     <div>
-      <div className="text-sm font-medium text-muted-foreground mb-1">{label}</div>
-      <div className="font-medium text-foreground">{value}</div>
+      <div className='text-sm font-medium text-muted-foreground mb-1'>
+        {label}
+      </div>
+      <div className='font-medium text-foreground'>{value}</div>
     </div>
-  )
+  );
 }

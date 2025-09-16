@@ -1,22 +1,24 @@
-import { NextResponse } from 'next/server'
-import type { NextRequest } from 'next/server'
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
 
 // Simple access level determination from headers
-function getAccessLevelFromRequest(request: NextRequest): 'none' | 'limited' | 'full' {
+function getAccessLevelFromRequest(
+  request: NextRequest
+): 'none' | 'limited' | 'full' {
   // DEVELOPMENT: Temporarily allow access to Kubernetes routes without authentication
   if (request.nextUrl.pathname.startsWith('/kubernetes')) {
-    return 'full'
+    return 'full';
   }
-  
+
   // Check for auth token in cookies
-  const authToken = request.cookies.get('auth-token')?.value
-  
+  const authToken = request.cookies.get('auth-token')?.value;
+
   if (!authToken) {
-    return 'none'
+    return 'none';
   }
 
   // For demo purposes, if we have an auth token, grant full access
-  return 'full'
+  return 'full';
 }
 
 // Route access configuration
@@ -24,42 +26,45 @@ const routeConfigs = {
   none: ['/auth', '/auth/signin', '/auth/signup'],
   limited: [
     '/dashboard',
-    '/docs', 
+    '/docs',
     '/documentation',
     '/cost-estimator',
     '/ai-studio',
     '/profile',
     '/support',
     '/settings/profile',
-    '/dashboard/profile-completion'
+    '/dashboard/profile-completion',
   ],
-  full: ['*'] // Wildcard for full access
-}
+  full: ['*'], // Wildcard for full access
+};
 
-function checkRouteAccess(pathname: string, accessLevel: 'none' | 'limited' | 'full'): boolean {
-  const allowedRoutes = routeConfigs[accessLevel]
-  
+function checkRouteAccess(
+  pathname: string,
+  accessLevel: 'none' | 'limited' | 'full'
+): boolean {
+  const allowedRoutes = routeConfigs[accessLevel];
+
   // Full access allows everything
   if (allowedRoutes.includes('*')) {
-    return true
+    return true;
   }
-  
+
   // Check exact match
   if (allowedRoutes.includes(pathname)) {
-    return true
+    return true;
   }
-  
+
   // Check prefix match (for nested routes)
   return allowedRoutes.some(route => {
-    const normalizedRoute = route.replace(/\/$/, '')
-    const normalizedPath = pathname.replace(/\/$/, '')
-    return normalizedPath.startsWith(normalizedRoute)
-  })
+    const normalizedRoute = route.replace(/\/$/, '');
+    const normalizedPath = pathname.replace(/\/$/, '');
+    return normalizedPath.startsWith(normalizedRoute);
+  });
 }
 
 export function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl
-  
+  const { pathname } = request.nextUrl;
+
   // Skip middleware for static files and API routes
   if (
     pathname.startsWith('/_next') ||
@@ -67,40 +72,43 @@ export function middleware(request: NextRequest) {
     pathname.includes('.') ||
     pathname.startsWith('/favicon')
   ) {
-    return NextResponse.next()
+    return NextResponse.next();
   }
 
   // Get access level from request
-  const accessLevel = getAccessLevelFromRequest(request)
+  const accessLevel = getAccessLevelFromRequest(request);
 
   // Check if user has access to the requested route
-  const hasAccess = checkRouteAccess(pathname, accessLevel)
+  const hasAccess = checkRouteAccess(pathname, accessLevel);
 
   if (!hasAccess) {
     // If no access, redirect to sign in page
-    const signInUrl = new URL('/auth/signin', request.url)
-    signInUrl.searchParams.set('redirect', pathname)
-    return NextResponse.redirect(signInUrl)
+    const signInUrl = new URL('/auth/signin', request.url);
+    signInUrl.searchParams.set('redirect', pathname);
+    return NextResponse.redirect(signInUrl);
   }
 
   // If user is authenticated and trying to access auth pages, redirect to dashboard
   // Exception: Allow access to profile completion flows
   if (accessLevel !== 'none' && pathname.startsWith('/auth')) {
-    const allowedAuthRoutes = [
-      '/auth/profile-completion'
-    ]
-    
-    const isAllowedAuthRoute = allowedAuthRoutes.some(route => pathname.startsWith(route))
-    
+    const allowedAuthRoutes = ['/auth/profile-completion'];
+
+    const isAllowedAuthRoute = allowedAuthRoutes.some(route =>
+      pathname.startsWith(route)
+    );
+
     if (!isAllowedAuthRoute) {
-      return NextResponse.redirect(new URL('/dashboard', request.url))
+      return NextResponse.redirect(new URL('/dashboard', request.url));
     }
   }
 
   // Clone the request headers and add the auth token
-  const requestHeaders = new Headers(request.headers)
+  const requestHeaders = new Headers(request.headers);
   if (accessLevel !== 'none') {
-    requestHeaders.set('x-auth-token', request.cookies.get('auth-token')?.value || '')
+    requestHeaders.set(
+      'x-auth-token',
+      request.cookies.get('auth-token')?.value || ''
+    );
   }
 
   // Return response with modified headers
@@ -108,7 +116,7 @@ export function middleware(request: NextRequest) {
     request: {
       headers: requestHeaders,
     },
-  })
+  });
 }
 
 export const config = {
@@ -122,4 +130,4 @@ export const config = {
      */
     '/((?!api|_next/static|_next/image|favicon.ico).*)',
   ],
-} 
+};

@@ -1,71 +1,76 @@
 // Mock data for MKS (Managed Kubernetes Service) Dashboard
 
 export interface MKSCluster {
-  id: string
-  name: string
-  region: string
-  status: 'creating' | 'active' | 'updating' | 'deleting' | 'error'
-  k8sVersion: string
-  nodeCount: number
-  createdAt: string
-  tags: string[]
-  vpcId: string
-  subnetId: string
-  securityGroupIds: string[]
-  kubeApiEndpoint: string
-  nodePools: MKSNodePool[]
-  addOns: MKSAddOn[]
-  podCIDR: string
-  serviceCIDR: string
-  description?: string
-  estimatedCompletionTime?: string
-  creationProgress?: number
+  id: string;
+  name: string;
+  region: string;
+  status: 'creating' | 'active' | 'updating' | 'deleting' | 'error';
+  k8sVersion: string;
+  nodeCount: number;
+  createdAt: string;
+  tags: string[];
+  vpcId: string;
+  subnetId: string;
+  securityGroupIds: string[];
+  kubeApiEndpoint: string;
+  nodePools: MKSNodePool[];
+  addOns: MKSAddOn[];
+  podCIDR: string;
+  serviceCIDR: string;
+  description?: string;
+  estimatedCompletionTime?: string;
+  creationProgress?: number;
 }
 
 export interface MKSNodePool {
-  id: string
-  name: string
-  flavor: string
-  desiredCount: number
-  minCount: number
-  maxCount: number
-  diskSize: number
-  taints: string[]
-  labels: Record<string, string>
-  status: 'creating' | 'active' | 'updating' | 'deleting' | 'error'
-  createdAt: string
-  k8sVersion: string
-  subnetId: string
+  id: string;
+  name: string;
+  flavor: string;
+  desiredCount: number;
+  minCount: number;
+  maxCount: number;
+  diskSize: number;
+  taints: string[];
+  labels: Record<string, string>;
+  status: 'creating' | 'active' | 'updating' | 'deleting' | 'error';
+  createdAt: string;
+  k8sVersion: string;
+  subnetId: string;
 }
 
 export interface MKSAddOn {
-  id: string
-  name: string
-  displayName: string
-  description: string
-  category: 'monitoring' | 'networking' | 'security' | 'storage' | 'development'
-  isEnabled: boolean
-  isDefault: boolean
-  isEditable: boolean
-  version: string
-  status: 'active' | 'installing' | 'failed' | 'disabling'
+  id: string;
+  name: string;
+  displayName: string;
+  description: string;
+  category:
+    | 'monitoring'
+    | 'networking'
+    | 'security'
+    | 'storage'
+    | 'development';
+  isEnabled: boolean;
+  isDefault: boolean;
+  isEditable: boolean;
+  version: string;
+  status: 'active' | 'installing' | 'failed' | 'disabling';
 }
 
 export interface MKSRegion {
-  id: string
-  name: string
-  displayName: string
-  isAvailable: boolean
+  id: string;
+  name: string;
+  displayName: string;
+  isAvailable: boolean;
 }
 
 export interface MKSPersistentVolume {
-  id: string
-  name: string
-  size: number
-  status: 'available' | 'bound' | 'released' | 'failed'
-  storageClass: string
-  clusterId: string
-  createdAt: string
+  id: string;
+  name: string;
+  size: number;
+  status: 'available' | 'bound' | 'released' | 'failed';
+  storageClass: string;
+  clusterId: string;
+  createdAt: string;
 }
 
 // Default Krutrim add-ons
@@ -74,13 +79,14 @@ export const defaultKrutrimAddOns: MKSAddOn[] = [
     id: 'addon-monitoring',
     name: 'kube-prometheus-stack',
     displayName: 'Kubernetes Monitoring Stack',
-    description: 'Comprehensive monitoring solution with Prometheus, Grafana, and AlertManager',
+    description:
+      'Comprehensive monitoring solution with Prometheus, Grafana, and AlertManager',
     category: 'monitoring',
     isEnabled: true,
     isDefault: true,
     isEditable: true,
     version: 'v0.68.0',
-    status: 'active'
+    status: 'active',
   },
   {
     id: 'addon-networking',
@@ -92,7 +98,7 @@ export const defaultKrutrimAddOns: MKSAddOn[] = [
     isDefault: true,
     isEditable: true,
     version: 'v3.26.1',
-    status: 'active'
+    status: 'active',
   },
   {
     id: 'addon-security',
@@ -104,7 +110,7 @@ export const defaultKrutrimAddOns: MKSAddOn[] = [
     isDefault: true,
     isEditable: true,
     version: 'v1.13.3',
-    status: 'active'
+    status: 'active',
   },
   {
     id: 'addon-storage',
@@ -116,7 +122,7 @@ export const defaultKrutrimAddOns: MKSAddOn[] = [
     isDefault: true,
     isEditable: true,
     version: 'v2.20.0',
-    status: 'active'
+    status: 'active',
   },
   {
     id: 'addon-development',
@@ -128,59 +134,174 @@ export const defaultKrutrimAddOns: MKSAddOn[] = [
     isDefault: true,
     isEditable: true,
     version: 'v0.35.0',
-    status: 'active'
-  }
-]
+    status: 'active',
+  },
+];
 
 // Available regions
 export const availableRegions: MKSRegion[] = [
-  { id: 'ap-south-1', name: 'ap-south-1', displayName: 'Asia Pacific (Mumbai) - Bangalore', isAvailable: true },
-  { id: 'ap-southeast-1', name: 'ap-southeast-1', displayName: 'Asia Pacific (Singapore) - Hyderabad', isAvailable: true },
-  { id: 'us-east-1', name: 'us-east-1', displayName: 'US East (N. Virginia)', isAvailable: true },
-  { id: 'us-west-2', name: 'us-west-2', displayName: 'US West (Oregon)', isAvailable: true },
-  { id: 'eu-west-1', name: 'eu-west-1', displayName: 'Europe (Ireland)', isAvailable: true }
-]
+  {
+    id: 'ap-south-1',
+    name: 'ap-south-1',
+    displayName: 'Asia Pacific (Mumbai) - Bangalore',
+    isAvailable: true,
+  },
+  {
+    id: 'ap-southeast-1',
+    name: 'ap-southeast-1',
+    displayName: 'Asia Pacific (Singapore) - Hyderabad',
+    isAvailable: true,
+  },
+  {
+    id: 'us-east-1',
+    name: 'us-east-1',
+    displayName: 'US East (N. Virginia)',
+    isAvailable: true,
+  },
+  {
+    id: 'us-west-2',
+    name: 'us-west-2',
+    displayName: 'US West (Oregon)',
+    isAvailable: true,
+  },
+  {
+    id: 'eu-west-1',
+    name: 'eu-west-1',
+    displayName: 'Europe (Ireland)',
+    isAvailable: true,
+  },
+];
 
 // Subnet interface for MKS clusters
 export interface MKSSubnet {
-  id: string
-  name: string
-  type: 'Public' | 'Private'
-  cidr: string
-  availabilityZone: string
-  vpcId: string
+  id: string;
+  name: string;
+  type: 'Public' | 'Private';
+  cidr: string;
+  availabilityZone: string;
+  vpcId: string;
 }
 
 // Available subnets for MKS clusters
 export const mksSubnets: MKSSubnet[] = [
   // Production cluster subnets
-  { id: 'subnet-prod-1a', name: 'prod-public-1a', type: 'Public', cidr: '10.0.1.0/24', availabilityZone: 'ap-south-1a', vpcId: 'vpc-prod-001' },
-  { id: 'subnet-prod-1b', name: 'prod-private-1b', type: 'Private', cidr: '10.0.2.0/24', availabilityZone: 'ap-south-1b', vpcId: 'vpc-prod-001' },
-  
+  {
+    id: 'subnet-prod-1a',
+    name: 'prod-public-1a',
+    type: 'Public',
+    cidr: '10.0.1.0/24',
+    availabilityZone: 'ap-south-1a',
+    vpcId: 'vpc-prod-001',
+  },
+  {
+    id: 'subnet-prod-1b',
+    name: 'prod-private-1b',
+    type: 'Private',
+    cidr: '10.0.2.0/24',
+    availabilityZone: 'ap-south-1b',
+    vpcId: 'vpc-prod-001',
+  },
+
   // Staging cluster subnets
-  { id: 'subnet-staging-1a', name: 'staging-public-1a', type: 'Public', cidr: '10.1.1.0/24', availabilityZone: 'ap-southeast-1a', vpcId: 'vpc-staging-001' },
-  
+  {
+    id: 'subnet-staging-1a',
+    name: 'staging-public-1a',
+    type: 'Public',
+    cidr: '10.1.1.0/24',
+    availabilityZone: 'ap-southeast-1a',
+    vpcId: 'vpc-staging-001',
+  },
+
   // Development cluster subnets
-  { id: 'subnet-dev-1a', name: 'dev-public-1a', type: 'Public', cidr: '10.2.1.0/24', availabilityZone: 'ap-south-1a', vpcId: 'vpc-dev-001' },
-  
+  {
+    id: 'subnet-dev-1a',
+    name: 'dev-public-1a',
+    type: 'Public',
+    cidr: '10.2.1.0/24',
+    availabilityZone: 'ap-south-1a',
+    vpcId: 'vpc-dev-001',
+  },
+
   // Test cluster subnets
-  { id: 'subnet-test-1a', name: 'test-public-1a', type: 'Public', cidr: '10.3.1.0/24', availabilityZone: 'ap-southeast-1a', vpcId: 'vpc-test-001' },
-  
+  {
+    id: 'subnet-test-1a',
+    name: 'test-public-1a',
+    type: 'Public',
+    cidr: '10.3.1.0/24',
+    availabilityZone: 'ap-southeast-1a',
+    vpcId: 'vpc-test-001',
+  },
+
   // Demo cluster subnets
-  { id: 'subnet-demo-1a', name: 'demo-public-1a', type: 'Public', cidr: '10.4.1.0/24', availabilityZone: 'ap-south-1a', vpcId: 'vpc-demo-001' }
-]
+  {
+    id: 'subnet-demo-1a',
+    name: 'demo-public-1a',
+    type: 'Public',
+    cidr: '10.4.1.0/24',
+    availabilityZone: 'ap-south-1a',
+    vpcId: 'vpc-demo-001',
+  },
+];
 
 // Available node flavors
 export const availableNodeFlavors = [
-  { id: 't3.medium', name: 't3.medium', vcpus: 2, memory: 4, category: 'General Purpose' },
-  { id: 't3.large', name: 't3.large', vcpus: 2, memory: 8, category: 'General Purpose' },
-  { id: 'm5.large', name: 'm5.large', vcpus: 2, memory: 8, category: 'General Purpose' },
-  { id: 'm5.xlarge', name: 'm5.xlarge', vcpus: 4, memory: 16, category: 'General Purpose' },
-  { id: 'c5.large', name: 'c5.large', vcpus: 2, memory: 4, category: 'Compute Optimized' },
-  { id: 'c5.xlarge', name: 'c5.xlarge', vcpus: 4, memory: 8, category: 'Compute Optimized' },
-  { id: 'r5.large', name: 'r5.large', vcpus: 2, memory: 16, category: 'Memory Optimized' },
-  { id: 'r5.xlarge', name: 'r5.xlarge', vcpus: 4, memory: 32, category: 'Memory Optimized' }
-]
+  {
+    id: 't3.medium',
+    name: 't3.medium',
+    vcpus: 2,
+    memory: 4,
+    category: 'General Purpose',
+  },
+  {
+    id: 't3.large',
+    name: 't3.large',
+    vcpus: 2,
+    memory: 8,
+    category: 'General Purpose',
+  },
+  {
+    id: 'm5.large',
+    name: 'm5.large',
+    vcpus: 2,
+    memory: 8,
+    category: 'General Purpose',
+  },
+  {
+    id: 'm5.xlarge',
+    name: 'm5.xlarge',
+    vcpus: 4,
+    memory: 16,
+    category: 'General Purpose',
+  },
+  {
+    id: 'c5.large',
+    name: 'c5.large',
+    vcpus: 2,
+    memory: 4,
+    category: 'Compute Optimized',
+  },
+  {
+    id: 'c5.xlarge',
+    name: 'c5.xlarge',
+    vcpus: 4,
+    memory: 8,
+    category: 'Compute Optimized',
+  },
+  {
+    id: 'r5.large',
+    name: 'r5.large',
+    vcpus: 2,
+    memory: 16,
+    category: 'Memory Optimized',
+  },
+  {
+    id: 'r5.xlarge',
+    name: 'r5.xlarge',
+    vcpus: 4,
+    memory: 32,
+    category: 'Memory Optimized',
+  },
+];
 
 // Mock clusters data
 export const mockMKSClusters: MKSCluster[] = [
@@ -213,7 +334,7 @@ export const mockMKSClusters: MKSCluster[] = [
         status: 'active',
         createdAt: '2024-01-15T10:30:00Z',
         k8sVersion: '1.33.0',
-        subnetId: 'subnet-prod-1a'
+        subnetId: 'subnet-prod-1a',
       },
       {
         id: 'np-prod-2',
@@ -228,10 +349,13 @@ export const mockMKSClusters: MKSCluster[] = [
         status: 'active',
         createdAt: '2024-01-15T10:30:00Z',
         k8sVersion: '1.33.0',
-        subnetId: 'subnet-prod-1b'
-      }
+        subnetId: 'subnet-prod-1b',
+      },
     ],
-    addOns: defaultKrutrimAddOns.map(addon => ({ ...addon, isEnabled: addon.id !== 'addon-development' }))
+    addOns: defaultKrutrimAddOns.map(addon => ({
+      ...addon,
+      isEnabled: addon.id !== 'addon-development',
+    })),
   },
   {
     id: 'cluster-2',
@@ -262,7 +386,7 @@ export const mockMKSClusters: MKSCluster[] = [
         status: 'active',
         createdAt: '2024-02-20T14:15:00Z',
         k8sVersion: '1.29.0',
-        subnetId: 'subnet-staging-1a'
+        subnetId: 'subnet-staging-1a',
       },
       {
         id: 'np-staging-2',
@@ -277,10 +401,13 @@ export const mockMKSClusters: MKSCluster[] = [
         status: 'active',
         createdAt: '2024-02-20T14:15:00Z',
         k8sVersion: '1.29.0',
-        subnetId: 'subnet-staging-1a'
-      }
+        subnetId: 'subnet-staging-1a',
+      },
     ],
-    addOns: defaultKrutrimAddOns.map(addon => ({ ...addon, isEnabled: addon.id !== 'addon-development' }))
+    addOns: defaultKrutrimAddOns.map(addon => ({
+      ...addon,
+      isEnabled: addon.id !== 'addon-development',
+    })),
   },
   {
     id: 'cluster-3',
@@ -311,10 +438,13 @@ export const mockMKSClusters: MKSCluster[] = [
         status: 'active',
         createdAt: '2024-12-19T09:00:00Z',
         k8sVersion: '1.29.0',
-        subnetId: 'subnet-dev-1a'
-      }
+        subnetId: 'subnet-dev-1a',
+      },
     ],
-    addOns: defaultKrutrimAddOns.map(addon => ({ ...addon, isEnabled: addon.id === 'addon-monitoring' }))
+    addOns: defaultKrutrimAddOns.map(addon => ({
+      ...addon,
+      isEnabled: addon.id === 'addon-monitoring',
+    })),
   },
   {
     id: 'cluster-4',
@@ -345,10 +475,13 @@ export const mockMKSClusters: MKSCluster[] = [
         status: 'active',
         createdAt: '2024-11-10T16:45:00Z',
         k8sVersion: '1.31.0',
-        subnetId: 'subnet-test-1a'
-      }
+        subnetId: 'subnet-test-1a',
+      },
     ],
-    addOns: defaultKrutrimAddOns.map(addon => ({ ...addon, isEnabled: addon.id === 'addon-monitoring' }))
+    addOns: defaultKrutrimAddOns.map(addon => ({
+      ...addon,
+      isEnabled: addon.id === 'addon-monitoring',
+    })),
   },
   {
     id: 'cluster-5',
@@ -379,12 +512,15 @@ export const mockMKSClusters: MKSCluster[] = [
         status: 'active',
         createdAt: '2024-10-05T11:20:00Z',
         k8sVersion: '1.31.0',
-        subnetId: 'subnet-demo-1a'
-      }
+        subnetId: 'subnet-demo-1a',
+      },
     ],
-    addOns: defaultKrutrimAddOns.map(addon => ({ ...addon, isEnabled: addon.id === 'addon-monitoring' }))
-  }
-]
+    addOns: defaultKrutrimAddOns.map(addon => ({
+      ...addon,
+      isEnabled: addon.id === 'addon-monitoring',
+    })),
+  },
+];
 
 // Mock persistent volumes
 export const mockPersistentVolumes: MKSPersistentVolume[] = [
@@ -395,7 +531,7 @@ export const mockPersistentVolumes: MKSPersistentVolume[] = [
     status: 'bound',
     storageClass: 'gp3',
     clusterId: 'cluster-1',
-    createdAt: '2024-01-15T10:30:00Z'
+    createdAt: '2024-01-15T10:30:00Z',
   },
   {
     id: 'pv-2',
@@ -404,7 +540,7 @@ export const mockPersistentVolumes: MKSPersistentVolume[] = [
     status: 'bound',
     storageClass: 'io2',
     clusterId: 'cluster-1',
-    createdAt: '2024-01-15T10:30:00Z'
+    createdAt: '2024-01-15T10:30:00Z',
   },
   {
     id: 'pv-3',
@@ -413,31 +549,35 @@ export const mockPersistentVolumes: MKSPersistentVolume[] = [
     status: 'bound',
     storageClass: 'gp3',
     clusterId: 'cluster-2',
-    createdAt: '2024-02-20T14:15:00Z'
-  }
-]
+    createdAt: '2024-02-20T14:15:00Z',
+  },
+];
 
 // Helper functions
 export const getClusterById = (id: string): MKSCluster | undefined => {
-  return mockMKSClusters.find(cluster => cluster.id === id)
-}
+  return mockMKSClusters.find(cluster => cluster.id === id);
+};
 
 export const getClustersByRegion = (region: string): MKSCluster[] => {
-  return mockMKSClusters.filter(cluster => cluster.region === region)
-}
+  return mockMKSClusters.filter(cluster => cluster.region === region);
+};
 
-export const getClustersByStatus = (status: MKSCluster['status']): MKSCluster[] => {
-  return mockMKSClusters.filter(cluster => cluster.status === status)
-}
+export const getClustersByStatus = (
+  status: MKSCluster['status']
+): MKSCluster[] => {
+  return mockMKSClusters.filter(cluster => cluster.status === status);
+};
 
-export const getPersistentVolumesByCluster = (clusterId: string): MKSPersistentVolume[] => {
-  return mockPersistentVolumes.filter(pv => pv.clusterId === clusterId)
-}
+export const getPersistentVolumesByCluster = (
+  clusterId: string
+): MKSPersistentVolume[] => {
+  return mockPersistentVolumes.filter(pv => pv.clusterId === clusterId);
+};
 
 // K8s version management helpers
 export const isK8sVersionDeprecated = (version: string): boolean => {
-  return version === '1.29.0'
-}
+  return version === '1.29.0';
+};
 
 export const getNextK8sVersion = (currentVersion: string): string | null => {
   const versionMap: Record<string, string | null> = {
@@ -445,50 +585,54 @@ export const getNextK8sVersion = (currentVersion: string): string | null => {
     '1.30.0': '1.31.0',
     '1.31.0': '1.32.0',
     '1.32.0': '1.33.0',
-    '1.33.0': null // No upgrade available
-  }
-  return versionMap[currentVersion] || null
-}
+    '1.33.0': null, // No upgrade available
+  };
+  return versionMap[currentVersion] || null;
+};
 
 // Add-on version upgrade mappings
 export const addonVersionUpgrades: Record<string, Record<string, string>> = {
   'addon-monitoring': {
     'v0.68.0': 'v0.69.0',
-    'v0.69.0': 'v0.70.0'
+    'v0.69.0': 'v0.70.0',
   },
   'addon-networking': {
     'v3.26.1': 'v3.27.0',
-    'v3.27.0': 'v3.28.0'
+    'v3.27.0': 'v3.28.0',
   },
   'addon-security': {
     'v1.13.3': 'v1.14.0',
-    'v1.14.0': 'v1.15.0'
+    'v1.14.0': 'v1.15.0',
   },
   'addon-storage': {
     'v2.20.0': 'v2.21.0',
-    'v2.21.0': 'v2.22.0'
+    'v2.21.0': 'v2.22.0',
   },
   'addon-development': {
     'v0.35.0': 'v0.36.0',
-    'v0.36.0': 'v0.37.0'
-  }
-}
+    'v0.36.0': 'v0.37.0',
+  },
+};
 
 // Function to get next available add-on version
-export const getNextAddonVersion = (addonId: string, currentVersion: string): string | null => {
-  const addonUpgrades = addonVersionUpgrades[addonId]
-  if (!addonUpgrades) return null
-  
-  return addonUpgrades[currentVersion] || null
-}
+export const getNextAddonVersion = (
+  addonId: string,
+  currentVersion: string
+): string | null => {
+  const addonUpgrades = addonVersionUpgrades[addonId];
+  if (!addonUpgrades) {
+    return null;
+  }
+
+  return addonUpgrades[currentVersion] || null;
+};
 
 export const getRegionDisplayName = (regionId: string): string => {
-  const region = availableRegions.find(r => r.id === regionId)
-  return region?.displayName || regionId
-}
+  const region = availableRegions.find(r => r.id === regionId);
+  return region?.displayName || regionId;
+};
 
 // Helper function to get subnet details by ID
 export const getSubnetById = (subnetId: string): MKSSubnet | undefined => {
-  return mksSubnets.find(subnet => subnet.id === subnetId)
-}
-
+  return mksSubnets.find(subnet => subnet.id === subnetId);
+};

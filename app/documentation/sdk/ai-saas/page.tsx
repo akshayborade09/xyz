@@ -1,38 +1,39 @@
-import { PageLayout } from "@/components/page-layout"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { ExternalLink, Download, Code, Sparkles } from "lucide-react"
+import { PageLayout } from '@/components/page-layout';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { ExternalLink, Download, Code, Sparkles } from 'lucide-react';
 
 export default function AISaaSSDKPage() {
   return (
-    <PageLayout 
-      title="AI SaaS SDK Documentation" 
-      description="Integrate ready-to-use AI services into your applications"
+    <PageLayout
+      title='AI SaaS SDK Documentation'
+      description='Integrate ready-to-use AI services into your applications'
     >
-      <div className="grid gap-6">
+      <div className='grid gap-6'>
         {/* Quick Start */}
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Sparkles className="h-5 w-5" />
+            <CardTitle className='flex items-center gap-2'>
+              <Sparkles className='h-5 w-5' />
               Quick Start
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <p className="text-muted-foreground">
-              Integrate powerful AI capabilities into your applications with our pre-built AI services SDK. No training required.
+          <CardContent className='space-y-4'>
+            <p className='text-muted-foreground'>
+              Integrate powerful AI capabilities into your applications with our
+              pre-built AI services SDK. No training required.
             </p>
-            <div className="bg-muted p-4 rounded-lg font-mono text-sm">
+            <div className='bg-muted p-4 rounded-lg font-mono text-sm'>
               <div>npm install @krutrim/ai-saas-sdk</div>
-              <div className="mt-2">pip install krutrim-ai-saas</div>
+              <div className='mt-2'>pip install krutrim-ai-saas</div>
             </div>
-            <div className="flex gap-2">
+            <div className='flex gap-2'>
               <Button>
-                <Download className="h-4 w-4 mr-2" />
+                <Download className='h-4 w-4 mr-2' />
                 Download SDK
               </Button>
-              <Button variant="outline">
-                <ExternalLink className="h-4 w-4 mr-2" />
+              <Button variant='outline'>
+                <ExternalLink className='h-4 w-4 mr-2' />
                 Try Demo
               </Button>
             </div>
@@ -40,14 +41,15 @@ export default function AISaaSSDKPage() {
         </Card>
 
         {/* Features */}
-        <div className="grid md:grid-cols-2 gap-6">
+        <div className='grid md:grid-cols-2 gap-6'>
           <Card>
             <CardHeader>
               <CardTitle>Language Models</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-muted-foreground">
-                Access state-of-the-art language models for text generation, summarization, and analysis.
+              <p className='text-sm text-muted-foreground'>
+                Access state-of-the-art language models for text generation,
+                summarization, and analysis.
               </p>
             </CardContent>
           </Card>
@@ -57,8 +59,9 @@ export default function AISaaSSDKPage() {
               <CardTitle>Computer Vision</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-muted-foreground">
-                Image recognition, object detection, and visual analysis capabilities.
+              <p className='text-sm text-muted-foreground'>
+                Image recognition, object detection, and visual analysis
+                capabilities.
               </p>
             </CardContent>
           </Card>
@@ -68,7 +71,7 @@ export default function AISaaSSDKPage() {
               <CardTitle>Speech Processing</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-muted-foreground">
+              <p className='text-sm text-muted-foreground'>
                 Speech-to-text, text-to-speech, and voice analysis services.
               </p>
             </CardContent>
@@ -79,7 +82,7 @@ export default function AISaaSSDKPage() {
               <CardTitle>Document Intelligence</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-muted-foreground">
+              <p className='text-sm text-muted-foreground'>
                 Extract insights from documents, forms, and structured data.
               </p>
             </CardContent>
@@ -92,7 +95,7 @@ export default function AISaaSSDKPage() {
             <CardTitle>Example Usage</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="bg-muted p-4 rounded-lg font-mono text-sm overflow-x-auto">
+            <div className='bg-muted p-4 rounded-lg font-mono text-sm overflow-x-auto'>
               <pre>{`import { AISaaSClient } from '@krutrim/ai-saas-sdk';
 
 const client = new AISaaSClient({
@@ -123,5 +126,5 @@ console.log('Generated text:', response.text);`}</pre>
         </Card>
       </div>
     </PageLayout>
-  )
+  );
 }

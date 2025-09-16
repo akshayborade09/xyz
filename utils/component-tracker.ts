@@ -1,4 +1,4 @@
-"use client"
+'use client';
 
 /**
  * Component Usage Tracker
@@ -14,29 +14,29 @@
  */
 
 // Set to store unique component names that have been rendered
-const renderedComponents = new Set<string>()
+const renderedComponents = new Set<string>();
 
 // Track when a component renders
 export function trackComponentRender(componentName: string): void {
-  if (process.env.NODE_ENV === "development") {
-    renderedComponents.add(componentName)
-    console.log(`[Component Tracker] ${componentName} rendered`)
+  if (process.env.NODE_ENV === 'development') {
+    renderedComponents.add(componentName);
+    console.log(`[Component Tracker] ${componentName} rendered`);
   }
 }
 
 // Get list of all components that have been rendered
 export function getRenderedComponents(): string[] {
-  return Array.from(renderedComponents)
+  return Array.from(renderedComponents);
 }
 
 // Check if a specific component has been rendered
 export function hasComponentRendered(componentName: string): boolean {
-  return renderedComponents.has(componentName)
+  return renderedComponents.has(componentName);
 }
 
 // Reset tracking data (useful for testing)
 export function resetTracking(): void {
-  renderedComponents.clear()
+  renderedComponents.clear();
 }
 
 // Example usage in a component:

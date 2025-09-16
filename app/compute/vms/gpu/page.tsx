@@ -1,8 +1,8 @@
-"use client"
+'use client';
 
-import { redirect } from "next/navigation"
+import { redirect } from 'next/navigation';
 
 export default function GPUVMPage() {
   // Redirect to main VMs page with GPU tab
-  redirect("/compute/vms")
-} 
+  redirect('/compute/vms');
+}

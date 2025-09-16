@@ -1,4 +1,4 @@
-import React from "react"
+import React from 'react';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -6,15 +6,15 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb"
+} from '@/components/ui/breadcrumb';
 
 interface BreadcrumbItemType {
-  name: string
-  href?: string
+  name: string;
+  href?: string;
 }
 
 interface BreadcrumbsProps {
-  items: BreadcrumbItemType[]
+  items: BreadcrumbItemType[];
 }
 
 /**
@@ -48,5 +48,5 @@ export function Breadcrumbs({ items }: BreadcrumbsProps) {
         ))}
       </BreadcrumbList>
     </Breadcrumb>
-  )
+  );
 }

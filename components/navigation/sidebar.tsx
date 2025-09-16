@@ -1,9 +1,9 @@
-"use client"
+'use client';
 
-import type React from "react"
+import type React from 'react';
 
-import Link from "next/link"
-import { usePathname } from "next/navigation"
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import {
   LayoutDashboard,
   Server,
@@ -22,9 +22,9 @@ import {
   ChevronRight,
   MessageSquare,
   FileSearch,
-} from "lucide-react"
+} from 'lucide-react';
 
-import { cn } from "@/lib/utils"
+import { cn } from '@/lib/utils';
 import {
   Sidebar,
   SidebarContent,
@@ -35,7 +35,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarHeader,
-} from "@/components/ui/sidebar"
+} from '@/components/ui/sidebar';
 
 /**
  * @deprecated
@@ -48,235 +48,252 @@ import {
  * Last reviewed: April 24, 2025
  */
 interface NavigationItem {
-  title: string
-  href: string
-  icon: React.ReactNode
-  items?: { title: string; href: string }[]
+  title: string;
+  href: string;
+  icon: React.ReactNode;
+  items?: { title: string; href: string }[];
 }
 
 interface NavigationCategory {
-  title: string
-  items: NavigationItem[]
+  title: string;
+  items: NavigationItem[];
 }
 
 const navigationStructure: NavigationCategory[] = [
   {
-    title: "CORE INFRASTRUCTURE",
+    title: 'CORE INFRASTRUCTURE',
     items: [
       {
-        title: "Compute & Scaling",
-        href: "/compute",
-        icon: <Server className="h-5 w-5" />,
+        title: 'Compute & Scaling',
+        href: '/compute',
+        icon: <Server className='h-5 w-5' />,
         items: [
-          { title: "Machines", href: "/compute/machines" },
-          { title: "AI Pods", href: "/compute/ai-pods" },
-          { title: "SSH Keys", href: "/compute/ssh-keys" },
+          { title: 'Machines', href: '/compute/machines' },
+          { title: 'AI Pods', href: '/compute/ai-pods' },
+          { title: 'SSH Keys', href: '/compute/ssh-keys' },
         ],
       },
       {
-        title: "Storage",
-        href: "/storage",
-        icon: <Database className="h-5 w-5" />,
+        title: 'Storage',
+        href: '/storage',
+        icon: <Database className='h-5 w-5' />,
         items: [
-          { title: "Object Storage", href: "/storage/object" },
-          { title: "Block Storage", href: "/storage/block" },
+          { title: 'Object Storage', href: '/storage/object' },
+          { title: 'Block Storage', href: '/storage/block' },
         ],
       },
       {
-        title: "Networking",
-        href: "/networking",
-        icon: <Network className="h-5 w-5" />,
+        title: 'Networking',
+        href: '/networking',
+        icon: <Network className='h-5 w-5' />,
         items: [
-          { title: "Network Security", href: "/networking/security" },
-          { title: "Load Balancing", href: "/networking/load-balancing" },
-          { title: "DNS", href: "/networking/dns" },
+          { title: 'Network Security', href: '/networking/security' },
+          { title: 'Load Balancing', href: '/networking/load-balancing' },
+          { title: 'DNS', href: '/networking/dns' },
         ],
       },
       {
-        title: "Kubernetes",
-        href: "/kubernetes",
-        icon: <Boxes className="h-5 w-5" />,
+        title: 'Kubernetes',
+        href: '/kubernetes',
+        icon: <Boxes className='h-5 w-5' />,
       },
     ],
   },
   {
-    title: "AI & INTELLIGENT SERVICES",
+    title: 'AI & INTELLIGENT SERVICES',
     items: [
       {
-        title: "Model Hub",
-        href: "/model-hub",
-        icon: <Brain className="h-5 w-5" />,
+        title: 'Model Hub',
+        href: '/model-hub',
+        icon: <Brain className='h-5 w-5' />,
         items: [
-          { title: "Model Catalog", href: "/model-hub/catalog" },
-          { title: "My Models", href: "/model-hub/my-models" },
-          { title: "Models as a Service", href: "/model-hub/models-as-service" },
+          { title: 'Model Catalog', href: '/model-hub/catalog' },
+          { title: 'My Models', href: '/model-hub/my-models' },
+          {
+            title: 'Models as a Service',
+            href: '/model-hub/models-as-service',
+          },
         ],
       },
       {
-        title: "Model Development",
-        href: "/model-dev",
-        icon: <Code className="h-5 w-5" />,
+        title: 'Model Development',
+        href: '/model-dev',
+        icon: <Code className='h-5 w-5' />,
         items: [
-          { title: "Fine-Tuning", href: "/model-dev/fine-tuning" },
-          { title: "Evaluation", href: "/model-dev/evaluation" },
+          { title: 'Fine-Tuning', href: '/model-dev/fine-tuning' },
+          { title: 'Evaluation', href: '/model-dev/evaluation' },
         ],
       },
       {
-        title: "Bhashik Language AI",
-        href: "/bhashik",
-        icon: <MessageSquare className="h-5 w-5" />,
+        title: 'Bhashik Language AI',
+        href: '/bhashik',
+        icon: <MessageSquare className='h-5 w-5' />,
         items: [
-          { title: "Text Services", href: "/bhashik/text" },
-          { title: "Speech Services", href: "/bhashik/speech" },
+          { title: 'Text Services', href: '/bhashik/text' },
+          { title: 'Speech Services', href: '/bhashik/speech' },
         ],
       },
       {
-        title: "Document Intelligence",
-        href: "/doc-intelligence",
-        icon: <FileSearch className="h-5 w-5" />,
+        title: 'Document Intelligence',
+        href: '/doc-intelligence',
+        icon: <FileSearch className='h-5 w-5' />,
         items: [
-          { title: "All Services", href: "/doc-intelligence" },
-          { title: "Extract Text", href: "/doc-intelligence/extract-text" },
-          { title: "Extract Information", href: "/doc-intelligence/extract-info" },
-          { title: "Doc Summarization", href: "/doc-intelligence/summarization" },
-          { title: "PII Masking", href: "/doc-intelligence/pii-masking" },
+          { title: 'All Services', href: '/doc-intelligence' },
+          { title: 'Extract Text', href: '/doc-intelligence/extract-text' },
+          {
+            title: 'Extract Information',
+            href: '/doc-intelligence/extract-info',
+          },
+          {
+            title: 'Doc Summarization',
+            href: '/doc-intelligence/summarization',
+          },
+          { title: 'PII Masking', href: '/doc-intelligence/pii-masking' },
         ],
       },
       {
-        title: "AI Solutions",
-        href: "/ai-solutions",
-        icon: <Microscope className="h-5 w-5" />,
+        title: 'AI Solutions',
+        href: '/ai-solutions',
+        icon: <Microscope className='h-5 w-5' />,
         items: [
-          { title: "Industrial Manufacturing", href: "/ai-solutions/manufacturing" },
-          { title: "Medical Imaging", href: "/ai-solutions/medical-imaging" },
+          {
+            title: 'Industrial Manufacturing',
+            href: '/ai-solutions/manufacturing',
+          },
+          { title: 'Medical Imaging', href: '/ai-solutions/medical-imaging' },
         ],
       },
       {
-        title: "Maps",
-        href: "/maps",
-        icon: <Map className="h-5 w-5" />,
+        title: 'Maps',
+        href: '/maps',
+        icon: <Map className='h-5 w-5' />,
         items: [
-          { title: "Map Studio", href: "/maps/studio" },
-          { title: "Products & Services", href: "/maps/products" },
-        ],
-      },
-    ],
-  },
-  {
-    title: "ADMINISTRATION",
-    items: [
-      {
-        title: "IAM",
-        href: "/iam",
-        icon: <Shield className="h-5 w-5" />,
-        items: [
-          { title: "Users", href: "/iam/users" },
-          { title: "Groups", href: "/iam/groups" },
-          { title: "Roles", href: "/iam/roles" },
-          { title: "Policy", href: "/iam/policy" },
-        ],
-      },
-      {
-        title: "Settings",
-        href: "/settings",
-        icon: <Settings className="h-5 w-5" />,
-        items: [
-          { title: "API Keys", href: "/settings/api-keys" },
-          { title: "MFA", href: "/settings/mfa" },
-          { title: "VS Studio Integration", href: "/settings/vs-studio" },
-        ],
-      },
-      {
-        title: "Billing & Subscriptions",
-        href: "/billing",
-        icon: <CreditCard className="h-5 w-5" />,
-        items: [
-          { title: "Usage Metrics", href: "/billing/usage" },
-          { title: "Transactions", href: "/billing/transactions" },
-          { title: "Pricing", href: "/billing/pricing" },
+          { title: 'Map Studio', href: '/maps/studio' },
+          { title: 'Products & Services', href: '/maps/products' },
         ],
       },
     ],
   },
   {
-    title: "LEARNING RESOURCES",
+    title: 'ADMINISTRATION',
     items: [
       {
-        title: "Documentation",
-        href: "/documentation",
-        icon: <BookOpen className="h-5 w-5" />,
+        title: 'IAM',
+        href: '/iam',
+        icon: <Shield className='h-5 w-5' />,
         items: [
-          { title: "Docs", href: "/documentation/docs" },
-          { title: "API Reference", href: "/documentation/api" },
-          { title: "SDK Reference", href: "/documentation/sdk" },
+          { title: 'Users', href: '/iam/users' },
+          { title: 'Groups', href: '/iam/groups' },
+          { title: 'Roles', href: '/iam/roles' },
+          { title: 'Policy', href: '/iam/policy' },
         ],
       },
       {
-        title: "Getting Started",
-        href: "/getting-started",
-        icon: <GraduationCap className="h-5 w-5" />,
+        title: 'Settings',
+        href: '/settings',
+        icon: <Settings className='h-5 w-5' />,
         items: [
-          { title: "Tutorials", href: "/getting-started/tutorials" },
-          { title: "Quickstart Guides", href: "/getting-started/quickstart" },
-          { title: "Example Projects", href: "/getting-started/examples" },
+          { title: 'API Keys', href: '/settings/api-keys' },
+          { title: 'MFA', href: '/settings/mfa' },
+          { title: 'VS Studio Integration', href: '/settings/vs-studio' },
+        ],
+      },
+      {
+        title: 'Billing & Subscriptions',
+        href: '/billing',
+        icon: <CreditCard className='h-5 w-5' />,
+        items: [
+          { title: 'Usage Metrics', href: '/billing/usage' },
+          { title: 'Transactions', href: '/billing/transactions' },
+          { title: 'Pricing', href: '/billing/pricing' },
         ],
       },
     ],
   },
-]
+  {
+    title: 'LEARNING RESOURCES',
+    items: [
+      {
+        title: 'Documentation',
+        href: '/documentation',
+        icon: <BookOpen className='h-5 w-5' />,
+        items: [
+          { title: 'Docs', href: '/documentation/docs' },
+          { title: 'API Reference', href: '/documentation/api' },
+          { title: 'SDK Reference', href: '/documentation/sdk' },
+        ],
+      },
+      {
+        title: 'Getting Started',
+        href: '/getting-started',
+        icon: <GraduationCap className='h-5 w-5' />,
+        items: [
+          { title: 'Tutorials', href: '/getting-started/tutorials' },
+          { title: 'Quickstart Guides', href: '/getting-started/quickstart' },
+          { title: 'Example Projects', href: '/getting-started/examples' },
+        ],
+      },
+    ],
+  },
+];
 
 export function AppSidebar() {
-  const pathname = usePathname()
+  const pathname = usePathname();
 
   const isActive = (href: string) => {
-    if (href === "/") {
-      return pathname === "/"
+    if (href === '/') {
+      return pathname === '/';
     }
-    return pathname === href || pathname.startsWith(href + "/")
-  }
+    return pathname === href || pathname.startsWith(href + '/');
+  };
 
   return (
     <Sidebar>
-      <SidebarHeader className="border-b">
-        <div className="flex h-16 items-center px-4">
-          <Link href="/dashboard" className="flex items-center">
-            <span className="text-xl font-bold">Krutrim Cloud</span>
+      <SidebarHeader className='border-b'>
+        <div className='flex h-16 items-center px-4'>
+          <Link href='/dashboard' className='flex items-center'>
+            <span className='text-xl font-bold'>Krutrim Cloud</span>
           </Link>
         </div>
       </SidebarHeader>
       <SidebarContent>
-        {navigationStructure.map((category) => (
+        {navigationStructure.map(category => (
           <SidebarGroup key={category.title}>
-            <SidebarGroupLabel className="text-xs font-semibold text-muted-foreground tracking-wider">
+            <SidebarGroupLabel className='text-xs font-semibold text-muted-foreground tracking-wider'>
               {category.title}
             </SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
-                {category.items.map((item) => (
+                {category.items.map(item => (
                   <SidebarMenuItem key={item.href}>
                     <SidebarMenuButton
                       asChild
                       isActive={isActive(item.href)}
-                      className={cn("justify-start", item.items && isActive(item.href) && "bg-accent/50")}
+                      className={cn(
+                        'justify-start',
+                        item.items && isActive(item.href) && 'bg-accent/50'
+                      )}
                     >
                       <Link href={item.href}>
                         {item.icon}
-                        <span className="ml-2">{item.title}</span>
-                        {item.items && <ChevronRight className="ml-auto h-4 w-4" />}
+                        <span className='ml-2'>{item.title}</span>
+                        {item.items && (
+                          <ChevronRight className='ml-auto h-4 w-4' />
+                        )}
                       </Link>
                     </SidebarMenuButton>
 
                     {item.items && isActive(item.href) && (
-                      <div className="mt-1 ml-7 space-y-1 border-l pl-2">
-                        {item.items.map((subItem) => (
+                      <div className='mt-1 ml-7 space-y-1 border-l pl-2'>
+                        {item.items.map(subItem => (
                           <Link
                             key={subItem.href}
                             href={subItem.href}
                             className={cn(
-                              "flex h-8 items-center text-sm rounded-md px-2",
+                              'flex h-8 items-center text-sm rounded-md px-2',
                               isActive(subItem.href)
-                                ? "bg-accent text-accent-foreground font-medium"
-                                : "text-muted-foreground hover:text-foreground hover:bg-accent/50",
+                                ? 'bg-accent text-accent-foreground font-medium'
+                                : 'text-muted-foreground hover:text-foreground hover:bg-accent/50'
                             )}
                           >
                             {subItem.title}
@@ -292,5 +309,5 @@ export function AppSidebar() {
         ))}
       </SidebarContent>
     </Sidebar>
-  )
+  );
 }

@@ -1,15 +1,15 @@
-import type React from "react"
-import type { Metadata } from "next"
+import type React from 'react';
+import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: "Authentication - Krutrim Cloud",
-  description: "Authentication pages for Krutrim Cloud Platform",
-}
+  title: 'Authentication - Krutrim Cloud',
+  description: 'Authentication pages for Krutrim Cloud Platform',
+};
 
 export default function AuthLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode
+  children: React.ReactNode;
 }>) {
-  return <div className="min-h-screen bg-gray-50">{children}</div>
+  return <div className='min-h-screen bg-gray-50'>{children}</div>;
 }

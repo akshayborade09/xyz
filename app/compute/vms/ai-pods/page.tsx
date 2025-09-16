@@ -1,8 +1,8 @@
-"use client"
+'use client';
 
-import { redirect } from "next/navigation"
+import { redirect } from 'next/navigation';
 
 export default function AIPodsPage() {
   // Redirect to main VMs page with AI Pods tab
-  redirect("/compute/vms")
-} 
+  redirect('/compute/vms');
+}

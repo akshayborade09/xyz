@@ -1,5 +1,5 @@
-import { MigratedTabsExample } from "@/components/examples/migrated-tabs-example"
+import { MigratedTabsExample } from '@/components/examples/migrated-tabs-example';
 
 export default function MigratedTabsDemo() {
-  return <MigratedTabsExample />
-} 
+  return <MigratedTabsExample />;
+}

@@ -1,13 +1,13 @@
-import type React from "react"
+import type React from 'react';
 
 export default function GettingStartedLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
-    <div className="h-full">
-      <div className="p-4 md:p-6">{children}</div>
+    <div className='h-full'>
+      <div className='p-4 md:p-6'>{children}</div>
     </div>
-  )
+  );
 }

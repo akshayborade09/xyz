@@ -2,43 +2,43 @@ name: Validate Code Quality
 
 on:
   push:
-    branches: [ main, develop, asg ]
+    branches: [main, develop, asg]
   pull_request:
-    branches: [ main, develop ]
+    branches: [main, develop]
 
 jobs:
   validate:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '18'
-        cache: 'npm'
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
 
-    - name: Install dependencies
-      run: npm ci
+      - name: Install dependencies
+        run: npm ci
 
-    - name: Type check
-      run: npm run type-check
+      - name: Type check
+        run: npm run type-check
 
-    - name: Lint
-      run: npm run lint
+      - name: Lint
+        run: npm run lint
 
-    - name: Format check
-      run: npm run format:check
+      - name: Format check
+        run: npm run format:check
 
-    - name: Build check
-      run: npm run build
+      - name: Build check
+        run: npm run build
 
-    - name: Test build artifacts
-      run: |
-        if [ -d ".next" ]; then
-          echo "✅ Build artifacts created successfully"
-        else
-          echo "❌ Build artifacts not found"
-          exit 1
-        fi
+      - name: Test build artifacts
+        run: |
+          if [ -d ".next" ]; then
+            echo "✅ Build artifacts created successfully"
+          else
+            echo "❌ Build artifacts not found"
+            exit 1
+          fi

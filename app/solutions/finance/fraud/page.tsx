@@ -1,14 +1,19 @@
-import { PageLayout } from "@/components/page-layout"
+import { PageLayout } from '@/components/page-layout';
 
 export default function FinanceFraudPage() {
   return (
-    <PageLayout title="Fraud Detection" description="AI solutions for financial fraud detection">
-      <div className="flex items-center justify-center h-[400px] border rounded-lg">
-        <div className="text-center">
-          <h3 className="text-xl font-bold mb-2">Fraud Detection</h3>
-          <p className="text-muted-foreground">This is a placeholder for the Fraud Detection content</p>
+    <PageLayout
+      title='Fraud Detection'
+      description='AI solutions for financial fraud detection'
+    >
+      <div className='flex items-center justify-center h-[400px] border rounded-lg'>
+        <div className='text-center'>
+          <h3 className='text-xl font-bold mb-2'>Fraud Detection</h3>
+          <p className='text-muted-foreground'>
+            This is a placeholder for the Fraud Detection content
+          </p>
         </div>
       </div>
     </PageLayout>
-  )
+  );
 }
