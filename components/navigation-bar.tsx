@@ -4,7 +4,7 @@ import type React from "react"
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { ServerIcon, GlobeAltIcon, ShieldCheckIcon, GlobeAmericasIcon } from "@heroicons/react/24/outline"
+import { ServerIcon, GlobeAltIcon, ShieldCheckIcon, GlobeAmericasIcon, NetworkIcon } from "@heroicons/react/24/outline"
 
 interface NavItem {
   name: string
@@ -26,27 +26,27 @@ export function NavigationBar() {
     {
       name: "Virtual Private Cloud",
       href: "/networking/vpc",
-      icon: <Network className="w-5 h-5" />,
+      icon: <NetworkIcon className="w-5 h-5" />,
     },
     {
       name: "Subnets",
       href: "/networking/subnets",
-      icon: <Globe className="w-5 h-5" />,
+      icon: <GlobeAltIcon className="w-5 h-5" />,
     },
     {
       name: "Security Groups",
       href: "/networking/security-groups",
-      icon: <Shield className="w-5 h-5" />,
+      icon: <ShieldCheckIcon className="w-5 h-5" />,
     },
     {
       name: "Static IP Addresses",
       href: "/networking/static-ips",
-      icon: <Server className="w-5 h-5" />,
+      icon: <ServerIcon className="w-5 h-5" />,
     },
     {
       name: "DNS",
       href: "/networking/dns",
-      icon: <Globe className="w-5 h-5" />,
+      icon: <GlobeAltIcon className="w-5 h-5" />,
     },
   ]
 

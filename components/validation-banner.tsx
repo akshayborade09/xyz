@@ -18,7 +18,7 @@ export function ValidationBanner({ daysRemaining, onValidate }: ValidationBanner
     <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
       <div className="flex items-start">
         <div className="flex-shrink-0">
-          <AlertTriangle className="h-5 w-5 text-yellow-600" />
+          <ExclamationTriangleIcon className="h-5 w-5 text-yellow-600" />
         </div>
         <div className="ml-3 flex-1">
           <h3 className="text-sm font-medium text-yellow-800">Customer Validation Required</h3>
@@ -43,7 +43,7 @@ export function ValidationBanner({ daysRemaining, onValidate }: ValidationBanner
                 onClick={() => setIsVisible(false)}
               >
                 Dismiss
-                <X className="ml-1 h-4 w-4" />
+                <XMarkIcon className="ml-1 h-4 w-4" />
               </Button>
             </div>
           </div>
