@@ -850,8 +850,6 @@ export default function CreateAutoScalingGroupPage() {
                 onRemoveStorageVolume={removeStorageVolume}
               />
 
-              <Separator />
-
               {/* Scripts & Tags Sections */}
               <ScriptsTagsSection
                 sshKey={formData.sshKey}
