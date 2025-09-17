@@ -16,15 +16,17 @@ import { StatusBadge } from '@/components/status-badge';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { useToast } from '@/hooks/use-toast';
 import { DeleteConfirmationModal } from '@/components/delete-confirmation-modal';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { tooltipContent } from '@/lib/tooltip-content';
 
 // Mock data to match Create Template structure
 const instanceTypes = [
   { id: "cpu-1x-4gb", name: "CPU-1x-4GB", vcpus: 1, ram: 4, pricePerHour: 3 },
   { id: "cpu-2x-8gb", name: "CPU-2x-8GB", vcpus: 2, ram: 8, pricePerHour: 6 },
+  { id: "t3.medium", name: "t3.medium", vcpus: 2, ram: 4, pricePerHour: 5 },
   { id: "cpu-4x-16gb", name: "CPU-4x-16GB", vcpus: 4, ram: 16, pricePerHour: 13 },
   { id: "cpu-8x-32gb", name: "CPU-8x-32GB", vcpus: 8, ram: 32, pricePerHour: 25 },
   { id: "cpu-16x-64gb", name: "CPU-16x-64GB", vcpus: 16, ram: 64, pricePerHour: 49 },
@@ -69,18 +71,13 @@ export default function TemplateDetailsPage() {
     );
   }
 
-  // Format created date
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
-  };
 
   // Breadcrumbs
   const customBreadcrumbs = [
     { href: '/dashboard', title: 'Home' },
     { href: '/compute', title: 'Compute' },
     { href: '/compute/auto-scaling', title: 'Auto Scaling' },
-    { href: `/compute/auto-scaling/templates/${template.id}`, title: 'cache-server-template' },
+    { href: `/compute/auto-scaling/templates/${template.id}`, title: "cache-server-template" },
   ];
 
   // Mock template data to match Create Template structure
@@ -90,12 +87,12 @@ export default function TemplateDetailsPage() {
     
     // Instance Configuration
     instanceName: "cache-server-template-instance",
-    instanceType: "cpu-4x-16gb",
+    instanceType: "t3.medium",
     
     // Storage Configuration
     bootVolumeName: "cache-server-template-boot",
     bootVolumeSize: 20,
-    machineImage: "ami-ubuntu-22.04",
+    machineImage: template.imageId || "ami-ubuntu-22.04",
     storageVolumes: [
       {
         id: "vol-1",
@@ -106,12 +103,12 @@ export default function TemplateDetailsPage() {
     ],
     
     // Scripts & Tags
-    sshKey: "ssh-key-2",
-    startupScript: "#!/bin/bash\necho 'Template startup script'",
+    sshKey: template.keyName || "ssh-key-2",
+    startupScript: template.userData || "#!/bin/bash\necho 'Template startup script'",
     tags: [
       { key: "Environment", value: "Production" },
       { key: "Template", value: "cache-server-template" },
-      { key: "Version", value: "6" }
+      { key: "Version", value: "V6" }
     ],
     
     // Network Configuration
@@ -161,7 +158,7 @@ export default function TemplateDetailsPage() {
 
   // Action handlers
   const handleEdit = () => {
-    window.location.href = `/compute/auto-scaling/templates/template-1/edit`;
+    window.location.href = `/compute/auto-scaling/templates/${template.id}/edit`;
   };
 
   const handleDelete = () => {
@@ -171,7 +168,7 @@ export default function TemplateDetailsPage() {
   const handleDeleteConfirm = () => {
     toast({
       title: "Template deleted",
-      description: "cache-server-template has been deleted successfully.",
+      description: `cache-server-template has been deleted successfully.`,
     });
     setIsDeleteModalOpen(false);
     // In a real app, you would navigate back to the listing page
@@ -203,22 +200,39 @@ export default function TemplateDetailsPage() {
         >
           {/* Overlay Edit/Delete Buttons */}
           <div className='absolute top-4 right-4 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10'>
-            <Button
-              variant='ghost'
-              size='sm'
-              onClick={handleEdit}
-              className='h-8 w-8 p-0 text-muted-foreground hover:text-foreground bg-white/80 hover:bg-white border border-gray-200 shadow-sm'
-            >
-              <Edit className='h-4 w-4' />
-            </Button>
-            <Button
-              variant='ghost'
-              size='sm'
-              onClick={handleDelete}
-              className='h-8 w-8 p-0 text-muted-foreground hover:text-red-600 bg-white/80 hover:bg-white border border-gray-200 shadow-sm'
-            >
-              <Trash2 className='h-4 w-4' />
-            </Button>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant='ghost'
+                    size='sm'
+                    onClick={handleEdit}
+                    className='h-8 w-8 p-0 text-muted-foreground hover:text-foreground bg-white/80 hover:bg-white border border-gray-200 shadow-sm'
+                  >
+                    <Edit className='h-4 w-4' />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Edit Template</p>
+                </TooltipContent>
+              </Tooltip>
+
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant='ghost'
+                    size='sm'
+                    onClick={handleDelete}
+                    className='h-8 w-8 p-0 text-muted-foreground hover:text-red-600 bg-white/80 hover:bg-white border border-gray-200 shadow-sm'
+                  >
+                    <Trash2 className='h-4 w-4' />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Delete Template</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           </div>
 
           <DetailGrid>
@@ -242,8 +256,10 @@ export default function TemplateDetailsPage() {
                 >
                   Type
                 </label>
-                <div className='font-medium' style={{ fontSize: '14px' }}>
-                  CPU
+                <div>
+                  <Badge variant="secondary" className="bg-blue-100 text-blue-800 text-xs hover:bg-blue-100 hover:text-blue-800 cursor-default">
+                    CPU
+                  </Badge>
                 </div>
               </div>
               <div className='space-y-1'>
@@ -264,11 +280,15 @@ export default function TemplateDetailsPage() {
                 >
                   Version
                 </label>
-                <div className='flex items-center gap-2'>
-                  <Badge variant="secondary" className='bg-black text-white text-xs px-2 py-1'>
-                    V6
-                  </Badge>
-                  <span className='text-xs text-gray-500'>Latest Version</span>
+                <div className='space-y-1'>
+                  <div className='flex items-center gap-2'>
+                    <Badge variant="secondary" className="bg-black text-white text-xs font-medium hover:bg-black hover:text-white cursor-default">
+                      V6
+                    </Badge>
+                  </div>
+                  <div className='text-xs text-gray-500'>
+                    Latest Version
+                  </div>
                 </div>
               </div>
               <div className='space-y-1'>
@@ -286,242 +306,381 @@ export default function TemplateDetailsPage() {
           </DetailGrid>
         </div>
 
-        {/* Main Content - Individual Cards */}
-        <div className="space-y-6">
-          {/* Instance Configuration Card */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-base font-medium">Instance Configuration</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <Label className="text-sm font-medium text-gray-700">Instance Name</Label>
-                  <div className="p-3 bg-gray-50 rounded-md border">
-                    <span className="text-sm">{templateData.instanceName}</span>
+        {/* Main Content - Full Width */}
+        <div className="w-full space-y-6">
+          {/* Instance Configuration */}
+          <div className='bg-card text-card-foreground border-border border rounded-lg'>
+            <div className='p-6 pb-4'>
+              <div className='flex items-center justify-between'>
+                <div className='flex items-center gap-3'>
+                  <h3 className='text-lg font-semibold'>Instance Configuration</h3>
+                </div>
+              </div>
+            </div>
+            <div className='px-6 pb-6'>
+              <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+                <div className='border transition-colors rounded-lg bg-card p-4 relative border-border hover:border-gray-300'>
+                  <div className='flex items-start justify-between mb-4'>
+                    <div className='flex-1 min-w-0'>
+                      <h4 className='text-sm font-medium leading-none'>Instance Name</h4>
+                    </div>
+                  </div>
+                  <div className='space-y-3 text-xs'>
+                    <div>
+                      <Label className='text-xs text-muted-foreground'>Name</Label>
+                      <div className='mt-1'>
+                        <span className='text-sm'>{templateData.instanceName}</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
-                <div className="space-y-2">
-                  <Label className="text-sm font-medium text-gray-700">Instance Type</Label>
-                  <div className="p-3 bg-gray-50 rounded-md border">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-4">
-                        <span className="font-medium text-sm">{instanceTypeDetails.name}</span>
-                        <span className="text-muted-foreground text-xs">
-                          {instanceTypeDetails.vcpus} vCPU • {instanceTypeDetails.ram} GB RAM
-                        </span>
+                
+                <div className='border transition-colors rounded-lg bg-card p-4 relative border-border hover:border-gray-300'>
+                  <div className='flex items-start justify-between mb-4'>
+                    <div className='flex-1 min-w-0'>
+                      <h4 className='text-sm font-medium leading-none'>Instance Type</h4>
+                    </div>
+                  </div>
+                  <div className='space-y-3 text-xs'>
+                    <div className='grid grid-cols-2 gap-6'>
+                      <div>
+                        <Label className='text-xs text-muted-foreground'>Type</Label>
+                        <div className='mt-1'>
+                          <span className='text-sm'>{instanceTypeDetails.name}</span>
+                        </div>
                       </div>
-                      <span className="text-primary font-semibold text-xs">
-                        ₹{instanceTypeDetails.pricePerHour}/hr
-                      </span>
+                      <div>
+                        <Label className='text-xs text-muted-foreground'>Specs</Label>
+                        <div className='mt-1'>
+                          <span className='text-sm'>{instanceTypeDetails.vcpus} vCPU • {instanceTypeDetails.ram} GB RAM</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div>
+                      <Label className='text-xs text-muted-foreground'>Price</Label>
+                      <div className='mt-1'>
+                        <span className='text-sm font-semibold'>₹{instanceTypeDetails.pricePerHour}/hr</span>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
 
-          {/* Storage Configuration Card */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-base font-medium">Storage Configuration</CardTitle>
-            </CardHeader>
-            <CardContent>
-                  
-                  {/* Bootable Volume */}
-                  <div className="space-y-4">
-                    <Label className="text-sm font-medium text-gray-700">Bootable Volume</Label>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                      <div className="space-y-2">
-                        <Label className="text-xs text-muted-foreground">Volume Name</Label>
-                        <div className="p-2 bg-gray-50 rounded border text-sm">
-                          {templateData.bootVolumeName}
+          {/* Storage Configuration */}
+          <div className='bg-card text-card-foreground border-border border rounded-lg'>
+            <div className='p-6 pb-4'>
+              <div className='flex items-center justify-between'>
+                <div className='flex items-center gap-3'>
+                  <h3 className='text-lg font-semibold'>Storage Configuration</h3>
+                </div>
+              </div>
+            </div>
+            <div className='px-6 pb-6'>
+              <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+                {/* Bootable Volume */}
+                <div className='border transition-colors rounded-lg bg-card p-4 relative border-border hover:border-gray-300'>
+                  <div className='flex items-start justify-between mb-4'>
+                    <div className='flex-1 min-w-0'>
+                      <h4 className='text-sm font-medium leading-none'>Boot Volume</h4>
+                    </div>
+                  </div>
+                  <div className='space-y-3 text-xs'>
+                    <div className='grid grid-cols-2 gap-6'>
+                      <div>
+                        <Label className='text-xs text-muted-foreground'>Volume Name</Label>
+                        <div className='mt-1'>
+                          <span className='text-sm'>{templateData.bootVolumeName}</span>
                         </div>
                       </div>
-                      <div className="space-y-2">
-                        <Label className="text-xs text-muted-foreground">Size (GB)</Label>
-                        <div className="p-2 bg-gray-50 rounded border text-sm">
-                          {templateData.bootVolumeSize} GB
-                        </div>
-                      </div>
-                      <div className="space-y-2">
-                        <Label className="text-xs text-muted-foreground">Machine Image</Label>
-                        <div className="p-2 bg-gray-50 rounded border text-sm">
-                          {machineImageDetails.name}
+                      <div>
+                        <Label className='text-xs text-muted-foreground'>Size</Label>
+                        <div className='mt-1'>
+                          <span className='text-sm'>{templateData.bootVolumeSize} GB</span>
                         </div>
                       </div>
                     </div>
+                    <div>
+                      <Label className='text-xs text-muted-foreground'>Machine Image</Label>
+                      <div className='mt-1'>
+                        <span className='text-sm'>{machineImageDetails.name}</span>
+                      </div>
+                    </div>
                   </div>
+                </div>
 
-              {/* Additional Storage Volumes */}
-              <div className="space-y-3">
-                <Label className="text-sm font-medium text-gray-700">Additional Storage Volumes</Label>
+                {/* Additional Storage Volumes */}
                 {templateData.storageVolumes.map((volume, index) => (
-                  <div key={volume.id} className="p-4 border rounded-lg bg-gray-50/50">
-                    <div className="grid grid-cols-3 gap-4">
-                      <div className="space-y-1">
-                        <Label className="text-xs text-muted-foreground">Volume Name</Label>
-                        <div className="text-sm font-medium">{volume.name}</div>
+                  <div key={volume.id} className='border transition-colors rounded-lg bg-card p-4 relative border-border hover:border-gray-300'>
+                    <div className='flex items-start justify-between mb-4'>
+                      <div className='flex-1 min-w-0'>
+                        <h4 className='text-sm font-medium leading-none'>{volume.name}</h4>
                       </div>
-                      <div className="space-y-1">
-                        <Label className="text-xs text-muted-foreground">Size (GB)</Label>
-                        <div className="text-sm">{volume.size} GB</div>
-                      </div>
-                      <div className="space-y-1">
-                        <Label className="text-xs text-muted-foreground">Type</Label>
-                        <div className="text-sm">{volume.type}</div>
+                    </div>
+                    <div className='space-y-3 text-xs'>
+                      <div className='grid grid-cols-2 gap-6'>
+                        <div>
+                          <Label className='text-xs text-muted-foreground'>Size</Label>
+                          <div className='mt-1'>
+                            <span className='text-sm'>{volume.size} GB</span>
+                          </div>
+                        </div>
+                        <div>
+                          <Label className='text-xs text-muted-foreground'>Type</Label>
+                          <div className='mt-1'>
+                            <span className='text-sm'>{volume.type}</span>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
                 ))}
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
 
-          {/* Scripts & Tags Card */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-base font-medium">Scripts & Tags</CardTitle>
-            </CardHeader>
-            <CardContent>
-                  
-                  {/* SSH Key */}
-                  <div className="space-y-2">
-                    <Label className="text-sm font-medium text-gray-700">SSH Key</Label>
-                    <div className="p-3 bg-gray-50 rounded-md border">
-                      <span className="text-sm">{sshKeyDetails.name}</span>
-                    </div>
-                  </div>
-
-                  {/* Startup Script */}
-                  <div className="space-y-2">
-                    <Label className="text-sm font-medium text-gray-700">Startup Script</Label>
-                    <div className="p-3 bg-gray-50 rounded-md border">
-                      <pre className="text-xs text-muted-foreground whitespace-pre-wrap font-mono">
-                        {templateData.startupScript}
-                      </pre>
-                    </div>
-                  </div>
-
-              {/* Tags */}
-              <div className="space-y-3">
-                <Label className="text-sm font-medium text-gray-700">Tags</Label>
-                <div className="space-y-2">
-                  {templateData.tags.map((tag, index) => (
-                    <div key={index} className="flex items-center gap-4 p-3 bg-gray-50 rounded border">
-                      <div className="flex-1">
-                        <span className="text-sm font-medium">{tag.key}</span>
-                      </div>
-                      <div className="flex-1">
-                        <span className="text-sm text-muted-foreground">{tag.value}</span>
-                      </div>
-                    </div>
-                  ))}
+          {/* Scripts & Tags */}
+          <div className='bg-card text-card-foreground border-border border rounded-lg'>
+            <div className='p-6 pb-4'>
+              <div className='flex items-center justify-between'>
+                <div className='flex items-center gap-3'>
+                  <h3 className='text-lg font-semibold'>Scripts & Tags</h3>
                 </div>
               </div>
-            </CardContent>
-          </Card>
-
-          {/* Network Configuration Card */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-base font-medium">Network Configuration</CardTitle>
-            </CardHeader>
-            <CardContent>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="space-y-2">
-                      <Label className="text-sm font-medium text-gray-700">Region</Label>
-                      <div className="p-3 bg-gray-50 rounded-md border">
-                        <span className="text-sm">US East (N. Virginia)</span>
-                      </div>
+            </div>
+            <div className='px-6 pb-6'>
+              <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+                {/* SSH Key */}
+                <div className='border transition-colors rounded-lg bg-card p-4 relative border-border hover:border-gray-300'>
+                  <div className='flex items-start justify-between mb-4'>
+                    <div className='flex-1 min-w-0'>
+                      <h4 className='text-sm font-medium leading-none'>SSH Key</h4>
                     </div>
-                    <div className="space-y-2">
-                      <Label className="text-sm font-medium text-gray-700">VPC</Label>
-                      <div className="p-3 bg-gray-50 rounded-md border">
-                        <span className="text-sm">Default VPC (us-east-1)</span>
-                      </div>
-                    </div>
-                    <div className="space-y-2">
-                      <Label className="text-sm font-medium text-gray-700">Subnet</Label>
-                      <div className="p-3 bg-gray-50 rounded-md border">
-                        <div className="flex items-center gap-2">
-                          <span className="text-sm">Public Subnet</span>
-                          <Badge variant="secondary" className="text-xs bg-blue-100 text-blue-800">
-                            Public
-                          </Badge>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="space-y-2">
-                      <Label className="text-sm font-medium text-gray-700">Security Groups</Label>
-                      <div className="space-y-2">
-                        {securityGroupDetails.map((sg) => (
-                          <div key={sg?.id} className="p-2 bg-gray-50 rounded border">
-                            <div className="flex items-center justify-between">
-                              <span className="text-sm font-medium">{sg?.name}</span>
-                              <span className="text-xs text-muted-foreground">{sg?.description}</span>
-                            </div>
-                          </div>
-                        ))}
+                  </div>
+                  <div className='space-y-3 text-xs'>
+                    <div>
+                      <Label className='text-xs text-muted-foreground'>Key Name</Label>
+                      <div className='mt-1'>
+                        <span className='text-sm'>{sshKeyDetails.name}</span>
                       </div>
                     </div>
                   </div>
+                </div>
+
+                {/* Startup Script */}
+                <div className='border transition-colors rounded-lg bg-card p-4 relative border-border hover:border-gray-300'>
+                  <div className='flex items-start justify-between mb-4'>
+                    <div className='flex-1 min-w-0'>
+                      <h4 className='text-sm font-medium leading-none'>Startup Script</h4>
+                    </div>
+                  </div>
+                  <div className='space-y-3 text-xs'>
+                    <div>
+                      <Label className='text-xs text-muted-foreground'>Script Content</Label>
+                      <div className='mt-1'>
+                        <pre className='text-xs text-muted-foreground whitespace-pre-wrap font-mono bg-gray-50 p-2 rounded border'>
+                          {templateData.startupScript}
+                        </pre>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Tags */}
+                {templateData.tags.map((tag, index) => (
+                  <div key={index} className='border transition-colors rounded-lg bg-card p-4 relative border-border hover:border-gray-300'>
+                    <div className='flex items-start justify-between mb-4'>
+                      <div className='flex-1 min-w-0'>
+                        <h4 className='text-sm font-medium leading-none'>Tag: {tag.key}</h4>
+                      </div>
+                    </div>
+                    <div className='space-y-3 text-xs'>
+                      <div className='grid grid-cols-2 gap-6'>
+                        <div>
+                          <Label className='text-xs text-muted-foreground'>Key</Label>
+                          <div className='mt-1'>
+                            <span className='text-sm'>{tag.key}</span>
+                          </div>
+                        </div>
+                        <div>
+                          <Label className='text-xs text-muted-foreground'>Value</Label>
+                          <div className='mt-1'>
+                            <span className='text-sm'>{tag.value}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
 
-          {/* Auto Scaling Policies Card */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-base font-medium">Auto Scaling Policies</CardTitle>
-            </CardHeader>
-            <CardContent>
-                  
-                  <div className="space-y-4">
-                    {templateData.scalingPolicies.map((policy, index) => (
-                      <div key={policy.id} className="p-4 border rounded-lg bg-gray-50/50">
-                        <div className="space-y-3">
-                          <div className="flex items-center gap-2">
-                            <Badge 
-                              variant="secondary" 
-                              className="bg-gray-100 text-gray-800 font-medium"
-                            >
-                              {policy.type === "Average CPU Utilization" ? "CPU" : 
-                               policy.type === "Average Memory Utilization" ? "Memory" : "Scheduled"}
-                            </Badge>
-                            <span className="text-sm font-medium">{policy.type}</span>
+          {/* Network Configuration */}
+          <div className='bg-card text-card-foreground border-border border rounded-lg'>
+            <div className='p-6 pb-4'>
+              <div className='flex items-center justify-between'>
+                <div className='flex items-center gap-3'>
+                  <h3 className='text-lg font-semibold'>Network Configuration</h3>
+                </div>
+              </div>
+            </div>
+            <div className='px-6 pb-6'>
+              <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+                {/* Region */}
+                <div className='border transition-colors rounded-lg bg-card p-4 relative border-border hover:border-gray-300'>
+                  <div className='flex items-start justify-between mb-4'>
+                    <div className='flex-1 min-w-0'>
+                      <h4 className='text-sm font-medium leading-none'>Region</h4>
+                    </div>
+                  </div>
+                  <div className='space-y-3 text-xs'>
+                    <div>
+                      <Label className='text-xs text-muted-foreground'>Location</Label>
+                      <div className='mt-1'>
+                        <span className='text-sm'>US East (N. Virginia)</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* VPC */}
+                <div className='border transition-colors rounded-lg bg-card p-4 relative border-border hover:border-gray-300'>
+                  <div className='flex items-start justify-between mb-4'>
+                    <div className='flex-1 min-w-0'>
+                      <h4 className='text-sm font-medium leading-none'>VPC</h4>
+                    </div>
+                  </div>
+                  <div className='space-y-3 text-xs'>
+                    <div>
+                      <Label className='text-xs text-muted-foreground'>Network</Label>
+                      <div className='mt-1'>
+                        <span className='text-sm'>Default VPC (us-east-1)</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Subnet */}
+                <div className='border transition-colors rounded-lg bg-card p-4 relative border-border hover:border-gray-300'>
+                  <div className='flex items-start justify-between mb-4'>
+                    <div className='flex-1 min-w-0'>
+                      <h4 className='text-sm font-medium leading-none'>Subnet</h4>
+                    </div>
+                  </div>
+                  <div className='space-y-3 text-xs'>
+                    <div>
+                      <Label className='text-xs text-muted-foreground'>Type</Label>
+                      <div className='mt-1 flex items-center gap-2'>
+                        <span className='text-sm'>Public Subnet</span>
+                        <Badge variant="secondary" className="text-xs bg-blue-100 text-blue-800 hover:bg-blue-100 hover:text-blue-800 cursor-default">
+                          Public
+                        </Badge>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Security Groups */}
+                {securityGroupDetails.map((sg) => (
+                  <div key={sg?.id} className='border transition-colors rounded-lg bg-card p-4 relative border-border hover:border-gray-300'>
+                    <div className='flex items-start justify-between mb-4'>
+                      <div className='flex-1 min-w-0'>
+                        <h4 className='text-sm font-medium leading-none'>{sg?.name}</h4>
+                      </div>
+                    </div>
+                    <div className='space-y-3 text-xs'>
+                      <div>
+                        <Label className='text-xs text-muted-foreground'>Description</Label>
+                        <div className='mt-1'>
+                          <span className='text-sm'>{sg?.description}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Auto Scaling Policies */}
+          <div className='bg-card text-card-foreground border-border border rounded-lg'>
+            <div className='p-6 pb-4'>
+              <div className='flex items-center justify-between'>
+                <div className='flex items-center gap-3'>
+                  <h3 className='text-lg font-semibold'>Auto Scaling Policies</h3>
+                </div>
+              </div>
+            </div>
+            <div className='px-6 pb-6'>
+              <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+                {templateData.scalingPolicies.map((policy, index) => (
+                  <div key={policy.id} className='border transition-colors rounded-lg bg-card p-4 relative border-border hover:border-gray-300'>
+                    <div className='flex items-start justify-between mb-4'>
+                      <div className='flex items-center gap-2 flex-1 min-w-0'>
+                        <h4 className='text-sm font-medium leading-none'>{policy.type}</h4>
+                        <Badge 
+                          variant="secondary" 
+                          className="bg-green-100 text-green-800 border-green-200 hover:bg-green-100 hover:text-green-800 cursor-default text-xs h-5"
+                        >
+                          Active
+                        </Badge>
+                      </div>
+                    </div>
+                    
+                    <div className='space-y-3 text-xs'>
+                      <div>
+                        <Label className='text-xs text-muted-foreground'>Type</Label>
+                        <div className='mt-1 flex items-center gap-2'>
+                          <Badge 
+                            variant="secondary" 
+                            className="bg-gray-100 text-gray-800 font-medium hover:bg-gray-100 hover:text-gray-800 cursor-default"
+                          >
+                            {policy.type === "Average CPU Utilization" ? "CPU" : 
+                             policy.type === "Average Memory Utilization" ? "Memory" : "Scheduled"}
+                          </Badge>
+                          <span className="text-sm">{policy.type}</span>
+                        </div>
+                      </div>
+                      
+                      <div className="grid grid-cols-2 gap-6">
+                        <div>
+                          <Label className="text-xs text-muted-foreground">Up Scale Target</Label>
+                          <div className="mt-1">
+                            <span className="text-sm font-medium">{policy.upScaleTarget}%</span>
                           </div>
-                          
-                          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                            <div className="space-y-1">
-                              <Label className="text-xs text-muted-foreground">Up Scale Target</Label>
-                              <div className="text-sm font-medium">{policy.upScaleTarget}%</div>
-                            </div>
-                            <div className="space-y-1">
-                              <Label className="text-xs text-muted-foreground">Down Scale Target</Label>
-                              <div className="text-sm font-medium">{policy.downScaleTarget}%</div>
-                            </div>
-                            <div className="space-y-1">
-                              <Label className="text-xs text-muted-foreground">Scale Out Cooldown</Label>
-                              <div className="text-sm">{policy.scaleOutCooldown}s</div>
-                            </div>
-                            <div className="space-y-1">
-                              <Label className="text-xs text-muted-foreground">Scale In Cooldown</Label>
-                              <div className="text-sm">{policy.scaleInCooldown}s</div>
-                            </div>
+                        </div>
+                        <div>
+                          <Label className="text-xs text-muted-foreground">Down Scale Target</Label>
+                          <div className="mt-1">
+                            <span className="text-sm font-medium">{policy.downScaleTarget}%</span>
+                          </div>
+                        </div>
+                        <div>
+                          <Label className="text-xs text-muted-foreground">Scale Out Cooldown</Label>
+                          <div className="mt-1">
+                            <span className="text-sm">{policy.scaleOutCooldown}s</span>
+                          </div>
+                        </div>
+                        <div>
+                          <Label className="text-xs text-muted-foreground">Scale In Cooldown</Label>
+                          <div className="mt-1">
+                            <span className="text-sm">{policy.scaleInCooldown}s</span>
                           </div>
                         </div>
                       </div>
-                    ))}
+                    </div>
                   </div>
-            </CardContent>
-          </Card>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
       <DeleteConfirmationModal
-        open={isDeleteModalOpen}
+        isOpen={isDeleteModalOpen}
         onClose={() => setIsDeleteModalOpen(false)}
         onConfirm={handleDeleteConfirm}
         resourceName="cache-server-template"

@@ -20,6 +20,7 @@ import { Badge } from '@/components/ui/badge';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { DeleteConfirmationModal } from '@/components/delete-confirmation-modal';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { 
   Table,
   TableBody,
@@ -186,37 +187,57 @@ export default function AutoScalingGroupDetailsPage() {
         >
           {/* Overlay Action Buttons */}
           <div className='absolute top-4 right-4 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10'>
-            {asg.status !== 'Creating' && (
-              <Button
-                variant='ghost'
-                size='sm'
-                onClick={handleAutoScalingSettings}
-                className='h-8 w-8 p-0 text-muted-foreground hover:text-foreground bg-white/80 hover:bg-white border border-gray-200 shadow-sm'
-                title="Auto Scaling Settings"
-              >
-                <TrendingUp className='h-4 w-4' />
-              </Button>
-            )}
-            {asg.status !== 'Creating' && (
-              <Button
-                variant='ghost'
-                size='sm'
-                onClick={handleEdit}
-                className='h-8 w-8 p-0 text-muted-foreground hover:text-foreground bg-white/80 hover:bg-white border border-gray-200 shadow-sm'
-                title="Edit"
-              >
-                <Edit className='h-4 w-4' />
-              </Button>
-            )}
-            <Button
-              variant='ghost'
-              size='sm'
-              onClick={handleDelete}
-              className='h-8 w-8 p-0 text-muted-foreground hover:text-red-600 bg-white/80 hover:bg-white border border-gray-200 shadow-sm'
-              title="Delete"
-            >
-              <Trash2 className='h-4 w-4' />
-            </Button>
+            <TooltipProvider>
+              {asg.status !== 'Creating' && (
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant='ghost'
+                      size='sm'
+                      onClick={handleAutoScalingSettings}
+                      className='h-8 w-8 p-0 text-muted-foreground hover:text-foreground bg-white/80 hover:bg-white border border-gray-200 shadow-sm'
+                    >
+                      <TrendingUp className='h-4 w-4' />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Auto Scaling Settings</p>
+                  </TooltipContent>
+                </Tooltip>
+              )}
+              {asg.status !== 'Creating' && (
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant='ghost'
+                      size='sm'
+                      onClick={handleEdit}
+                      className='h-8 w-8 p-0 text-muted-foreground hover:text-foreground bg-white/80 hover:bg-white border border-gray-200 shadow-sm'
+                    >
+                      <Edit className='h-4 w-4' />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Edit Auto Scaling Group</p>
+                  </TooltipContent>
+                </Tooltip>
+              )}
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant='ghost'
+                    size='sm'
+                    onClick={handleDelete}
+                    className='h-8 w-8 p-0 text-muted-foreground hover:text-red-600 bg-white/80 hover:bg-white border border-gray-200 shadow-sm'
+                  >
+                    <Trash2 className='h-4 w-4' />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Delete Auto Scaling Group</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           </div>
 
           <DetailGrid>

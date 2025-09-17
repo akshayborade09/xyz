@@ -374,17 +374,17 @@ export default function CreateTemplatePage() {
             <Card>
               <CardContent className="space-y-6 pt-6">
                 {/* Template Name */}
-                <div className="space-y-2">
-                  <Label htmlFor="templateName">
-                    Template Name <span className="text-red-500">*</span>
-                  </Label>
-                  <Input
-                    id="templateName"
-                    placeholder="Enter template name"
-                    value={formData.templateName}
-                    onChange={(e) => handleInputChange("templateName", e.target.value)}
-                    required
-                  />
+                    <div className="space-y-2">
+                      <Label htmlFor="templateName">
+                        Template Name <span className="text-red-500">*</span>
+                      </Label>
+                      <Input
+                        id="templateName"
+                        placeholder="Enter template name"
+                        value={formData.templateName}
+                        onChange={(e) => handleInputChange("templateName", e.target.value)}
+                        required
+                      />
                 </div>
 
                 <Separator />
