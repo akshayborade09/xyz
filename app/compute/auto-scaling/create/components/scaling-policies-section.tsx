@@ -8,7 +8,7 @@ import { Plus, Trash2 } from "lucide-react";
 
 interface ScalingPolicy {
   id: string;
-  type: "CPU" | "Memory" | "Scheduled";
+  type: "Average CPU Utilization" | "Average Memory Utilization" | "Scheduled Action";
   upScaleTarget: number;
   downScaleTarget: number;
   scaleOutCooldown: number;
@@ -70,7 +70,7 @@ export function ScalingPoliciesSection({
                     <Label>Policy Type</Label>
                     <Select
                       value={policy.type}
-                      onValueChange={(value: "CPU" | "Memory" | "Scheduled") =>
+                      onValueChange={(value: "Average CPU Utilization" | "Average Memory Utilization" | "Scheduled Action") =>
                         onUpdateScalingPolicy(policy.id, 'type', value)
                       }
                     >
@@ -78,9 +78,9 @@ export function ScalingPoliciesSection({
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="CPU">CPU</SelectItem>
-                        <SelectItem value="Memory">Memory</SelectItem>
-                        <SelectItem value="Scheduled">Scheduled</SelectItem>
+                        <SelectItem value="Average CPU Utilization">Average CPU Utilization</SelectItem>
+                        <SelectItem value="Average Memory Utilization">Average Memory Utilization</SelectItem>
+                        <SelectItem value="Scheduled Action">Scheduled Action</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>

@@ -59,7 +59,7 @@ interface TemplateFormData {
   // Auto Scaling Policies
   scalingPolicies: Array<{
     id: string
-    type: "CPU" | "Memory" | "Scheduled"
+    type: "Average CPU Utilization" | "Average Memory Utilization" | "Scheduled Action"
     upScaleTarget: number
     downScaleTarget: number
     scaleOutCooldown: number
@@ -250,7 +250,7 @@ export default function CreateTemplatePage() {
   const handleAddScalingPolicy = () => {
     const newPolicy = {
       id: `policy-${Date.now()}`,
-      type: "CPU" as const,
+      type: "Average CPU Utilization" as const,
       upScaleTarget: 80,
       downScaleTarget: 20,
       scaleOutCooldown: 300,
@@ -720,6 +720,24 @@ export default function CreateTemplatePage() {
                   onRemoveScalingPolicy={handleRemoveScalingPolicy}
                   onUpdateScalingPolicy={handleUpdateScalingPolicy}
                 />
+
+                {/* Action Buttons */}
+                <div className="flex items-center justify-between pt-6 border-t">
+                  <div className="flex items-center space-x-2">
+                    <Checkbox id="saveAsTemplate" defaultChecked />
+                    <Label htmlFor="saveAsTemplate" className="text-sm font-normal">
+                      Save as reusable template
+                    </Label>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <Button type="button" variant="outline" onClick={handleCancel}>
+                      Cancel
+                    </Button>
+                    <Button type="submit" disabled={isSubmitting}>
+                      {isSubmitting ? "Creating Template..." : "Create Template"}
+                    </Button>
+                  </div>
+                </div>
               </CardContent>
             </Card>
           </div>
@@ -757,24 +775,6 @@ export default function CreateTemplatePage() {
               </CardContent>
             </Card>
 
-          </div>
-        </div>
-
-        {/* Footer Actions */}
-        <div className="flex items-center justify-between pt-6 border-t">
-          <div className="flex items-center space-x-2">
-            <Checkbox id="saveAsTemplate" defaultChecked />
-            <Label htmlFor="saveAsTemplate" className="text-sm font-normal">
-              Save as reusable template
-            </Label>
-          </div>
-          <div className="flex items-center gap-3">
-            <Button type="button" variant="outline" onClick={handleCancel}>
-              Cancel
-            </Button>
-            <Button type="submit" disabled={isSubmitting}>
-              {isSubmitting ? "Creating Template..." : "Create Template"}
-            </Button>
           </div>
         </div>
       </form>

@@ -67,7 +67,7 @@ interface ASGFormData {
   // Auto Scaling Policies
   scalingPolicies: Array<{
     id: string
-    type: "CPU" | "Memory" | "Scheduled"
+    type: "Average CPU Utilization" | "Average Memory Utilization" | "Scheduled Action"
     upScaleTarget: number
     downScaleTarget: number
     scaleOutCooldown: number
@@ -203,7 +203,7 @@ export default function CreateAutoScalingGroupPage() {
   const addScalingPolicy = () => {
     const newPolicy = {
       id: `policy-${Date.now()}`,
-      type: "CPU" as const,
+      type: "Average CPU Utilization" as const,
       upScaleTarget: 80,
       downScaleTarget: 20,
       scaleOutCooldown: 300,
