@@ -794,7 +794,6 @@ export default function CreateAutoScalingGroupPage() {
                       value={formData.minInstances}
                       onChange={(e) => handleInputChange("minInstances", parseInt(e.target.value) || 0)}
                     />
-                    <p className="text-xs text-muted-foreground">Minimum number of instances to maintain</p>
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="desiredInstances">
@@ -807,7 +806,6 @@ export default function CreateAutoScalingGroupPage() {
                       value={formData.desiredInstances}
                       onChange={(e) => handleInputChange("desiredInstances", parseInt(e.target.value) || 0)}
                     />
-                    <p className="text-xs text-muted-foreground">Initial number of instances to launch</p>
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="maxInstances">
@@ -820,7 +818,6 @@ export default function CreateAutoScalingGroupPage() {
                       value={formData.maxInstances}
                       onChange={(e) => handleInputChange("maxInstances", parseInt(e.target.value) || 0)}
                     />
-                    <p className="text-xs text-muted-foreground">Maximum number of instances allowed</p>
                   </div>
                 </div>
               </div>
