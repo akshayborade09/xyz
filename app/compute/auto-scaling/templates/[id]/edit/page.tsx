@@ -36,6 +36,11 @@ interface TemplateFormData {
   instanceName: string
   instanceType: string
 
+  // Instance Scaling
+  minInstances: number
+  desiredInstances: number
+  maxInstances: number
+
   // Bootable Volume
   bootVolumeName: string
   bootVolumeSize: number
@@ -200,6 +205,9 @@ const fetchTemplateData = async (id: string): Promise<TemplateFormData> => {
     securityGroups: ["sg-default", "sg-web"],
     instanceName: "prod-instance",
     instanceType: "cpu-4x-16gb",
+    minInstances: 2,
+    desiredInstances: 4,
+    maxInstances: 20,
     bootVolumeName: "prod-boot-volume",
     bootVolumeSize: 50,
     machineImage: "ami-ubuntu-22.04",
@@ -245,6 +253,9 @@ export default function EditTemplatePage() {
     securityGroups: [],
     instanceName: "",
     instanceType: "",
+    minInstances: 1,
+    desiredInstances: 2,
+    maxInstances: 10,
     bootVolumeName: "",
     bootVolumeSize: 20,
     machineImage: "",
@@ -529,6 +540,61 @@ export default function EditTemplatePage() {
                           ))}
                         </SelectContent>
                       </Select>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Instance Scaling */}
+                <div className="space-y-4">
+                  <div className="flex items-center gap-2">
+                    <Label className="text-base font-medium">Instance Scaling</Label>
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger>
+                          <HelpCircle className="h-4 w-4 text-muted-foreground" />
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>Configure the minimum, desired, and maximum number of instances for your Auto Scaling Group.</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  </div>
+                  <div className="grid grid-cols-3 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="minInstances" className="text-sm">
+                        Minimum Instances <span className="text-red-500">*</span>
+                      </Label>
+                      <Input
+                        id="minInstances"
+                        type="number"
+                        min="0"
+                        value={formData.minInstances}
+                        onChange={(e) => handleInputChange("minInstances", parseInt(e.target.value) || 0)}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="desiredInstances" className="text-sm">
+                        Desired Instances <span className="text-red-500">*</span>
+                      </Label>
+                      <Input
+                        id="desiredInstances"
+                        type="number"
+                        min="0"
+                        value={formData.desiredInstances}
+                        onChange={(e) => handleInputChange("desiredInstances", parseInt(e.target.value) || 0)}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="maxInstances" className="text-sm">
+                        Maximum Instances <span className="text-red-500">*</span>
+                      </Label>
+                      <Input
+                        id="maxInstances"
+                        type="number"
+                        min="0"
+                        value={formData.maxInstances}
+                        onChange={(e) => handleInputChange("maxInstances", parseInt(e.target.value) || 0)}
+                      />
                     </div>
                   </div>
                 </div>

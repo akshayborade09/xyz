@@ -776,15 +776,22 @@ export default function CreateAutoScalingGroupPage() {
 
               {/* Instance Scaling */}
               <div className="space-y-4">
-                <div>
+                <div className="flex items-center gap-2">
                   <Label className="text-base font-medium">Instance Scaling</Label>
-                  <p className="text-sm text-muted-foreground mt-1">
-                    Configure the minimum, desired, and maximum number of instances for your Auto Scaling Group.
-                  </p>
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <HelpCircle className="h-4 w-4 text-muted-foreground" />
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Configure the minimum, desired, and maximum number of instances for your Auto Scaling Group.</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
                 </div>
                 <div className="grid grid-cols-3 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="minInstances">
+                    <Label htmlFor="minInstances" className="text-sm">
                       Minimum Instances <span className="text-red-500">*</span>
                     </Label>
                     <Input
@@ -796,7 +803,7 @@ export default function CreateAutoScalingGroupPage() {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="desiredInstances">
+                    <Label htmlFor="desiredInstances" className="text-sm">
                       Desired Instances <span className="text-red-500">*</span>
                     </Label>
                     <Input
@@ -808,7 +815,7 @@ export default function CreateAutoScalingGroupPage() {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="maxInstances">
+                    <Label htmlFor="maxInstances" className="text-sm">
                       Maximum Instances <span className="text-red-500">*</span>
                     </Label>
                     <Input
