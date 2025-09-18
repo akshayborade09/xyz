@@ -858,33 +858,15 @@ export default function EditAutoScalingGroupPage() {
                 <ul className="space-y-3">
                   <li className="flex items-start gap-2">
                     <div className="w-1.5 h-1.5 bg-primary rounded-full mt-2 flex-shrink-0"></div>
-                    <span className="text-sm text-muted-foreground">
-                      Set appropriate scaling policies to handle traffic fluctuations
-                    </span>
+                    <span className="text-muted-foreground" style={{ fontSize: '13px' }}>Use descriptive names that include environment and purpose (e.g., prod-web-servers-asg).</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <div className="w-1.5 h-1.5 bg-primary rounded-full mt-2 flex-shrink-0"></div>
-                    <span className="text-sm text-muted-foreground">
-                      Configure health checks to automatically replace unhealthy instances
-                    </span>
+                    <span className="text-muted-foreground" style={{ fontSize: '13px' }}>Set up both scale-out and scale-in policies based on CPU and memory metrics.</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <div className="w-1.5 h-1.5 bg-primary rounded-full mt-2 flex-shrink-0"></div>
-                    <span className="text-sm text-muted-foreground">
-                      Use multiple availability zones for high availability
-                    </span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <div className="w-1.5 h-1.5 bg-primary rounded-full mt-2 flex-shrink-0"></div>
-                    <span className="text-sm text-muted-foreground">
-                      Monitor costs and set up billing alerts for scaling activities
-                    </span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <div className="w-1.5 h-1.5 bg-primary rounded-full mt-2 flex-shrink-0"></div>
-                    <span className="text-sm text-muted-foreground">
-                      Note: Network settings (Region, VPC, Subnet) cannot be modified after creation
-                    </span>
+                    <span className="text-muted-foreground" style={{ fontSize: '13px' }}>Use launch templates to standardize auto scaling group configurations.</span>
                   </li>
                 </ul>
               </CardContent>

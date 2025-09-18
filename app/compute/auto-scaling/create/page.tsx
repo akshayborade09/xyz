@@ -933,19 +933,11 @@ export default function CreateAutoScalingGroupPage() {
                 </li>
                 <li className="flex items-start gap-2">
                   <div className="w-1.5 h-1.5 bg-primary rounded-full mt-2 flex-shrink-0"></div>
-                  <span className="text-muted-foreground" style={{ fontSize: '13px' }}>Distribute instances across multiple availability zones for high availability.</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <div className="w-1.5 h-1.5 bg-primary rounded-full mt-2 flex-shrink-0"></div>
                   <span className="text-muted-foreground" style={{ fontSize: '13px' }}>Set up both scale-out and scale-in policies based on CPU and memory metrics.</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <div className="w-1.5 h-1.5 bg-primary rounded-full mt-2 flex-shrink-0"></div>
-                  <span className="text-muted-foreground" style={{ fontSize: '13px' }}>Configure health checks to automatically replace unhealthy instances.</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <div className="w-1.5 h-1.5 bg-primary rounded-full mt-2 flex-shrink-0"></div>
-                  <span className="text-muted-foreground" style={{ fontSize: '13px' }}>Use launch templates to standardize instance configurations and enable version control.</span>
+                  <span className="text-muted-foreground" style={{ fontSize: '13px' }}>Use launch templates to standardize auto scaling group configurations.</span>
                 </li>
               </ul>
             </CardContent>
