@@ -148,14 +148,16 @@ export default function CreateAutoScalingGroupPage() {
       formData.vpc.length > 0 &&
       formData.instanceName.trim().length > 0 &&
       formData.instanceType.length > 0 &&
-      formData.bootVolumeName.trim().length > 0
+      formData.bootVolumeName.trim().length > 0 &&
+      formData.bootVolumeSize > 0 &&
+      formData.scalingPolicies.length > 0
   }
 
   const handleSubmit = async () => {
     if (!isFormValid()) {
       toast({
         title: "Validation Error",
-        description: "Please fill in all required fields.",
+        description: "Please fill in all required fields including bootable volume size and at least one auto scaling policy.",
         variant: "destructive"
       })
       return

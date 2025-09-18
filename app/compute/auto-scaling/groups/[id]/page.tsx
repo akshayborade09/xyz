@@ -92,20 +92,33 @@ export default function AutoScalingGroupDetailsPage() {
 
   const scalingPolicies = [
     {
-      name: 'CPU Utilization',
-      type: 'CPU Utilization',
+      name: 'CPU Scale Out Policy',
+      type: 'Average CPU Utilization',
       enabled: true,
-      scaleUp: '65%',
-      scaleDown: '35%',
-      cooldown: '300s'
+      scaleUp: '70%',
+      scaleDown: '30%',
+      cooldown: '300s',
+      scaleOutCooldown: '300s',
+      scaleInCooldown: '300s'
+    },
+    {
+      name: 'Memory Scale Out Policy',
+      type: 'Average Memory Utilization',
+      enabled: true,
+      scaleUp: '80%',
+      scaleDown: '40%',
+      cooldown: '300s',
+      scaleOutCooldown: '300s',
+      scaleInCooldown: '300s'
     },
     {
       name: 'Nightly Scale Down',
       type: 'Scheduled Action',
       enabled: true,
       schedule: '0 22 * * *',
-      nextRun: 'now',
-      action: 'Set desired capacity to 3'
+      nextRun: 'Today at 10:00 PM',
+      action: 'Set desired capacity to 2',
+      timezone: 'IST'
     }
   ];
 
@@ -339,186 +352,125 @@ export default function AutoScalingGroupDetailsPage() {
           </DetailGrid>
         </div>
 
-        {/* Instance Specifications */}
+        {/* Network Configuration */}
         <div className='bg-card text-card-foreground border-border border rounded-lg'>
           <div className='p-6 pb-4'>
             <div className='flex items-center justify-between'>
               <div className='flex items-center gap-3'>
-                <h3 className='text-lg font-semibold'>Instance Specifications</h3>
+                <h3 className='text-lg font-semibold'>Network Configuration</h3>
               </div>
             </div>
           </div>
           <div className='px-6 pb-6'>
-            <div
-              className='border transition-colors rounded-lg bg-card p-4 relative border-border hover:border-gray-300'
-            >
-              {/* Header with ASG name and CPU tag */}
-              <div className='flex items-start justify-between mb-4'>
-                <div className='flex items-center gap-2 flex-1 min-w-0'>
-                  <h4 className='text-sm font-medium leading-none'>
-                    {instanceSpecifications.name}
-                  </h4>
-                  <Badge variant='secondary' className='text-xs h-5'>
-                    {instanceSpecifications.type}
-                  </Badge>
+            <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
+              <div className='space-y-1'>
+                <Label className='text-xs text-muted-foreground'>Region</Label>
+                <div className='text-sm font-medium'>{asg.region || 'US East N. Virginia'}</div>
+              </div>
+              <div className='space-y-1'>
+                <Label className='text-xs text-muted-foreground'>VPC</Label>
+                <div className='text-sm font-medium'>{asg.vpc}</div>
+              </div>
+              <div className='space-y-1'>
+                <Label className='text-xs text-muted-foreground'>Subnet</Label>
+                <div className='text-sm font-medium'>{asg.subnet || 'subnet-5'}</div>
+              </div>
+              <div className='space-y-1'>
+                <Label className='text-xs text-muted-foreground'>Security Groups</Label>
+                <div className='text-sm font-medium'>{instanceSpecifications.securityGroups}</div>
+              </div>
+              <div className='space-y-1'>
+                <Label className='text-xs text-muted-foreground'>Availability Zones</Label>
+                <div className='text-sm font-medium'>{asg.availabilityZones?.join(', ') || 'us-east-1a, us-east-1b'}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Instance Configuration */}
+        <div className='bg-card text-card-foreground border-border border rounded-lg'>
+          <div className='p-6 pb-4'>
+            <div className='flex items-center justify-between'>
+              <div className='flex items-center gap-3'>
+                <h3 className='text-lg font-semibold'>Instance Configuration</h3>
+              </div>
+            </div>
+          </div>
+          <div className='px-6 pb-6'>
+            <div className='space-y-6'>
+              {/* Instance Details */}
+              <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
+                <div className='space-y-1'>
+                  <Label className='text-xs text-muted-foreground'>Instance Name</Label>
+                  <div className='text-sm font-medium'>{instanceSpecifications.name}-instance</div>
+                </div>
+                <div className='space-y-1'>
+                  <Label className='text-xs text-muted-foreground'>Instance Type</Label>
+                  <div className='text-sm font-medium'>{instanceSpecifications.instanceFlavour}</div>
+                </div>
+                <div className='space-y-1'>
+                  <Label className='text-xs text-muted-foreground'>Machine Image</Label>
+                  <div className='text-sm font-medium'>{instanceSpecifications.machineImage}</div>
                 </div>
               </div>
 
-              {/* Fields in specified order */}
-              <div className='space-y-3 text-xs'>
-                {/* Instance flavour */}
-                <div>
-                  <Label className='text-xs text-muted-foreground'>
-                    Instance Flavour
-                  </Label>
-                  <div className='mt-1'>
-                    <span className='text-sm'>
-                      {instanceSpecifications.instanceFlavour} (0 vCPUs, 0 GB RAM)
-                    </span>
+              {/* Instance Scaling */}
+              <div>
+                <Label className='text-sm font-medium mb-3 block'>Instance Scaling</Label>
+                <div className='grid grid-cols-1 md:grid-cols-3 gap-6'>
+                  <div className='space-y-1'>
+                    <Label className='text-xs text-muted-foreground'>Minimum Instances</Label>
+                    <div className='text-sm font-medium'>{instanceSpecifications.minCapacity}</div>
+                  </div>
+                  <div className='space-y-1'>
+                    <Label className='text-xs text-muted-foreground'>Desired Instances</Label>
+                    <div className='text-sm font-medium'>{instanceSpecifications.desiredCapacity}</div>
+                  </div>
+                  <div className='space-y-1'>
+                    <Label className='text-xs text-muted-foreground'>Maximum Instances</Label>
+                    <div className='text-sm font-medium'>{instanceSpecifications.maxCapacity}</div>
                   </div>
                 </div>
+              </div>
 
-                {/* Min, Desired, Max Capacity in same row */}
-                <div className='grid grid-cols-3 gap-6'>
-                  <div>
-                    <Label className='text-xs text-muted-foreground'>
-                      Min Capacity
-                    </Label>
-                    <div className='mt-1'>
-                      <span className='text-sm font-medium'>
-                        {instanceSpecifications.minCapacity}
-                      </span>
-                    </div>
+              {/* Storage Configuration */}
+              <div>
+                <Label className='text-sm font-medium mb-3 block'>Storage Configuration</Label>
+                <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
+                  <div className='space-y-1'>
+                    <Label className='text-xs text-muted-foreground'>Bootable Volume Name</Label>
+                    <div className='text-sm font-medium'>{instanceSpecifications.name}-boot</div>
                   </div>
-                  <div>
-                    <Label className='text-xs text-muted-foreground'>
-                      Desired Capacity
-                    </Label>
-                    <div className='mt-1'>
-                      <span className='text-sm font-medium'>
-                        {instanceSpecifications.desiredCapacity}
-                      </span>
-                    </div>
+                  <div className='space-y-1'>
+                    <Label className='text-xs text-muted-foreground'>Bootable Volume Size</Label>
+                    <div className='text-sm font-medium'>{instanceSpecifications.bootableVolumeSize}</div>
                   </div>
-                  <div>
-                    <Label className='text-xs text-muted-foreground'>
-                      Max Capacity
-                    </Label>
-                    <div className='mt-1'>
-                      <span className='text-sm font-medium'>
-                        {instanceSpecifications.maxCapacity}
-                      </span>
-                    </div>
+                  <div className='space-y-1'>
+                    <Label className='text-xs text-muted-foreground'>Startup Script</Label>
+                    <div className='text-sm font-medium'>No startup script configured</div>
                   </div>
                 </div>
-
-                {/* SSH Key, Security Groups, and empty third column to align with capacity grid */}
-                <div className='grid grid-cols-3 gap-6'>
-                  <div>
-                    <Label className='text-xs text-muted-foreground'>
-                      SSH Key
-                    </Label>
-                    <div className='mt-1'>
-                      <span className='text-sm'>{instanceSpecifications.sshKey}</span>
-                    </div>
+                <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4'>
+                  <div className='space-y-1'>
+                    <Label className='text-xs text-muted-foreground'>Storage Volumes</Label>
+                    <div className='text-sm font-medium'>{storageVolumes.length} volume(s) configured</div>
                   </div>
-                  <div>
-                    <Label className='text-xs text-muted-foreground'>
-                      Security Groups
-                    </Label>
-                    <div className='mt-1'>
-                      <span className='text-sm'>{instanceSpecifications.securityGroups}</span>
-                    </div>
+                  <div className='space-y-1'>
+                    <Label className='text-xs text-muted-foreground'>SSH Key</Label>
+                    <div className='text-sm font-medium'>{instanceSpecifications.sshKey}</div>
                   </div>
-                  <div></div>
-                </div>
-
-                {/* Bootable Volume Size, Machine Image, and empty third column */}
-                <div className='grid grid-cols-3 gap-6'>
-                  <div>
-                    <Label className='text-xs text-muted-foreground'>
-                      Bootable Volume Size
-                    </Label>
-                    <div className='mt-1'>
-                      <span className='text-sm'>{instanceSpecifications.bootableVolumeSize}</span>
-                    </div>
-                  </div>
-                  <div>
-                    <Label className='text-xs text-muted-foreground'>
-                      Machine Image
-                    </Label>
-                    <div className='mt-1'>
-                      <span className='text-sm'>{instanceSpecifications.machineImage}</span>
-                    </div>
-                  </div>
-                  <div></div>
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Storage Volumes */}
+        {/* Auto Scaling Policies */}
         <div className='bg-card text-card-foreground border-border border rounded-lg'>
           <div className='p-6 pb-4'>
             <div className='flex items-center justify-between'>
               <div className='flex items-center gap-3'>
-                <h3 className='text-lg font-semibold'>Storage Volumes</h3>
-                <div className='bg-gray-800 text-white text-sm font-medium rounded-full w-6 h-6 flex items-center justify-center'>
-                  {storageVolumes.length}
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className='px-6 pb-6'>
-            <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-            {storageVolumes.map((volume, index) => (
-              <div
-                key={index}
-                className='border transition-colors rounded-lg bg-card p-4 relative border-border hover:border-gray-300'
-              >
-                {/* Header with volume name */}
-                <div className='flex items-start justify-between mb-4'>
-                  <div className='flex-1 min-w-0'>
-                    <h4 className='text-sm font-medium leading-none'>
-                      {volume.name}
-                    </h4>
-                  </div>
-                </div>
-
-                {/* Fields */}
-                <div className='space-y-3 text-xs'>
-                  <div className='grid grid-cols-2 gap-6'>
-                    <div>
-                      <Label className='text-xs text-muted-foreground'>
-                        Size
-                      </Label>
-                      <div className='mt-1'>
-                        <span className='text-sm'>{volume.size}</span>
-                      </div>
-                    </div>
-                    <div>
-                      <Label className='text-xs text-muted-foreground'>
-                        Type
-                      </Label>
-                      <div className='mt-1'>
-                        <span className='text-sm'>{volume.volumeType}</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Scaling Policies */}
-        <div className='bg-card text-card-foreground border-border border rounded-lg'>
-          <div className='p-6 pb-4'>
-            <div className='flex items-center justify-between'>
-              <div className='flex items-center gap-3'>
-                <h3 className='text-lg font-semibold'>Scaling Policies</h3>
+                <h3 className='text-lg font-semibold'>Auto Scaling Policies</h3>
                 <div className='bg-gray-800 text-white text-sm font-medium rounded-full w-6 h-6 flex items-center justify-center'>
                   {scalingPolicies.length}
                 </div>
@@ -563,59 +515,83 @@ export default function AutoScalingGroupDetailsPage() {
                     </div>
                   </div>
 
-                  {policy.type === 'CPU Utilization' && (
-                    <div className='grid grid-cols-3 gap-6'>
-                      <div>
-                        <Label className='text-xs text-muted-foreground'>
-                          Scale Up
-                        </Label>
-                        <div className='mt-1'>
-                          <span className='text-sm'>{policy.scaleUp}</span>
+                  {(policy.type === 'Average CPU Utilization' || policy.type === 'Average Memory Utilization') && (
+                    <div className='space-y-3'>
+                      <div className='grid grid-cols-2 gap-6'>
+                        <div>
+                          <Label className='text-xs text-muted-foreground'>
+                            Up Scale Target
+                          </Label>
+                          <div className='mt-1'>
+                            <span className='text-sm'>{policy.scaleUp}</span>
+                          </div>
+                        </div>
+                        <div>
+                          <Label className='text-xs text-muted-foreground'>
+                            Down Scale Target
+                          </Label>
+                          <div className='mt-1'>
+                            <span className='text-sm'>{policy.scaleDown}</span>
+                          </div>
                         </div>
                       </div>
-                      <div>
-                        <Label className='text-xs text-muted-foreground'>
-                          Scale Down
-                        </Label>
-                        <div className='mt-1'>
-                          <span className='text-sm'>{policy.scaleDown}</span>
+                      <div className='grid grid-cols-2 gap-6'>
+                        <div>
+                          <Label className='text-xs text-muted-foreground'>
+                            Scale Out Cooldown
+                          </Label>
+                          <div className='mt-1'>
+                            <span className='text-sm'>{policy.scaleOutCooldown}</span>
+                          </div>
                         </div>
-                      </div>
-                      <div>
-                        <Label className='text-xs text-muted-foreground'>
-                          Cooldown
-                        </Label>
-                        <div className='mt-1'>
-                          <span className='text-sm'>{policy.cooldown}</span>
+                        <div>
+                          <Label className='text-xs text-muted-foreground'>
+                            Scale In Cooldown
+                          </Label>
+                          <div className='mt-1'>
+                            <span className='text-sm'>{policy.scaleInCooldown}</span>
+                          </div>
                         </div>
                       </div>
                     </div>
                   )}
 
                   {policy.type === 'Scheduled Action' && (
-                    <div className='grid grid-cols-3 gap-6'>
-                      <div>
-                        <Label className='text-xs text-muted-foreground'>
-                          Schedule
-                        </Label>
-                        <div className='mt-1'>
-                          <span className='text-sm'>{policy.schedule}</span>
+                    <div className='space-y-3'>
+                      <div className='grid grid-cols-2 gap-6'>
+                        <div>
+                          <Label className='text-xs text-muted-foreground'>
+                            Schedule
+                          </Label>
+                          <div className='mt-1'>
+                            <span className='text-sm'>{policy.schedule}</span>
+                          </div>
+                        </div>
+                        <div>
+                          <Label className='text-xs text-muted-foreground'>
+                            Timezone
+                          </Label>
+                          <div className='mt-1'>
+                            <span className='text-sm'>{policy.timezone}</span>
+                          </div>
                         </div>
                       </div>
-                      <div>
-                        <Label className='text-xs text-muted-foreground'>
-                          Next Run
-                        </Label>
-                        <div className='mt-1'>
-                          <span className='text-sm'>{policy.nextRun}</span>
+                      <div className='grid grid-cols-2 gap-6'>
+                        <div>
+                          <Label className='text-xs text-muted-foreground'>
+                            Next Run
+                          </Label>
+                          <div className='mt-1'>
+                            <span className='text-sm'>{policy.nextRun}</span>
+                          </div>
                         </div>
-                      </div>
-                      <div>
-                        <Label className='text-xs text-muted-foreground'>
-                          Action
-                        </Label>
-                        <div className='mt-1'>
-                          <span className='text-sm'>{policy.action}</span>
+                        <div>
+                          <Label className='text-xs text-muted-foreground'>
+                            Action
+                          </Label>
+                          <div className='mt-1'>
+                            <span className='text-sm'>{policy.action}</span>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -627,96 +603,6 @@ export default function AutoScalingGroupDetailsPage() {
           </div>
         </div>
 
-        {/* Instance Details */}
-        <div className='bg-card text-card-foreground border-border border rounded-lg'>
-          <div className='p-6 pb-4'>
-            <div className='flex items-center justify-between'>
-              <div className='flex items-center gap-3'>
-                <h3 className='text-lg font-semibold'>Instance Details</h3>
-                <div className='bg-gray-800 text-white text-sm font-medium rounded-full w-6 h-6 flex items-center justify-center'>
-                  {runningInstances.length}
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className='px-6 pb-6'>
-            <div
-              className='border transition-colors rounded-lg bg-card p-4 relative border-border hover:border-gray-300'
-            >
-              {/* Header */}
-              <div className='flex items-start justify-between mb-4'>
-                <div className='flex-1 min-w-0'>
-                  <h4 className='text-sm font-medium leading-none'>
-                    Running Instances
-                  </h4>
-                </div>
-              </div>
-
-              {/* Content */}
-              {runningInstances.length === 0 ? (
-                <div className='flex flex-col items-center justify-center py-12'>
-                  <div className='mb-6'>
-                    <svg
-                      width='64'
-                      height='64'
-                      viewBox='0 0 64 64'
-                      fill='none'
-                      xmlns='http://www.w3.org/2000/svg'
-                      className='text-muted-foreground'
-                    >
-                      <rect width='64' height='64' fill='transparent'/>
-                      <path
-                        d='M16 20H48C49.1046 20 50 20.8954 50 22V42C50 43.1046 49.1046 44 48 44H16C14.8954 44 14 43.1046 14 42V22C14 20.8954 14.8954 20 16 20Z'
-                        stroke='currentColor'
-                        strokeWidth='2'
-                        fill='none'
-                      />
-                      <path
-                        d='M20 28H28M20 32H32M20 36H24'
-                        stroke='currentColor'
-                        strokeWidth='2'
-                        strokeLinecap='round'
-                      />
-                    </svg>
-                  </div>
-                  <h3 className='text-lg font-semibold text-gray-900 mb-2'>No instances are currently running</h3>
-                  <p className='text-sm text-gray-600 text-center max-w-md'>
-                    Instances will appear here when the Auto Scaling Group creates them based on your scaling policies.
-                  </p>
-                </div>
-              ) : (
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Instance ID</TableHead>
-                      <TableHead>Status</TableHead>
-                      <TableHead>Type</TableHead>
-                      <TableHead>Launch Time</TableHead>
-                      <TableHead>Health Status</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {runningInstances.map((instance, index) => (
-                      <TableRow key={index}>
-                        <TableCell>{instance.id}</TableCell>
-                        <TableCell>
-                          <StatusBadge status={instance.status} />
-                        </TableCell>
-                        <TableCell>{instance.type}</TableCell>
-                        <TableCell>{formatDate(instance.launchTime)}</TableCell>
-                        <TableCell>
-                          <Badge variant={instance.healthy ? 'default' : 'destructive'}>
-                            {instance.healthy ? 'Healthy' : 'Unhealthy'}
-                          </Badge>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              )}
-            </div>
-          </div>
-        </div>
       </div>
 
       {/* Delete Confirmation Modal */}

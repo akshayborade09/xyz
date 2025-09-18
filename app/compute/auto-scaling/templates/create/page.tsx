@@ -321,8 +321,30 @@ export default function CreateTemplatePage() {
     }))
   }
 
+  const isFormValid = () => {
+    return formData.templateName.trim().length > 0 &&
+      formData.instanceName.trim().length > 0 &&
+      formData.instanceType.length > 0 &&
+      formData.minInstances > 0 &&
+      formData.desiredInstances > 0 &&
+      formData.maxInstances > 0 &&
+      formData.bootVolumeName.trim().length > 0 &&
+      formData.bootVolumeSize > 0 &&
+      formData.machineImage.length > 0
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    
+    if (!isFormValid()) {
+      toast({
+        title: "Validation Error",
+        description: "Please fill in all required fields: template name, instance details, scaling configuration, and bootable volume information.",
+        variant: "destructive"
+      })
+      return
+    }
+
     setIsSubmitting(true)
 
     try {
@@ -555,7 +577,7 @@ export default function CreateTemplatePage() {
                   {/* Row 1: Region */}
                   <div className="space-y-2">
                     <Label htmlFor="region">
-                      Region <span className="text-red-500">*</span>
+                      Region
                     </Label>
                     <Select value={formData.region} onValueChange={(value) => handleInputChange("region", value)}>
                       <SelectTrigger>
@@ -615,7 +637,7 @@ export default function CreateTemplatePage() {
                   {/* Row 2: VPC */}
                   <div className="space-y-2">
                     <Label htmlFor="vpc">
-                      VPC <span className="text-red-500">*</span>
+                      VPC
                     </Label>
                     <div className="relative">
                       <button
@@ -687,7 +709,7 @@ export default function CreateTemplatePage() {
                   <div className="space-y-2">
                     <div className="flex items-center gap-2">
                       <Label htmlFor="subnet">
-                        Subnet <span className="text-red-500">*</span>
+                        Subnet
                       </Label>
                       <TooltipProvider>
                         <Tooltip>
@@ -794,6 +816,7 @@ export default function CreateTemplatePage() {
                   onAddScalingPolicy={handleAddScalingPolicy}
                   onRemoveScalingPolicy={handleRemoveScalingPolicy}
                   onUpdateScalingPolicy={handleUpdateScalingPolicy}
+                  required={false}
                 />
 
                 {/* Action Buttons */}
@@ -801,7 +824,14 @@ export default function CreateTemplatePage() {
                   <Button type="button" variant="outline" onClick={handleCancel}>
                     Cancel
                   </Button>
-                  <Button type="submit" disabled={isSubmitting}>
+                  <Button 
+                    type="submit" 
+                    disabled={isSubmitting || !isFormValid()}
+                    className={`transition-colors ${isFormValid()
+                      ? 'bg-black text-white hover:bg-black/90'
+                      : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                    }`}
+                  >
                     {isSubmitting ? "Creating Template..." : "Create Template"}
                   </Button>
                 </div>
@@ -820,23 +850,15 @@ export default function CreateTemplatePage() {
                 <ul className="space-y-3">
                   <li className="flex items-start gap-2">
                     <div className="w-1.5 h-1.5 bg-primary rounded-full mt-2 flex-shrink-0"></div>
-                    <span className="text-muted-foreground" style={{ fontSize: '13px' }}>Use descriptive names that include environment and purpose (e.g., prod-web-servers-template).</span>
+                    <span className="text-muted-foreground" style={{ fontSize: '13px' }}>Use templates to standardize ASG configs across teams and avoid drift.</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <div className="w-1.5 h-1.5 bg-primary rounded-full mt-2 flex-shrink-0"></div>
-                    <span className="text-muted-foreground" style={{ fontSize: '13px' }}>Include comprehensive documentation in the description field.</span>
+                    <span className="text-muted-foreground" style={{ fontSize: '13px' }}>Templates are only for creating new ASGs — once an ASG is created, it manages its own configuration and won't change if the template is updated.</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <div className="w-1.5 h-1.5 bg-primary rounded-full mt-2 flex-shrink-0"></div>
-                    <span className="text-muted-foreground" style={{ fontSize: '13px' }}>Configure standardized instance types and storage configurations.</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <div className="w-1.5 h-1.5 bg-primary rounded-full mt-2 flex-shrink-0"></div>
-                    <span className="text-muted-foreground" style={{ fontSize: '13px' }}>Use tags to categorize templates by environment, team, or project.</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <div className="w-1.5 h-1.5 bg-primary rounded-full mt-2 flex-shrink-0"></div>
-                    <span className="text-muted-foreground" style={{ fontSize: '13px' }}>Test templates thoroughly before making them available to teams.</span>
+                    <span className="text-muted-foreground" style={{ fontSize: '13px' }}>Keep templates lightweight — specify only the fields that remain constant across ASGs. Other fields can still be edited during ASG creation.</span>
                   </li>
                 </ul>
               </CardContent>

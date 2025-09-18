@@ -29,6 +29,7 @@ interface ScalingPoliciesSectionProps {
   onAddScalingPolicy: () => void;
   onUpdateScalingPolicy: (id: string, field: keyof Omit<ScalingPolicy, 'id'>, value: any) => void;
   onRemoveScalingPolicy: (id: string) => void;
+  required?: boolean;
 }
 
 // Helper function to get badge text from policy type
@@ -50,11 +51,14 @@ export function ScalingPoliciesSection({
   onAddScalingPolicy,
   onUpdateScalingPolicy,
   onRemoveScalingPolicy,
+  required = true,
 }: ScalingPoliciesSectionProps) {
   return (
     <div className="space-y-4">
       <div>
-        <Label className="text-base font-medium">Auto Scaling Policies</Label>
+        <Label className="text-base font-medium">
+          Auto Scaling Policies {required && <span className="text-red-500">*</span>}
+        </Label>
         <p className="text-sm text-muted-foreground mt-1">
           Configure auto-scaling policies for CPU, memory, and scheduled actions. You can have one policy of each type (CPU, Memory, Scheduled).
         </p>

@@ -108,10 +108,7 @@ export function AutoScalingSettingsModal({
       >
         <DialogHeader className="space-y-3 pb-4">
           <DialogTitle className="text-base font-semibold text-black pr-8">
-            <div className="flex items-center gap-2">
-              <TrendingUp className="h-4 w-4" />
-              Auto Scaling Settings - {asgName}
-            </div>
+            Auto Scaling Settings - {asgName}
           </DialogTitle>
           <hr className="border-border" />
         </DialogHeader>
@@ -167,7 +164,7 @@ export function AutoScalingSettingsModal({
           <div className="space-y-4">
             {activeTab === "up" ? (
               <>
-                <p className="text-muted-foreground">
+                <p className="text-muted-foreground text-sm">
                   Scale up your auto scaling group to handle increased load. Enter a number greater than {currentVMs} VMs.
                 </p>
                 <div className="space-y-2">
@@ -185,7 +182,7 @@ export function AutoScalingSettingsModal({
               </>
             ) : (
               <>
-                <p className="text-muted-foreground">
+                <p className="text-muted-foreground text-sm">
                   Scale down your auto scaling group to reduce costs. Enter a number less than {currentVMs} VMs.
                 </p>
                 <div className="space-y-2">

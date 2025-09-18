@@ -64,7 +64,9 @@ export function StorageSection({
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="bootVolumeSize">Size (GB)</Label>
+            <Label htmlFor="bootVolumeSize">
+              Size (GB) <span className="text-red-500">*</span>
+            </Label>
             <Input
               id="bootVolumeSize"
               type="number"
@@ -124,7 +126,8 @@ export function StorageSection({
               {storageVolumes.map((volume, index) => (
                 <div key={volume.id} className="p-4 border rounded-lg">
                   <div className="space-y-4">
-                    <div className="flex justify-end">
+                    <div className="flex justify-between items-center">
+                      {index === 0 ? <Label>Storage Volumes</Label> : <div></div>}
                       <Button
                         size="sm"
                         variant="ghost"
