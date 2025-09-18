@@ -323,10 +323,6 @@ export default function TemplateDetailsPage() {
                       <Label className='text-xs text-muted-foreground'>Bootable Volume Size</Label>
                       <div className='text-sm font-medium'>{templateData.bootVolumeSize} GB</div>
                     </div>
-                    <div className='space-y-1'>
-                      <Label className='text-xs text-muted-foreground'>Startup Script</Label>
-                      <div className='text-sm font-medium'>Configured</div>
-                    </div>
                   </div>
                   <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4'>
                     <div className='space-y-1'>

@@ -254,8 +254,8 @@ export default function AutoScalingGroupDetailsPage() {
           </div>
 
           <DetailGrid>
-            {/* ASG Name, Type, Status, Created On in one row */}
-            <div className='col-span-full grid grid-cols-4 gap-4'>
+            {/* ASG Name, Status, Created On in one row */}
+            <div className='col-span-full grid grid-cols-3 gap-4'>
               <div className='space-y-1'>
                 <label
                   className='text-sm font-normal text-gray-700'
@@ -265,17 +265,6 @@ export default function AutoScalingGroupDetailsPage() {
                 </label>
                 <div className='font-medium' style={{ fontSize: '14px' }}>
                   {asg.name}
-                </div>
-              </div>
-              <div className='space-y-1'>
-                <label
-                  className='text-sm font-normal text-gray-700'
-                  style={{ fontSize: '13px' }}
-                >
-                  Type
-                </label>
-                <div>
-                  <Badge variant='secondary'>{asg.type}</Badge>
                 </div>
               </div>
               <div className='space-y-1'>
@@ -392,10 +381,6 @@ export default function AutoScalingGroupDetailsPage() {
                   <div className='space-y-1'>
                     <Label className='text-xs text-muted-foreground'>Bootable Volume Size</Label>
                     <div className='text-sm font-medium'>{instanceSpecifications.bootableVolumeSize}</div>
-                  </div>
-                  <div className='space-y-1'>
-                    <Label className='text-xs text-muted-foreground'>Startup Script</Label>
-                    <div className='text-sm font-medium'>No startup script configured</div>
                   </div>
                 </div>
                 <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4'>
