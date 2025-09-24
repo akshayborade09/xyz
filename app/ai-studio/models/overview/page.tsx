@@ -55,7 +55,7 @@ print(response.json())`;
       <div 
         className='grid grid-cols-1 lg:grid-cols-2 gap-8 items-center min-h-[500px] px-6 lg:px-12 py-12 rounded-2xl relative overflow-hidden'
         style={{
-          backgroundColor: '#F3F8FF',
+          backgroundColor: '#f0fdf4',
         }}
       >
         {/* Background SVG Pattern */}
@@ -68,12 +68,12 @@ print(response.json())`;
             preserveAspectRatio="xMidYMid slice"
           >
             <g clipPath="url(#clip0_646_2612)">
-              <rect width="1232" height="640" fill="#F3F8FF"/>
+              <rect width="1232" height="640" fill="#f0fdf4"/>
               <path 
                 fillRule="evenodd" 
                 clipRule="evenodd" 
                 d="M929.704 412C928.178 412 927.047 410.582 927.387 409.094L933.471 382.466C933.811 380.979 932.681 379.561 931.155 379.561H853.876C853.18 379.561 852.519 379.256 852.068 378.726L733.568 239.754C732.811 238.866 732.811 237.559 733.568 236.671L850.74 99.2564C851.192 98.727 851.852 98.422 852.548 98.422H941.134C943.161 98.422 944.258 100.797 942.942 102.34L828.4 236.671C827.642 237.559 827.642 238.866 828.4 239.754L933.912 363.495C935.181 364.982 937.602 364.388 938.037 362.483L1005.58 66.847C1005.83 65.7664 1006.79 65 1007.9 65H1072.45C1073.97 65 1075.1 66.4179 1074.76 67.9056L1068.46 95.5164C1068.12 97.0041 1069.25 98.422 1070.77 98.422H1150.65C1151.35 98.422 1152.01 98.727 1152.46 99.2564L1269.63 236.671C1270.39 237.559 1270.39 238.866 1269.63 239.754L1151.13 378.726C1150.68 379.256 1150.02 379.561 1149.32 379.561H1131.57L1060.85 379.42C1058.83 379.416 1057.73 377.043 1059.05 375.502L1174.8 239.754C1175.56 238.866 1175.56 237.559 1174.8 236.671L1068.56 112.083C1067.3 110.596 1064.87 111.19 1064.44 113.095L996.567 410.153C996.32 411.234 995.359 412 994.251 412H929.704Z" 
-                fill="#DBEFFF"
+                fill="#dcfce7"
               />
             </g>
             <defs>
@@ -197,8 +197,8 @@ print(response.json())`;
             {/* Pricing */}
             <div className='space-y-1'>
               <div className='flex items-center justify-between'>
-                <span className='text-lg font-semibold text-gray-900'>$0.05</span>
-                <span className='text-lg font-semibold text-gray-900'>$0.20</span>
+                <span className='text-lg font-semibold text-gray-900'>₹4.2</span>
+                <span className='text-lg font-semibold text-gray-900'>₹16.7</span>
               </div>
               <div className='flex items-center justify-between text-xs text-gray-500'>
                 <span>Per 1M Input Tokens</span>
@@ -264,8 +264,8 @@ print(response.json())`;
             {/* Pricing */}
             <div className='space-y-1'>
               <div className='flex items-center justify-between'>
-                <span className='text-lg font-semibold text-gray-900'>$1.00</span>
-                <span className='text-lg font-semibold text-gray-900'>$3.00</span>
+                <span className='text-lg font-semibold text-gray-900'>₹83.5</span>
+                <span className='text-lg font-semibold text-gray-900'>₹250.5</span>
               </div>
               <div className='flex items-center justify-between text-xs text-gray-500'>
                 <span>Per 1M Input Tokens</span>
@@ -336,8 +336,8 @@ print(response.json())`;
             {/* Pricing */}
             <div className='space-y-1'>
               <div className='flex items-center justify-between'>
-                <span className='text-lg font-semibold text-gray-900'>$0.15</span>
-                <span className='text-lg font-semibold text-gray-900'>$1.50</span>
+                <span className='text-lg font-semibold text-gray-900'>₹12.5</span>
+                <span className='text-lg font-semibold text-gray-900'>₹125.3</span>
               </div>
               <div className='flex items-center justify-between text-xs text-gray-500'>
                 <span>Per 1M Input Tokens</span>
