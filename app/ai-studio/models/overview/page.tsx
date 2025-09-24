@@ -163,7 +163,7 @@ print(response.json())`;
         {/* Model Cards Grid */}
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
           {/* Card 1 - OpenAI GPT-OSS 20B */}
-          <div className='bg-gradient-to-bl from-green-100/60 via-green-50/10 to-transparent rounded-xl border border-green-200 p-6 space-y-4'>
+          <div className='bg-gradient-to-bl from-blue-100/50 via-white/80 to-white rounded-xl border border-blue-200 p-6 space-y-4'>
             {/* Provider Logo */}
             <div className='flex justify-start mb-4'>
               <div className='w-8 h-8 flex items-center justify-center'>
@@ -229,7 +229,7 @@ print(response.json())`;
           </div>
 
           {/* Card 2 - Kimi K2-Instruct */}
-          <div className='bg-gradient-to-bl from-green-100/60 via-green-50/10 to-transparent rounded-xl border border-green-200 p-6 space-y-4'>
+          <div className='bg-gradient-to-bl from-purple-100/50 via-white/80 to-white rounded-xl border border-purple-200 p-6 space-y-4'>
             {/* Provider Logo */}
             <div className='flex justify-start mb-4'>
               <div className='w-8 h-8 flex items-center justify-center'>
@@ -296,7 +296,7 @@ print(response.json())`;
           </div>
 
           {/* Card 3 - Qwen3 Next */}
-          <div className='bg-gradient-to-bl from-green-100/60 via-green-50/10 to-transparent rounded-xl border border-green-200 p-6 space-y-4'>
+          <div className='bg-gradient-to-bl from-emerald-100/50 via-white/80 to-white rounded-xl border border-emerald-200 p-6 space-y-4'>
             {/* Provider Logo */}
             <div className='flex justify-start mb-4'>
               <div className='w-8 h-8 flex items-center justify-center'>
