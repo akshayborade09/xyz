@@ -3,6 +3,7 @@
 import { Button } from '@/components/ui/button';
 import { TooltipWrapper } from '@/components/ui/tooltip-wrapper';
 import { useToast } from '@/hooks/use-toast';
+import { GlowingShadow } from '@/components/ui/glowing-shadow';
 
 export default function ModelsOverviewPage() {
   const { toast } = useToast();
@@ -121,29 +122,31 @@ print(response.json())`;
         
         {/* Right Side - Code Example */}
         <div className='hidden lg:block relative z-10'>
-          <div className='bg-gray-900 rounded-xl border border-gray-700 overflow-hidden'>
-            {/* Header */}
-            <div className='flex items-center justify-between px-4 py-3 bg-gray-800 border-b border-gray-700'>
-              <h3 className='text-sm font-medium text-gray-200'>Try it now</h3>
-              <TooltipWrapper content="Copy code">
-                <button 
-                  onClick={handleCopyCode}
-                  className='p-1 hover:bg-gray-700 rounded transition-colors'
-                >
-                  <svg className='w-4 h-4 text-gray-400 hover:text-gray-200' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-                    <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z' />
-                  </svg>
-                </button>
-              </TooltipWrapper>
+          <GlowingShadow>
+            <div className='w-full h-full flex flex-col overflow-hidden'>
+              {/* Header */}
+              <div className='flex items-center justify-between px-4 py-3 bg-gray-800 border-b border-gray-700'>
+                <h3 className='text-sm font-medium text-gray-200'>Try it now</h3>
+                <TooltipWrapper content="Copy code">
+                  <button 
+                    onClick={handleCopyCode}
+                    className='p-1 hover:bg-gray-700 rounded transition-colors'
+                  >
+                    <svg className='w-4 h-4 text-gray-400 hover:text-gray-200' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                      <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z' />
+                    </svg>
+                  </button>
+                </TooltipWrapper>
+              </div>
+              
+              {/* Code Content */}
+              <div className='p-4 bg-gray-900 flex-1'>
+                <pre className='text-sm text-gray-300 leading-relaxed overflow-x-auto'>
+                  <code>{codeSnippet}</code>
+                </pre>
+              </div>
             </div>
-            
-            {/* Code Content */}
-            <div className='p-4 bg-gray-900'>
-              <pre className='text-sm text-gray-300 leading-relaxed overflow-x-auto'>
-                <code>{codeSnippet}</code>
-              </pre>
-            </div>
-          </div>
+          </GlowingShadow>
         </div>
       </div>
 
@@ -219,7 +222,7 @@ print(response.json())`;
                 Playground
               </Button>
               <TooltipWrapper content="View starter code">
-                <Button variant='outline' className='px-3 border-gray-500 text-gray-500 hover:bg-gray-500 hover:text-white hover:border-gray-500'>
+                <Button variant='outline' className='px-3 border-gray-500 text-gray-500 hover:bg-gray-900 hover:text-white hover:border-gray-900'>
                   <svg className='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
                     <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4' />
                   </svg>
@@ -286,7 +289,7 @@ print(response.json())`;
                 Playground
               </Button>
               <TooltipWrapper content="View starter code">
-                <Button variant='outline' className='px-3 border-gray-500 text-gray-500 hover:bg-gray-500 hover:text-white hover:border-gray-500'>
+                <Button variant='outline' className='px-3 border-gray-500 text-gray-500 hover:bg-gray-900 hover:text-white hover:border-gray-900'>
                   <svg className='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
                     <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4' />
                   </svg>
@@ -358,7 +361,7 @@ print(response.json())`;
                 Playground
               </Button>
               <TooltipWrapper content="View starter code">
-                <Button variant='outline' className='px-3 border-gray-500 text-gray-500 hover:bg-gray-500 hover:text-white hover:border-gray-500'>
+                <Button variant='outline' className='px-3 border-gray-500 text-gray-500 hover:bg-gray-900 hover:text-white hover:border-gray-900'>
                   <svg className='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
                     <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4' />
                   </svg>
