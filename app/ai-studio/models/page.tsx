@@ -7,8 +7,8 @@ export default function ModelsPage() {
   const router = useRouter();
 
   useEffect(() => {
-    // Redirect to Model Catalogue by default
-    router.replace('/model-hub/catalog');
+    // Redirect to Overview by default
+    router.replace('/ai-studio/models/overview');
   }, [router]);
 
   return null;

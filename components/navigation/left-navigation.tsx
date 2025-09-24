@@ -197,6 +197,7 @@ const navigationConfig = {
         href: '/ai-studio/models',
         label: 'Models',
         subItems: [
+          { href: '/ai-studio/models/overview', label: 'Overview' },
           { href: '/model-hub/catalog', label: 'Model Catalogue' },
           { href: '/model-dev/fine-tuning', label: 'Fine-Tuning' },
           { href: '/models/deployment', label: 'Deployments' },
@@ -711,6 +712,9 @@ export function LeftNavigation({ onClose }: LeftNavigationProps) {
       setExpandedSubItem('/administration/kms');
     } else if (pathname.startsWith('/ai-studio')) {
       setExpandedItem('/ai-studio');
+      if (pathname.startsWith('/ai-studio/models')) {
+        setExpandedSubItem('/ai-studio/models');
+      }
     } else if (
       pathname.startsWith('/ai-solutions') ||
       pathname.startsWith('/bhashik') ||
@@ -741,6 +745,10 @@ export function LeftNavigation({ onClose }: LeftNavigationProps) {
     if (pathname.startsWith('/compute') && href === '/core-infrastructure') {
       return;
     }
+    // Don't collapse if we're in the AI Studio section
+    if (pathname.startsWith('/ai-studio') && href === '/ai-studio') {
+      return;
+    }
 
     const newExpandedItem = expandedItem === href ? null : href;
     setExpandedItem(newExpandedItem);
@@ -752,7 +760,7 @@ export function LeftNavigation({ onClose }: LeftNavigationProps) {
       router.push('/compute/vms');
     } else if (newExpandedItem && href === '/ai-studio') {
       setExpandedSubItem('/ai-studio/models');
-      router.push('/models');
+      router.push('/ai-studio/models');
     } else if (newExpandedItem && href === '/ai-solutions') {
       setExpandedSubItem('/ai-solutions/bhashik');
       router.push('/bhashik');
@@ -785,7 +793,7 @@ export function LeftNavigation({ onClose }: LeftNavigationProps) {
       } else if (href === '/billing') {
         router.push('/billing/usage');
       } else if (href === '/ai-studio/models') {
-        router.push('/model-hub/catalog');
+        router.push('/ai-studio/models/overview');
       } else if (href === '/ai-solutions/bhashik') {
         router.push('/bhashik');
       } else if (href === '/ai-solutions/document-intelligence') {
@@ -813,6 +821,11 @@ export function LeftNavigation({ onClose }: LeftNavigationProps) {
     // Don't collapse storage submenu when in storage section
     if (pathname.startsWith('/storage') && href === '/storage') {
       setExpandedSubItem('/storage');
+      return;
+    }
+    // Don't collapse Models submenu when in AI Studio models section
+    if (pathname.startsWith('/ai-studio/models') && href === '/ai-studio/models') {
+      setExpandedSubItem('/ai-studio/models');
       return;
     }
   };
