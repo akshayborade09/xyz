@@ -488,7 +488,7 @@ export default function PlaygroundPage() {
                           className='h-7 px-3 text-xs'
                           disabled={chatHistory.length === 0}
                         >
-                          Clear
+                          Clear chat
                         </Button>
                       </TooltipWrapper>
                       <TooltipWrapper content="Copy system prompt to clipboard">
