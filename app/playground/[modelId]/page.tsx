@@ -569,12 +569,12 @@ export default function PlaygroundPage() {
 
                 {/* Message Input */}
                 <div className='pt-4 flex-shrink-0'>
-                  <div className='flex gap-2'>
+                  <div className='relative'>
                     <Textarea
-                      placeholder="Enter message"
+                      placeholder="Find hiking boots for wide feet"
                       value={message}
                       onChange={(e) => setMessage(e.target.value)}
-                      className='flex-1 min-h-[45px] resize-none'
+                      className='flex-1 min-h-[60px] resize-none rounded-2xl border-2 border-gray-200 px-4 py-3 pr-12 text-sm placeholder:text-gray-500 focus:border-gray-300 focus:ring-0'
                       onKeyDown={(e) => {
                         if (e.key === 'Enter' && !e.shiftKey) {
                           e.preventDefault();
@@ -586,9 +586,9 @@ export default function PlaygroundPage() {
                       onClick={handleSendMessage}
                       disabled={!message.trim()}
                       size='sm'
-                      className='self-end mb-2'
+                      className='absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8 rounded-full p-0 bg-gray-800 hover:bg-gray-900'
                     >
-                      <Send className='h-4 w-4' />
+                      <Send className='h-4 w-4 text-white' />
                     </Button>
                   </div>
                 </div>
