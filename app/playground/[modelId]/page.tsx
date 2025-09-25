@@ -444,10 +444,24 @@ export default function PlaygroundPage() {
               </div>
 
               {/* Fixed Cost Information */}
-              <div className='absolute bottom-0 left-0 right-0 border-t pt-2 pb-2 bg-background/95 backdrop-blur-sm'>
-                <div className='bg-muted/50 rounded-lg p-2 mx-3'>
-                  <div className='text-xs text-muted-foreground'>
-                    Text generation will cost ${model.costPerToken.toFixed(3)} per 1000 tokens
+              <div className='absolute bottom-0 left-0 right-0 pt-2 pb-2'>
+                <div 
+                  className='mx-3'
+                  style={{
+                    borderRadius: '16px',
+                    border: '4px solid #FFF',
+                    background: 'linear-gradient(265deg, #FFF -13.17%, #F7F8FD 133.78%)',
+                    boxShadow: '0px 8px 39.1px -9px rgba(0, 27, 135, 0.08)',
+                    padding: '1.5rem',
+                  }}
+                >
+                  <div className='flex items-center justify-between'>
+                    <h3 className='text-base font-semibold'>Cost Summary</h3>
+                  </div>
+                  <div className='mt-2'>
+                    <div className='text-sm text-muted-foreground'>
+                      Text generation will cost ${model.costPerToken.toFixed(3)} per 1000 tokens
+                    </div>
                   </div>
                 </div>
               </div>
