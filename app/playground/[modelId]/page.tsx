@@ -530,7 +530,7 @@ export default function PlaygroundPage() {
                             </g>
                           </svg>
                           <div>
-                            <div className='text-base font-medium mb-1'>Start a conversation</div>
+                            <div className='text-base font-semibold mb-1 text-gray-900'>Start a conversation</div>
                             <div className='text-sm'>Enter a message below or use one of the quick actions</div>
                           </div>
                         </div>
@@ -538,7 +538,6 @@ export default function PlaygroundPage() {
                         {/* Quick Actions moved here */}
                         <div className='flex flex-wrap gap-2 justify-center'>
                           {quickActions.map((action, index) => {
-                            const Icon = action.icon;
                             return (
                               <Button
                                 key={index}
@@ -547,7 +546,6 @@ export default function PlaygroundPage() {
                                 onClick={() => handleQuickAction(action.label)}
                                 className='text-xs'
                               >
-                                <Icon className='h-3 w-3 mr-1' />
                                 {action.label}
                               </Button>
                             );
