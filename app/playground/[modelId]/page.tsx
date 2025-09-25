@@ -450,7 +450,7 @@ export default function PlaygroundPage() {
                   style={{
                     borderRadius: '16px',
                     border: '4px solid #FFF',
-                    background: 'linear-gradient(265deg, #EBF4FF -13.17%, #E1F0FF 133.78%)',
+                    background: 'linear-gradient(265deg, #FFF -13.17%, #F0F7FF 133.78%)',
                     boxShadow: '0px 8px 39.1px -9px rgba(0, 27, 135, 0.08)',
                     padding: '1.5rem',
                   }}
