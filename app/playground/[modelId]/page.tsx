@@ -13,6 +13,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { TooltipWrapper } from '@/components/ui/tooltip-wrapper';
 import { useToast } from '@/hooks/use-toast';
+import { SetupCodeModal } from '@/components/modals/setup-code-modal';
 import { 
   Copy, 
   Send, 
@@ -23,9 +24,7 @@ import {
   Globe,
   FileText,
   Sparkles,
-  BookOpen,
-  Code,
-  Key
+  BookOpen
 } from 'lucide-react';
 
 // Mock model data - in real app, this would come from API
@@ -110,6 +109,7 @@ export default function PlaygroundPage() {
   const [message, setMessage] = useState('');
   const [isAdvancedOpen, setIsAdvancedOpen] = useState(false);
   const [chatHistory, setChatHistory] = useState<Array<{role: 'user' | 'assistant', content: string}>>([]);
+  const [isSetupCodeModalOpen, setIsSetupCodeModalOpen] = useState(false);
 
   const handleCopySystemPrompt = async () => {
     try {
@@ -156,12 +156,14 @@ export default function PlaygroundPage() {
           description={`Interactive playground for ${model.name}`}
           headerActions={
             <div className='flex items-center gap-2'>
-              <Button variant='outline' size='sm'>
-                <Code className='h-4 w-4 mr-2' />
+              <Button 
+                variant='outline' 
+                size='sm'
+                onClick={() => setIsSetupCodeModalOpen(true)}
+              >
                 View code
               </Button>
               <Button variant='default' size='sm'>
-                <Key className='h-4 w-4 mr-2' />
                 Get API key
               </Button>
             </div>
@@ -552,6 +554,13 @@ export default function PlaygroundPage() {
           </div>
         </PageShell>
       </div>
+
+      {/* Setup Code Modal */}
+      <SetupCodeModal
+        open={isSetupCodeModalOpen}
+        onClose={() => setIsSetupCodeModalOpen(false)}
+        modelId={selectedModel}
+      />
     </div>
   );
 }
