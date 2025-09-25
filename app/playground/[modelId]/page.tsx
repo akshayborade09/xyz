@@ -525,7 +525,7 @@ export default function PlaygroundPage() {
                 </div>
 
                 {/* Message Input */}
-                <div className='pt-4 flex-shrink-0 border-t'>
+                <div className='pt-4 flex-shrink-0'>
                   <div className='flex gap-2'>
                     <Textarea
                       placeholder="Enter message"
