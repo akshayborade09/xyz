@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams } from 'next/navigation';
 import { PageShell } from '@/components/page-shell';
 import { Button } from '@/components/ui/button';
@@ -124,6 +124,8 @@ export default function PlaygroundPage() {
   const [totalCost, setTotalCost] = useState(0);
   const [showCostShimmer, setShowCostShimmer] = useState(false);
   const [isCostPopoverOpen, setIsCostPopoverOpen] = useState(false);
+  const [showScrollIndicator, setShowScrollIndicator] = useState(false);
+  const chatContainerRef = React.useRef<HTMLDivElement>(null);
 
   const handleCopySystemPrompt = async () => {
     try {
@@ -202,6 +204,39 @@ export default function PlaygroundPage() {
 
   const handleQuickAction = (action: string) => {
     setMessage(action);
+  };
+
+  // Check if chat container is scrollable
+  useEffect(() => {
+    const checkScroll = () => {
+      if (chatContainerRef.current) {
+        const { scrollTop, scrollHeight, clientHeight } = chatContainerRef.current;
+        // Show indicator if there's more content below (not scrolled to bottom)
+        setShowScrollIndicator(scrollHeight > clientHeight && scrollTop + clientHeight < scrollHeight - 20);
+      }
+    };
+
+    const container = chatContainerRef.current;
+    if (container) {
+      checkScroll();
+      container.addEventListener('scroll', checkScroll);
+      // Also check on resize
+      window.addEventListener('resize', checkScroll);
+      
+      return () => {
+        container.removeEventListener('scroll', checkScroll);
+        window.removeEventListener('resize', checkScroll);
+      };
+    }
+  }, [chatHistory]);
+
+  const scrollToBottom = () => {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTo({
+        top: chatContainerRef.current.scrollHeight,
+        behavior: 'smooth'
+      });
+    }
   };
 
   const toggleReasoning = (index: number) => {
@@ -705,7 +740,7 @@ export default function PlaygroundPage() {
                 </div>
 
                 {/* Chat History */}
-                <div className='flex-1 flex flex-col mt-6 min-h-0 px-6'>
+                <div className='flex-1 flex flex-col mt-6 min-h-0 px-6 relative'>
                   {chatHistory.length === 0 ? (
                     <div className='flex-1 flex items-center justify-center'>
                       <div className='text-center space-y-4 text-muted-foreground'>
@@ -742,7 +777,7 @@ export default function PlaygroundPage() {
                       </div>
                     </div>
                   ) : (
-                    <div className='flex-1 overflow-y-auto pr-2 divide-y'>
+                    <div ref={chatContainerRef} className='flex-1 overflow-y-auto pr-2'>
                       {chatHistory.map((msg, index) => (
                         <div key={index} className='py-6 first:pt-0 last:pb-0'>
                           {msg.role === 'user' ? (
@@ -841,6 +876,18 @@ export default function PlaygroundPage() {
                           )}
                         </div>
                       ))}
+                    </div>
+                  )}
+                  
+                  {/* Scroll Indicator */}
+                  {showScrollIndicator && chatHistory.length > 0 && (
+                    <div className='absolute bottom-4 left-1/2 -translate-x-1/2 z-10'>
+                      <button
+                        onClick={scrollToBottom}
+                        className='bg-white rounded-full p-2 shadow-lg hover:shadow-xl transition-all border border-gray-200 hover:border-gray-300'
+                      >
+                        <ChevronDown className='h-5 w-5 text-gray-600 animate-bounce' />
+                      </button>
                     </div>
                   )}
                 </div>
