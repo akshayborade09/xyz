@@ -14,9 +14,9 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/component
 import { TooltipWrapper } from '@/components/ui/tooltip-wrapper';
 import { useToast } from '@/hooks/use-toast';
 import { SetupCodeModal } from '@/components/modals/setup-code-modal';
+import { AIChatInput } from '@/components/ui/ai-chat-input';
 import { 
   Copy, 
-  Send, 
   ChevronDown, 
   ChevronRight,
   ExternalLink,
@@ -24,7 +24,8 @@ import {
   Globe,
   FileText,
   Sparkles,
-  BookOpen
+  BookOpen,
+  RotateCcw
 } from 'lucide-react';
 
 // Mock model data - in real app, this would come from API
@@ -111,8 +112,9 @@ export default function PlaygroundPage() {
   const [systemPrompt, setSystemPrompt] = useState('');
   const [message, setMessage] = useState('');
   const [isAdvancedOpen, setIsAdvancedOpen] = useState(false);
-  const [chatHistory, setChatHistory] = useState<Array<{role: 'user' | 'assistant', content: string}>>([]);
+  const [chatHistory, setChatHistory] = useState<Array<{role: 'user' | 'assistant', content: string, reasoning?: string, isThinking?: boolean}>>([]);
   const [isSetupCodeModalOpen, setIsSetupCodeModalOpen] = useState(false);
+  const [expandedReasoning, setExpandedReasoning] = useState<Set<number>>(new Set());
 
   const handleCopySystemPrompt = async () => {
     try {
@@ -148,22 +150,77 @@ export default function PlaygroundPage() {
     // Clear input
     setMessage('');
     
-    // Simulate AI response (in real app, this would call the API)
+    // Add thinking state
+    const thinkingMessage = { 
+      role: 'assistant' as const, 
+      content: '', 
+      isThinking: true 
+    };
+    setChatHistory(prev => [...prev, thinkingMessage]);
+    
+    // Simulate AI reasoning and response (in real app, this would call the API)
     setTimeout(() => {
-      const aiResponse = { role: 'assistant' as const, content: 'This is a mock response from the AI model.' };
-      setChatHistory(prev => [...prev, aiResponse]);
-    }, 1000);
+      // Remove thinking message and add actual response with reasoning
+      setChatHistory(prev => {
+        const withoutThinking = prev.slice(0, -1);
+        const reasoning = `On the first morning, a small robot named BEE-BOP rolled into Class 1A with a soft whirr. The hallway went quiet, then curious.\n\nIn homeroom, BEE-BOP introduced itself, printed a quick doodle of the solar system, and earned the first laugh of the day when its metal chair squeaked.\n\nAt lunch, it could not eat pizza, so it projected a tiny hologram of a pepperoni slice and pretended to take a bite. The other students found this hilarious.`;
+        const aiResponse = { 
+          role: 'assistant' as const, 
+          content: 'This is a mock response from the AI model. In a real implementation, this would be the actual AI-generated response based on your input and the selected model parameters.',
+          reasoning: reasoning
+        };
+        return [...withoutThinking, aiResponse];
+      });
+      
+      // Reasoning will be collapsed by default (no auto-expand)
+    }, 2000);
   };
 
   const handleQuickAction = (action: string) => {
     setMessage(action);
   };
 
+  const toggleReasoning = (index: number) => {
+    setExpandedReasoning(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(index)) {
+        newSet.delete(index);
+      } else {
+        newSet.add(index);
+      }
+      return newSet;
+    });
+  };
+
+  const handleCopyReasoning = async (reasoning: string) => {
+    try {
+      await navigator.clipboard.writeText(reasoning);
+      toast({
+        title: "Reasoning copied",
+        description: "The reasoning has been copied to your clipboard.",
+      });
+    } catch (err) {
+      toast({
+        title: "Failed to copy",
+        description: "Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleRegenerateResponse = (index: number) => {
+    toast({
+      title: "Regenerating response",
+      description: "This feature will regenerate the AI response.",
+    });
+    // In real implementation, this would call the API again
+  };
+
   return (
     <div className='h-full'>
       <div className='p-4'>
         <PageShell
-          title={`Playground: ${model.name}`}
+          title={model.name}
           description={model.description}
           headerActions={
             <div className='flex items-center gap-2'>
@@ -266,34 +323,30 @@ export default function PlaygroundPage() {
                 
                 {/* Temperature */}
                 <div className='space-y-3'>
-                  <div className='flex items-center gap-2'>
-                    <label className='text-sm text-muted-foreground'>Temperature</label>
-                    <TooltipWrapper content="Controls randomness in the output. Higher values make output more random.">
-                      <div className='w-4 h-4 rounded-full border border-muted-foreground/30 flex items-center justify-center text-xs'>
-                        ?
-                      </div>
-                    </TooltipWrapper>
+                  <div className='flex items-center justify-between'>
+                    <div className='flex items-center gap-2'>
+                      <label className='text-sm text-muted-foreground'>Temperature</label>
+                      <TooltipWrapper content="Controls randomness in the model's output. Higher values make output more random, lower values make it more focused and deterministic.">
+                        <div className='w-4 h-4 rounded-full border border-muted-foreground/30 flex items-center justify-center text-xs'>
+                          ?
+                        </div>
+                      </TooltipWrapper>
+                    </div>
+                    <span className='text-sm font-medium text-foreground'>{temperature[0]}</span>
                   </div>
                   
-                  <div className='space-y-2'>
-                    <Input 
-                      value={temperature[0] === 1 ? 'Unset' : temperature[0]} 
-                      readOnly 
-                      className='text-center'
+                  <div className='px-2'>
+                    <Slider
+                      value={temperature}
+                      onValueChange={setTemperature}
+                      max={2}
+                      min={0}
+                      step={0.1}
+                      className='w-full'
                     />
-                    <div className='px-2'>
-                      <Slider
-                        value={temperature}
-                        onValueChange={setTemperature}
-                        max={2}
-                        min={0}
-                        step={0.1}
-                        className='w-full'
-                      />
-                      <div className='flex justify-between text-xs text-muted-foreground mt-1'>
-                        <span>0</span>
-                        <span>2</span>
-                      </div>
+                    <div className='flex justify-between text-xs text-muted-foreground mt-1'>
+                      <span>0</span>
+                      <span>2</span>
                     </div>
                   </div>
                 </div>
@@ -512,12 +565,8 @@ export default function PlaygroundPage() {
                     placeholder="Enter system instructions"
                     value={systemPrompt}
                     onChange={(e) => setSystemPrompt(e.target.value)}
-                    className='min-h-[80px] resize-none'
+                    className='min-h-[60px]'
                   />
-                  
-                  <Button variant='ghost' size='sm' className='text-muted-foreground hover:text-foreground'>
-                    + Add few-shot example
-                  </Button>
                 </div>
 
                 {/* Chat History */}
@@ -558,11 +607,85 @@ export default function PlaygroundPage() {
                       </div>
                     </div>
                   ) : (
-                    <div className='flex-1 overflow-y-auto space-y-3 pr-2'>
+                    <div className='flex-1 overflow-y-auto space-y-4 pr-2'>
                       {chatHistory.map((msg, index) => (
-                        <div key={index} className={`p-4 rounded-lg border ${msg.role === 'user' ? 'ml-12 bg-muted/30' : 'mr-12 bg-background'}`}>
-                          <div className='text-sm font-medium mb-2 capitalize'>{msg.role}</div>
-                          <div className='text-sm'>{msg.content}</div>
+                        <div key={index}>
+                          {msg.role === 'user' ? (
+                            <div className='ml-12 p-4 rounded-lg border bg-muted/30'>
+                              <div className='text-sm font-medium mb-2 capitalize'>{msg.role}</div>
+                              <div className='text-sm'>{msg.content}</div>
+                            </div>
+                          ) : msg.isThinking ? (
+                            <div className='mr-12 p-4 rounded-lg border bg-background'>
+                              <div className='flex items-center gap-2 text-sm text-muted-foreground'>
+                                <div className='flex gap-1'>
+                                  <span className='w-2 h-2 bg-gray-400 rounded-full animate-bounce' style={{ animationDelay: '0ms' }}></span>
+                                  <span className='w-2 h-2 bg-gray-400 rounded-full animate-bounce' style={{ animationDelay: '150ms' }}></span>
+                                  <span className='w-2 h-2 bg-gray-400 rounded-full animate-bounce' style={{ animationDelay: '300ms' }}></span>
+                                </div>
+                                <span>AI is thinking...</span>
+                              </div>
+                            </div>
+                          ) : (
+                            <div className='mr-12 space-y-3'>
+                              {/* Reasoning Section */}
+                              {msg.reasoning && (
+                                <div className='rounded-lg border bg-background'>
+                                  <button
+                                    onClick={() => toggleReasoning(index)}
+                                    className='w-full flex items-center justify-between p-4 hover:bg-muted/30 transition-colors'
+                                  >
+                                    <div className='flex items-center gap-2'>
+                                      {expandedReasoning.has(index) ? (
+                                        <ChevronDown className='h-4 w-4' />
+                                      ) : (
+                                        <ChevronRight className='h-4 w-4' />
+                                      )}
+                                      <span className='text-sm font-medium'>Reasoning / Thought</span>
+                                    </div>
+                                  </button>
+                                  
+                                  {expandedReasoning.has(index) && (
+                                    <div className='px-4 pb-4'>
+                                      <div className='text-sm text-foreground whitespace-pre-wrap'>
+                                        {msg.reasoning}
+                                      </div>
+                                    </div>
+                                  )}
+                                </div>
+                              )}
+                              
+                              {/* Response Section */}
+                              <div className='p-4 rounded-lg border bg-background space-y-3'>
+                                <div>
+                                  <div className='text-sm font-medium mb-2 capitalize'>{msg.role}</div>
+                                  <div className='text-sm'>{msg.content}</div>
+                                </div>
+                                
+                                {/* Action Buttons */}
+                                <div className='flex items-center gap-2 pt-2 border-t'>
+                                  <Button
+                                    variant='outline'
+                                    size='sm'
+                                    onClick={() => handleRegenerateResponse(index)}
+                                    className='text-xs h-7'
+                                  >
+                                    <RotateCcw className='h-3 w-3 mr-1' />
+                                    Regenerate
+                                  </Button>
+                                  <Button
+                                    variant='outline'
+                                    size='sm'
+                                    onClick={() => handleCopyReasoning(msg.content)}
+                                    className='text-xs h-7'
+                                  >
+                                    <Copy className='h-3 w-3 mr-1' />
+                                    Copy
+                                  </Button>
+                                </div>
+                              </div>
+                            </div>
+                          )}
                         </div>
                       ))}
                     </div>
@@ -571,27 +694,21 @@ export default function PlaygroundPage() {
 
                 {/* Message Input */}
                 <div className='pt-4 flex-shrink-0 px-6 pb-6'>
-                  <div className='relative'>
-                    <Textarea
-                      placeholder="Find hiking boots for wide feet"
+                  <div className='w-full'>
+                    <AIChatInput
                       value={message}
-                      onChange={(e) => setMessage(e.target.value)}
-                      className='flex-1 min-h-[60px] resize-none rounded-2xl border-2 border-gray-200 px-4 py-3 pr-12 text-sm placeholder:text-gray-500 focus:border-gray-300 focus:ring-0'
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter' && !e.shiftKey) {
-                          e.preventDefault();
-                          handleSendMessage();
-                        }
-                      }}
+                      onChange={setMessage}
+                      onSend={handleSendMessage}
+                      placeholder={[
+                        "Find hiking boots for wide feet",
+                        "Explain quantum computing in simple terms",
+                        "Write a Python function to sort a list",
+                        "What are the best practices for React?",
+                        "Help me debug this code",
+                        "Summarize this article for me"
+                      ]}
+                      className="p-0"
                     />
-                    <Button 
-                      onClick={handleSendMessage}
-                      disabled={!message.trim()}
-                      size='sm'
-                      className='absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8 rounded-full p-0 bg-gray-800 hover:bg-gray-900'
-                    >
-                      <Send className='h-4 w-4 text-white' />
-                    </Button>
                   </div>
                 </div>
               </CardContent>
