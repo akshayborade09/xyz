@@ -99,7 +99,7 @@ const AIChatInput = ({
       transition: { type: "spring", stiffness: 120, damping: 18 },
     },
     expanded: {
-      height: 128,
+      height: 68, // Keep same height since controls are hidden
       boxShadow: "0 8px 32px 0 rgba(0,0,0,0.16)",
       transition: { type: "spring", stiffness: 120, damping: 18 },
     },
@@ -207,14 +207,15 @@ const AIChatInput = ({
               </div>
             </div>
  
-            <button
+            {/* Microphone - Hidden for now */}
+            {/* <button
               className="p-3 rounded-full hover:bg-gray-100 transition"
               title="Voice input"
               type="button"
               tabIndex={-1}
             >
               <Mic size={20} />
-            </button>
+            </button> */}
             <button
               className="flex items-center gap-1 bg-black hover:bg-zinc-700 text-white p-3 rounded-full font-medium justify-center disabled:opacity-50 disabled:cursor-not-allowed"
               title="Send"
@@ -227,8 +228,9 @@ const AIChatInput = ({
             </button>
           </div>
  
-          {/* Expanded Controls */}
-          <motion.div
+          {/* Expanded Controls - Hidden for now (Think and Deep Search) */}
+          {/* TODO: Re-enable Think and Deep Search buttons when ready */}
+          {/* <motion.div
             className="w-full flex justify-start px-4 items-center text-sm"
             variants={{
               hidden: {
@@ -249,11 +251,10 @@ const AIChatInput = ({
             style={{ marginTop: 8 }}
           >
             <div className="flex gap-3 items-center">
-              {/* Think Toggle */}
               <button
                 className={`flex items-center gap-1 px-4 py-2 rounded-full transition-all font-medium group ${
                   thinkActive
-                    ? "bg-blue-600/10 outline outline-blue-600/60 text-blue-950"
+                    ? "bg-green-600/10 outline outline-green-600/60 text-green-950"
                     : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                 }`}
                 title="Think"
@@ -270,11 +271,10 @@ const AIChatInput = ({
                 Think
               </button>
  
-              {/* Deep Search Toggle */}
               <motion.button
                 className={`flex items-center px-4 gap-1 py-2 rounded-full transition font-medium whitespace-nowrap overflow-hidden justify-start  ${
                   deepSearchActive
-                    ? "bg-blue-600/10 outline outline-blue-600/60 text-blue-950"
+                    ? "bg-green-600/10 outline outline-green-600/60 text-green-950"
                     : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                 }`}
                 title="Deep Search"
@@ -303,7 +303,7 @@ const AIChatInput = ({
                 </motion.span>
               </motion.button>
             </div>
-          </motion.div>
+          </motion.div> */}
         </div>
       </motion.div>
     </div>

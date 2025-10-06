@@ -199,6 +199,7 @@ const navigationConfig = {
         subItems: [
           { href: '/ai-studio/models/overview', label: 'Overview' },
           { href: '/model-hub/catalog', label: 'Model Catalogue' },
+          { href: '/playground/gpt-oss-20b', label: 'Playground' },
           { href: '/model-dev/fine-tuning', label: 'Fine-Tuning' },
           { href: '/models/deployment', label: 'Deployments' },
           { href: '/model-dev/evaluation', label: 'Evaluation' },
