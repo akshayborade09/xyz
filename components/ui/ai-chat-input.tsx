@@ -18,6 +18,9 @@ interface AIChatInputProps {
   value?: string;
   onChange?: (value: string) => void;
   onSend?: () => void;
+  onAttach?: () => void;
+  attachedImages?: string[];
+  onRemoveImage?: (index: number) => void;
   placeholder?: string[];
   className?: string;
 }
@@ -26,6 +29,9 @@ const AIChatInput = ({
   value: externalValue, 
   onChange, 
   onSend,
+  onAttach,
+  attachedImages = [],
+  onRemoveImage,
   placeholder = PLACEHOLDERS,
   className = ""
 }: AIChatInputProps) => {
@@ -36,6 +42,7 @@ const AIChatInput = ({
   const [deepSearchActive, setDeepSearchActive] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const wrapperRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   // Use external value if provided
   const value = externalValue !== undefined ? externalValue : inputValue;
@@ -46,6 +53,14 @@ const AIChatInput = ({
       setInputValue(newValue);
     }
   };
+
+  // Auto-focus input when images are attached
+  useEffect(() => {
+    if (attachedImages.length > 0 && inputRef.current) {
+      inputRef.current.focus();
+      setIsActive(true);
+    }
+  }, [attachedImages.length]);
  
   // Cycle placeholder text when input is inactive
   useEffect(() => {
@@ -92,14 +107,19 @@ const AIChatInput = ({
     }
   };
  
+  // Calculate height based on images
+  const baseHeight = 68;
+  const imageRowHeight = attachedImages.length > 0 ? 88 : 0; // 64px image + padding
+  const totalHeight = baseHeight + imageRowHeight;
+
   const containerVariants = {
     collapsed: {
-      height: 68,
+      height: totalHeight,
       boxShadow: "0 2px 8px 0 rgba(0,0,0,0.08)",
       transition: { type: "spring", stiffness: 120, damping: 18 },
     },
     expanded: {
-      height: 68, // Keep same height since controls are hidden
+      height: totalHeight,
       boxShadow: "0 8px 32px 0 rgba(0,0,0,0.16)",
       transition: { type: "spring", stiffness: 120, damping: 18 },
     },
@@ -151,6 +171,36 @@ const AIChatInput = ({
         onClick={handleActivate}
       >
         <div className="flex flex-col items-stretch w-full h-full">
+          {/* Image Preview Row - Inside input container */}
+          {attachedImages.length > 0 && (
+            <div className="px-4 pt-3 pb-2">
+              <div className="flex flex-wrap gap-2">
+                {attachedImages.map((img, idx) => (
+                  <div key={idx} className="relative">
+                    <img 
+                      src={img} 
+                      alt={`Attached ${idx + 1}`} 
+                      className="h-16 w-16 object-cover rounded-lg bg-gray-50"
+                    />
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onRemoveImage?.(idx);
+                      }}
+                      className="absolute -top-1.5 -right-1.5 bg-black text-white rounded-full p-1 hover:bg-gray-800 transition-colors"
+                      type="button"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                      </svg>
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+          
           {/* Input Row */}
           <div className="flex items-center gap-2 p-3 rounded-full bg-white w-full">
             <button
@@ -158,13 +208,15 @@ const AIChatInput = ({
               title="Attach file"
               type="button"
               tabIndex={-1}
+              onClick={onAttach}
             >
               <Paperclip size={20} />
             </button>
- 
+
             {/* Text Input & Placeholder */}
             <div className="relative flex-1">
               <input
+                ref={inputRef}
                 type="text"
                 value={value}
                 onChange={(e) => handleChange(e.target.value)}
