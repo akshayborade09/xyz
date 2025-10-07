@@ -525,8 +525,8 @@ export function SpeechToTextPlayground({
       </div>
 
       {/* MAIN CONTENT - Same design as text generation playground */}
-      <Card className='flex-1 flex flex-col min-h-0 relative overflow-hidden' style={{ background: 'linear-gradient(180deg, #8e92981a 0%, #ffffff 100%)' }}>
-        <CardContent className='flex-1 flex flex-col min-h-0 p-0 overflow-hidden relative'>
+      <Card className='flex-1 flex flex-col min-h-0 relative' style={{ background: 'linear-gradient(180deg, #8e92981a 0%, #ffffff 100%)' }}>
+        <CardContent className='flex-1 flex flex-col min-h-0 p-0 relative'>
           {/* Output Section - Scrollable */}
           <div className='flex-1 overflow-y-auto p-6'>
             <div className='space-y-4'>
@@ -648,9 +648,9 @@ export function SpeechToTextPlayground({
                   
                   {/* Single Row Layout - All elements horizontally aligned */}
                   {!audioFile ? (
-                    <div className='flex items-center gap-6'>
+                    <div className='flex items-center justify-between gap-6'>
                       {/* Left: Recording Button or Recording Waveform */}
-                      <div className='flex items-center gap-3 flex-1'>
+                      <div className='flex items-center gap-3'>
                         {!isRecording ? (
                           <>
                             <TooltipWrapper content='Click to start recording'>
@@ -684,29 +684,27 @@ export function SpeechToTextPlayground({
                         )}
                       </div>
 
-                      {/* OR Divider */}
-                      <span className='text-sm text-muted-foreground/60 font-medium'>OR</span>
+                      {/* OR Divider - Only show when not recording */}
+                      {!isRecording && <span className='text-sm text-muted-foreground/60 font-medium'>OR</span>}
 
                       {/* Center: Upload Section */}
-                      <div className='flex items-center gap-3 flex-1'>
-                        {!isRecording && (
-                          <>
-                            <TooltipWrapper content='Upload audio file'>
-                              <button
-                                onClick={() => fileInputRef.current?.click()}
-                                onFocus={() => setIsInputFocused(true)}
-                                className='flex items-center justify-center w-12 h-12 rounded-full border-2 border-border hover:border-[#10A554] transition-all bg-white flex-shrink-0'
-                              >
-                                <Upload className='h-5 w-5 text-foreground' />
-                              </button>
-                            </TooltipWrapper>
-                            <div>
-                              <p className='text-xs text-muted-foreground font-medium'>Upload File</p>
-                              <p className='text-xs text-muted-foreground/70'>WAV format • File size 5MB • Below 16khz</p>
-                            </div>
-                          </>
-                        )}
-                      </div>
+                      {!isRecording && (
+                        <div className='flex items-center gap-3'>
+                          <TooltipWrapper content='Upload audio file'>
+                            <button
+                              onClick={() => fileInputRef.current?.click()}
+                              onFocus={() => setIsInputFocused(true)}
+                              className='flex items-center justify-center w-12 h-12 rounded-full border-2 border-border hover:border-[#10A554] transition-all bg-white flex-shrink-0'
+                            >
+                              <Upload className='h-5 w-5 text-foreground' />
+                            </button>
+                          </TooltipWrapper>
+                          <div className='whitespace-nowrap'>
+                            <p className='text-xs text-muted-foreground font-medium'>Upload File</p>
+                            <p className='text-xs text-muted-foreground/70'>WAV format • File size 5MB • Below 16khz</p>
+                          </div>
+                        </div>
+                      )}
 
                       {/* Right: Language Selector and Transcribe Button */}
                       <div className='flex flex-col gap-2 min-w-[280px]'>
