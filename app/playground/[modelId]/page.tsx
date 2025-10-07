@@ -2,16 +2,6 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams } from 'next/navigation';
-
-// Generate static params for known model IDs
-export async function generateStaticParams() {
-  return [
-    { modelId: 'qwen3-coder-480b' },
-    { modelId: 'gpt-oss-20b' },
-    { modelId: 'kimi-k2-instruct' },
-    { modelId: 'krutrim-dhwani' },
-  ];
-}
 import { PageShell } from '@/components/page-shell';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
