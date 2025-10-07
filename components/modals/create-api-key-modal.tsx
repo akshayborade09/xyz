@@ -31,7 +31,7 @@ export function CreateApiKeyModal({ open, onClose }: CreateApiKeyModalProps) {
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className='sm:max-w-lg'>
         <DialogHeader>
-          <DialogTitle className='text-xl font-semibold text-foreground'>
+          <DialogTitle className='text-base font-semibold text-black'>
             Create New API Key
           </DialogTitle>
         </DialogHeader>
