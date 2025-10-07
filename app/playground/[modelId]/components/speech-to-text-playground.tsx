@@ -545,8 +545,8 @@ export function SpeechToTextPlayground({
                 </div>
               ) : (
                 <div className='flex flex-col items-center justify-center min-h-[400px] gap-3'>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 18 18" className='text-muted-foreground/40'>
-                    <g fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" stroke="currentColor">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 18 18" className='text-muted-foreground/40'>
+                    <g fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.2" stroke="currentColor">
                       <path d="M8 11.75H2.75"></path> 
                       <path d="M15.205 7.75H2.75"></path> 
                       <path d="M15.25 3.75H2.75"></path> 
