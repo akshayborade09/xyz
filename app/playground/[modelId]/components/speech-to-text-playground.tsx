@@ -615,7 +615,7 @@ export function SpeechToTextPlayground({
                               Transcribing...
                             </>
                           ) : (
-                            'Transcribe button'
+                            'Transcribe'
                           )}
                         </Button>
                       </div>
@@ -677,7 +677,7 @@ export function SpeechToTextPlayground({
                               Transcribing...
                             </>
                           ) : (
-                            'Transcribe button'
+                            'Transcribe'
                           )}
                         </Button>
                       </div>
