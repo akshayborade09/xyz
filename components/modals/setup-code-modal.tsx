@@ -17,12 +17,14 @@ interface SetupCodeModalProps {
   open: boolean;
   onClose: () => void;
   modelId?: string;
+  onOpenCreateApiKey?: () => void;
 }
 
 export function SetupCodeModal({
   open,
   onClose,
   modelId = 'gpt-oss-20b',
+  onOpenCreateApiKey,
 }: SetupCodeModalProps) {
   const { toast } = useToast();
   const [activeTab, setActiveTab] = useState('python');
@@ -112,7 +114,11 @@ print(response.choices[0].message.content)`;
                 Create an{' '}
                 <button 
                   className='font-medium text-primary hover:text-primary/80 underline cursor-pointer'
-                  onClick={() => window.open('/api-keys', '_blank')}
+                  onClick={() => {
+                    if (onOpenCreateApiKey) {
+                      onOpenCreateApiKey();
+                    }
+                  }}
                 >
                   API key
                 </button>{' '}

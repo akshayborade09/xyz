@@ -420,6 +420,86 @@ print(response.json())`;
               </div>
             </div>
           </div>
+
+          {/* Card 4 - Krutrim Dhwani */}
+          <div className='bg-gradient-to-bl from-green-100/50 via-emerald-50/30 to-white rounded-xl border border-green-200/60 p-6 flex flex-col h-full'>
+            {/* Top Content - Flexible */}
+            <div className='flex-1 flex flex-col'>
+              {/* Provider Logo */}
+              <div className='flex justify-start mb-4'>
+                <div className='w-8 h-8 flex items-center justify-center'>
+                  <svg width="32" height="32" viewBox="0 0 385 385" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-8 h-8" aria-hidden="true">
+                    <rect x="0.166992" y="0.33313" width="384.002" height="384.002" rx="192.001" fill="#10A554"/>
+                    <path d="M281.913 134.663H206.35V167.282C213.859 162.901 222.463 160.711 232.163 160.711C243.271 160.711 252.344 164.153 259.385 171.036C266.581 177.92 270.179 187.463 270.179 199.666C270.179 206.549 268.849 214.215 266.19 222.663C263.687 231.111 259.541 239.716 253.752 248.477L226.296 233.223C229.895 228.374 232.867 223.367 235.214 218.205C237.56 213.042 238.734 207.723 238.734 202.247C238.734 196.459 237.482 192.391 234.979 190.044C232.632 187.698 229.503 186.524 225.592 186.524C221.994 186.524 215.032 189.81 215.032 189.81C215.032 189.81 204.053 194.347 201.55 196.85V254.813H174.904V225.01C169.741 227.982 164.5 230.251 159.181 231.815C154.019 233.38 147.995 234.162 141.112 234.162C132.507 234.162 124.607 232.598 117.41 229.469C110.37 226.183 104.738 221.412 100.514 215.154C96.2903 208.896 94.1783 201.074 94.1783 191.687C94.1783 182.926 96.2903 175.417 100.514 169.159C104.738 162.745 110.605 157.817 118.114 154.375C125.624 150.777 134.307 148.978 144.163 148.978C148.543 148.978 152.924 149.134 157.304 149.447C161.841 149.76 165.361 150.307 167.864 151.09L165.517 177.138C160.511 175.886 154.957 175.26 148.856 175.26C141.503 175.26 135.793 176.747 131.725 179.719C127.658 182.535 125.624 186.524 125.624 191.687C125.624 197.945 127.579 202.247 131.491 204.594C135.402 206.941 139.626 208.114 144.163 208.114C150.733 208.114 156.522 206.628 161.528 203.655C166.691 200.683 171.149 197.241 174.904 193.33V134.663H85.4956V108.849H281.913V134.663Z" fill="white"/>
+                    <path d="M235.619 309.49C231.551 311.524 226.702 313.401 221.069 315.122C215.281 316.843 208.397 317.704 200.419 317.704C192.596 317.704 185.635 316.218 179.533 313.245C173.432 310.429 168.66 306.44 165.219 301.277C161.62 296.271 159.821 290.404 159.821 283.677C159.821 272.413 163.811 263.417 171.789 256.69C179.611 250.119 186.076 246.365 200.781 245.426L203.597 269.597C195.619 270.066 194.943 271.552 191.971 274.056C188.998 276.715 187.512 279.766 187.512 283.208C187.512 290.404 192.284 294.002 201.827 294.002C205.425 294.002 209.101 293.455 212.856 292.36C216.611 291.264 221.148 289.387 226.467 286.728L235.619 309.49Z" fill="white"/>
+                  </svg>
+                </div>
+              </div>
+
+              {/* Model ID with Copy */}
+              <div className='space-y-1 mb-10'>
+                <div className='flex items-center gap-2'>
+                  <h3 className='text-lg font-semibold text-gray-900'>Krutrim/Krutrim-Dhwani</h3>
+                  <TooltipWrapper content="Copy model ID">
+                    <button 
+                      onClick={() => handleCopyModelId('Krutrim/Krutrim-Dhwani')}
+                      className='p-1 hover:bg-gray-100 rounded transition-colors'
+                    >
+                      <svg className='w-4 h-4 text-gray-500' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                        <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z' />
+                      </svg>
+                    </button>
+                  </TooltipWrapper>
+                </div>
+                <p className='text-sm text-gray-600'>Speech-to-text model for audio transcription</p>
+              </div>
+            </div>
+
+            {/* Bottom Content - Fixed to bottom */}
+            <div className='mt-auto space-y-4'>
+              {/* Pricing */}
+              <div className='space-y-1'>
+                <div className='flex items-center justify-between'>
+                  <span className='text-lg font-semibold text-gray-900'>₹24</span>
+                  <span className='text-lg font-semibold text-gray-400'>—</span>
+                </div>
+                <div className='flex items-center justify-between text-xs text-gray-500'>
+                  <span>Per Hour of Input Audio</span>
+                  <span>Output</span>
+                </div>
+              </div>
+
+              {/* Tags */}
+              <div className='flex flex-wrap gap-2'>
+                <span className='px-2 py-1 bg-white border border-gray-300 text-gray-700 text-xs rounded font-medium'>Speech-to-Text</span>
+                <span className='px-2 py-1 bg-white border border-gray-300 text-gray-700 text-xs rounded font-medium'>Audio</span>
+                <span className='px-2 py-1 bg-white border border-gray-300 text-gray-700 text-xs rounded font-medium'>Transcription</span>
+              </div>
+
+              {/* Action Buttons */}
+              <div className='flex space-x-3'>
+                <Button className='flex-1' asChild>
+                  <a href='/playground/krutrim-dhwani'>
+                    Playground
+                  </a>
+                </Button>
+                <TooltipWrapper content="View starter code">
+                  <Button 
+                    variant='outline' 
+                    className='px-3 border-gray-500 text-gray-500 hover:bg-gray-900 hover:text-white hover:border-gray-900'
+                    onClick={() => {
+                      setSelectedModelId('krutrim-dhwani');
+                      setIsSetupCodeModalOpen(true);
+                    }}
+                  >
+                    <svg className='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                      <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4' />
+                    </svg>
+                  </Button>
+                </TooltipWrapper>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 

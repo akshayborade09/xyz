@@ -4,6 +4,7 @@ import * as React from "react"
 import { useState, useEffect, useRef } from "react";
 import { Lightbulb, Mic, Globe, Paperclip, Send } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
+import { GlowEffect } from "./glow-effect";
  
 const PLACEHOLDERS = [
   "Generate website with HextaUI",
@@ -161,16 +162,33 @@ const AIChatInput = ({
  
   return (
     <div className={`w-full text-black ${className}`}>
-      <motion.div
-        ref={wrapperRef}
-        className="w-full"
-        variants={containerVariants}
-        animate={isActive || value ? "expanded" : "collapsed"}
-        initial="collapsed"
-        style={{ overflow: "hidden", borderRadius: 32, background: "#fff" }}
-        onClick={handleActivate}
-      >
-        <div className="flex flex-col items-stretch w-full h-full">
+      <div className="relative w-full">
+        <motion.div
+          className="absolute inset-0"
+          animate={{
+            opacity: isActive || value ? 0.35 : 0.2,
+            scale: isActive || value ? 1.03 : 1.02,
+          }}
+          transition={{ duration: 0.3, ease: "easeInOut" }}
+        >
+          <GlowEffect
+            colors={['#0894FF', '#C959DD', '#FF2E54', '#FF9004']}
+            mode='rotate'
+            blur='stronger'
+            duration={8}
+            className='rounded-[32px]'
+          />
+        </motion.div>
+        <motion.div
+          ref={wrapperRef}
+          className="w-full relative"
+          variants={containerVariants}
+          animate={isActive || value ? "expanded" : "collapsed"}
+          initial="collapsed"
+          style={{ overflow: "hidden", borderRadius: 32, background: "#fff" }}
+          onClick={handleActivate}
+        >
+          <div className="flex flex-col items-stretch w-full h-full">
           {/* Image Preview Row - Inside input container */}
           {attachedImages.length > 0 && (
             <div className="px-4 pt-3 pb-2">
@@ -358,6 +376,7 @@ const AIChatInput = ({
           </motion.div> */}
         </div>
       </motion.div>
+      </div>
     </div>
   );
 };

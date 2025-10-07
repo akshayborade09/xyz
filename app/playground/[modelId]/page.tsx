@@ -14,6 +14,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/component
 import { TooltipWrapper } from '@/components/ui/tooltip-wrapper';
 import { useToast } from '@/hooks/use-toast';
 import { SetupCodeModal } from '@/components/modals/setup-code-modal';
+import { CreateApiKeyModal } from '@/components/modals/create-api-key-modal';
 import { AIChatInput } from '@/components/ui/ai-chat-input';
 import { TextShimmer } from '@/components/ui/text-shimmer';
 import { ChatBubbleAvatar } from '@/components/ui/chat-bubble';
@@ -92,6 +93,24 @@ const modelData = {
         <path d="M1.052 16.916l9.539 2.552a21.007 21.007 0 00.06 2.033l5.956 1.593a11.997 11.997 0 01-5.586.865l-.18-.016-.044-.004-.084-.009-.094-.01a11.605 11.605 0 01-.157-.02l-.107-.014-.11-.016a11.962 11.962 0 01-.32-.051l-.042-.008-.075-.013-.107-.02-.07-.015-.093-.019-.075-.016-.095-.02-.097-.023-.094-.022-.068-.017-.088-.022-.09-.024-.095-.025-.082-.023-.109-.03-.062-.02-.084-.025-.093-.028-.105-.034-.058-.019-.08-.026-.09-.031-.066-.024a6.293 6.293 0 01-.044-.015l-.068-.025-.101-.037-.057-.022-.08-.03-.087-.035-.088-.035-.079-.032-.095-.04-.063-.028-.063-.027a5.655 5.655 0 01-.041-.018l-.066-.03-.103-.047-.052-.024-.096-.046-.062-.03-.084-.04-.086-.044-.093-.047-.052-.027-.103-.055-.057-.03-.058-.032a6.49 6.49 0 01-.046-.026l-.094-.053-.06-.034-.051-.03-.072-.041-.082-.05-.093-.056-.052-.032-.084-.053-.061-.039-.079-.05-.07-.047-.053-.035a7.785 7.785 0 01-.054-.036l-.044-.03-.044-.03a6.066 6.066 0 01-.04-.028l-.057-.04-.076-.054-.069-.05-.074-.054-.056-.042-.076-.057-.076-.059-.086-.067-.045-.035-.064-.052-.074-.06-.089-.073-.046-.039-.046-.039a7.516 7.516 0 01-.043-.037l-.045-.04-.061-.053-.07-.062-.068-.06-.062-.058-.067-.062-.053-.05-.088-.084a13.28 13.28 0 01-.099-.097l-.029-.028-.041-.042-.069-.07-.05-.051-.05-.053a6.457 6.457 0 01-.168-.179l-.08-.088-.062-.07-.071-.08-.042-.049-.053-.062-.058-.068-.046-.056a7.175 7.175 0 01-.027-.033l-.045-.055-.066-.082-.041-.052-.05-.064-.02-.025a11.99 11.99 0 01-1.44-2.402zm-1.02-5.794l11.353 3.037a20.468 20.468 0 00-.469 2.011l10.817 2.894a12.076 12.076 0 01-1.845 2.005L.657 15.923l-.016-.046-.035-.104a11.965 11.965 0 01-.05-.153l-.007-.023a11.896 11.896 0 01-.207-.741l-.03-.126-.018-.08-.021-.097-.018-.081-.018-.09-.017-.084-.018-.094c-.026-.141-.05-.283-.071-.426l-.017-.118-.011-.083-.013-.102a12.01 12.01 0 01-.019-.161l-.005-.047a12.12 12.12 0 01-.034-2.145zm1.593-5.15l11.948 3.196c-.368.605-.705 1.231-1.01 1.875l11.295 3.022c-.142.82-.368 1.612-.668 2.365l-11.55-3.09L.124 10.26l.015-.1.008-.049.01-.067.015-.087.018-.098c.026-.148.056-.295.088-.442l.028-.124.02-.085.024-.097c.022-.09.045-.18.07-.268l.028-.102.023-.083.03-.1.025-.082.03-.096.026-.082.031-.095a11.896 11.896 0 011.01-2.232zm4.442-4.4L17.352 4.59a20.77 20.77 0 00-1.688 1.721l7.823 2.093c.267.852.442 1.744.513 2.665L2.106 5.213l.045-.065.027-.04.04-.055.046-.065.055-.076.054-.072.064-.086.05-.065.057-.073.055-.070.060-.074.055-.069.065-.077.054-.066.066-.077.053-.060.072-.082.053-.060.067-.074.054-.058.073-.078.058-.060.063-.067.168-.17.1-.098.059-.056.076-.071a12.084 12.084 0 012.272-1.677zM12.017 0h.097l.082.001.069.001.054.002.068.002.046.001.076.003.047.002.060.003.054.002.087.005.105.007.144.011.088.007.044.004.077.008.082.008.047.005.102.012.05.006.108.014.081.01.042.006.065.01.207.032.07.012.065.011.14.026.092.018.11.022.046.01.075.016.041.01L14.7.3l.042.01.065.015.049.012.071.017.096.024.112.03.113.03.113.032.05.015.070.02.078.024.073.023.05.016.050.016.076.025.099.033.102.036.048.017.064.023.093.034.11.041.116.045.1.04.047.02.060.024.041.018.063.026.040.018.057.025.11.048.1.046.074.035.075.036.060.028.092.046.091.045.102.052.053.028.049.026.046.024.060.033.041.022.052.029.088.05.106.06.087.051.057.034.053.032.096.059.088.055.098.062.036.024.064.041.084.056.040.027.062.042.062.043.023.017c.054.037.108.075.161.114l.083.060.065.048.056.043.086.065.082.064.040.030.050.041.086.069.079.065.085.071c.712.6 1.353 1.283 1.909 2.031L7.222.994l.062-.027.065-.028.081-.034.086-.035c.113-.045.227-.090.341-.131l.096-.035.093-.033.084-.030.096-.031c.087-.030.176-.058.264-.085l.091-.027.086-.025.102-.030.085-.023.100-.026L9.04.37l.090-.023.091-.022.095-.022.090-.020.098-.021.091-.020.095-.018.092-.018.100-.018.091-.016.098-.017.092-.014.097-.015.092-.013.102-.013.091-.012.105-.012.090-.010.105-.010c.093-.010.186-.018.280-.024l.106-.008.090-.005.110-.006.093-.004.100-.004.097-.002.099-.002.197-.002z"></path>
       </svg>
     )
+  },
+  'krutrim-dhwani': {
+    name: 'Krutrim/Krutrim-Dhwani',
+    provider: 'Krutrim',
+    license: 'Proprietary',
+    costPerToken: 0,
+    inputPrice: '24',
+    outputPrice: '0',
+    description: 'Speech-to-text model for audio transcription',
+    tags: ['Speech-to-Text', 'Audio', 'Transcription'],
+    cardGradient: 'bg-gradient-to-bl from-green-100/50 via-emerald-50/30 to-white border-green-200/60',
+    logo: (
+      <svg width="20" height="20" viewBox="0 0 385 385" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" aria-hidden="true">
+        <rect x="0.166992" y="0.33313" width="384.002" height="384.002" rx="192.001" fill="#10A554"/>
+        <path d="M281.913 134.663H206.35V167.282C213.859 162.901 222.463 160.711 232.163 160.711C243.271 160.711 252.344 164.153 259.385 171.036C266.581 177.92 270.179 187.463 270.179 199.666C270.179 206.549 268.849 214.215 266.19 222.663C263.687 231.111 259.541 239.716 253.752 248.477L226.296 233.223C229.895 228.374 232.867 223.367 235.214 218.205C237.56 213.042 238.734 207.723 238.734 202.247C238.734 196.459 237.482 192.391 234.979 190.044C232.632 187.698 229.503 186.524 225.592 186.524C221.994 186.524 215.032 189.81 215.032 189.81C215.032 189.81 204.053 194.347 201.55 196.85V254.813H174.904V225.01C169.741 227.982 164.5 230.251 159.181 231.815C154.019 233.38 147.995 234.162 141.112 234.162C132.507 234.162 124.607 232.598 117.41 229.469C110.37 226.183 104.738 221.412 100.514 215.154C96.2903 208.896 94.1783 201.074 94.1783 191.687C94.1783 182.926 96.2903 175.417 100.514 169.159C104.738 162.745 110.605 157.817 118.114 154.375C125.624 150.777 134.307 148.978 144.163 148.978C148.543 148.978 152.924 149.134 157.304 149.447C161.841 149.76 165.361 150.307 167.864 151.09L165.517 177.138C160.511 175.886 154.957 175.26 148.856 175.26C141.503 175.26 135.793 176.747 131.725 179.719C127.658 182.535 125.624 186.524 125.624 191.687C125.624 197.945 127.579 202.247 131.491 204.594C135.402 206.941 139.626 208.114 144.163 208.114C150.733 208.114 156.522 206.628 161.528 203.655C166.691 200.683 171.149 197.241 174.904 193.33V134.663H85.4956V108.849H281.913V134.663Z" fill="white"/>
+        <path d="M235.619 309.49C231.551 311.524 226.702 313.401 221.069 315.122C215.281 316.843 208.397 317.704 200.419 317.704C192.596 317.704 185.635 316.218 179.533 313.245C173.432 310.429 168.66 306.44 165.219 301.277C161.62 296.271 159.821 290.404 159.821 283.677C159.821 272.413 163.811 263.417 171.789 256.69C179.611 250.119 186.076 246.365 200.781 245.426L203.597 269.597C195.619 270.066 194.943 271.552 191.971 274.056C188.998 276.715 187.512 279.766 187.512 283.208C187.512 290.404 192.284 294.002 201.827 294.002C205.425 294.002 209.101 293.455 212.856 292.36C216.611 291.264 221.148 289.387 226.467 286.728L235.619 309.49Z" fill="white"/>
+      </svg>
+    )
   }
 };
 
@@ -122,6 +141,7 @@ export default function PlaygroundPage() {
   const [isAdvancedOpen, setIsAdvancedOpen] = useState(false);
   const [chatHistory, setChatHistory] = useState<Array<{role: 'user' | 'assistant', content: string, reasoning?: string, isThinking?: boolean, reasoningMetrics?: {ttft: number, latency: number, tps: number, cost: number}, responseMetrics?: {ttft: number, latency: number, tps: number, cost: number}, images?: string[]}>>([]);
   const [isSetupCodeModalOpen, setIsSetupCodeModalOpen] = useState(false);
+  const [isCreateApiKeyModalOpen, setIsCreateApiKeyModalOpen] = useState(false);
   const [expandedReasoning, setExpandedReasoning] = useState<Set<number>>(new Set());
   const [totalCost, setTotalCost] = useState(0);
   const [attachedImages, setAttachedImages] = useState<string[]>([]);
@@ -394,7 +414,11 @@ export default function PlaygroundPage() {
               >
                 View code
               </Button>
-              <Button variant='default' size='sm'>
+              <Button 
+                variant='default' 
+                size='sm'
+                onClick={() => setIsCreateApiKeyModalOpen(true)}
+              >
                 Get API key
               </Button>
             </div>
@@ -440,6 +464,12 @@ export default function PlaygroundPage() {
                           <div className='flex items-center gap-2 w-full'>
                             {modelData['kimi-k2-instruct'].logo}
                             <span className='text-sm'>moonshotai/Kimi-K2-Instruct-0905</span>
+                          </div>
+                        </SelectItem>
+                        <SelectItem value="krutrim-dhwani" className='py-3'>
+                          <div className='flex items-center gap-2 w-full'>
+                            {modelData['krutrim-dhwani'].logo}
+                            <span className='text-sm'>Krutrim/Krutrim-Dhwani</span>
                           </div>
                         </SelectItem>
                       </SelectContent>
@@ -690,9 +720,7 @@ export default function PlaygroundPage() {
                           <div className='text-sm text-foreground flex items-center gap-1'>
                             <span>Total cost:</span>
                             {showCostShimmer ? (
-                              <TextShimmer duration={1.5} className='font-semibold text-sm inline-block'>
-                                ₹{totalCost.toFixed(6)}
-                              </TextShimmer>
+                              <TextShimmer duration={1.5} className='font-semibold text-sm inline-block'>{`₹${totalCost.toFixed(6)}`}</TextShimmer>
                             ) : (
                               <span className='font-semibold text-gray-900'>₹{totalCost.toFixed(6)}</span>
                             )}
@@ -748,29 +776,7 @@ export default function PlaygroundPage() {
 
             {/* Right Panel - Entire section wrapped in Card */}
             <Card className='flex-1 flex flex-col min-h-0 relative overflow-hidden' style={{ background: 'linear-gradient(180deg, #8e92981a 0%, #ffffff 100%)' }}>
-              {/* Animated Gradient Overlay - Top 25% */}
-              <motion.div
-                className='absolute top-0 left-0 right-0 pointer-events-none'
-                style={{
-                  height: '25%',
-                  background: 'linear-gradient(180deg, rgba(139, 199, 244, 0.25) 0%, rgba(139, 199, 244, 0.12) 50%, transparent 100%)',
-                  zIndex: 1,
-                }}
-                animate={{
-                  background: [
-                    'linear-gradient(180deg, rgba(139, 199, 244, 0.25) 0%, rgba(139, 199, 244, 0.12) 50%, transparent 100%)',
-                    'linear-gradient(180deg, rgba(139, 244, 199, 0.25) 0%, rgba(139, 244, 199, 0.12) 50%, transparent 100%)',
-                    'linear-gradient(180deg, rgba(139, 244, 168, 0.25) 0%, rgba(139, 244, 168, 0.12) 50%, transparent 100%)',
-                    'linear-gradient(180deg, rgba(139, 199, 244, 0.25) 0%, rgba(139, 199, 244, 0.12) 50%, transparent 100%)',
-                  ],
-                }}
-                transition={{
-                  duration: 8,
-                  repeat: Infinity,
-                  ease: 'linear',
-                }}
-              />
-              <CardContent className='flex-1 flex flex-col min-h-0 p-0 overflow-hidden relative' style={{ zIndex: 2 }}>
+              <CardContent className='flex-1 flex flex-col min-h-0 p-0 overflow-hidden relative'>
                 {/* System Prompt Section */}
                 <div className='flex-shrink-0 space-y-3 p-6 pb-0'>
                   <div className='flex items-center justify-between'>
@@ -1038,6 +1044,13 @@ export default function PlaygroundPage() {
         open={isSetupCodeModalOpen}
         onClose={() => setIsSetupCodeModalOpen(false)}
         modelId={selectedModel}
+        onOpenCreateApiKey={() => setIsCreateApiKeyModalOpen(true)}
+      />
+
+      {/* Create API Key Modal */}
+      <CreateApiKeyModal
+        open={isCreateApiKeyModalOpen}
+        onClose={() => setIsCreateApiKeyModalOpen(false)}
       />
 
       {/* Image Preview Modal */}
