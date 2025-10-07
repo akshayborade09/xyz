@@ -497,9 +497,10 @@ export function SpeechToTextPlayground({
           {/* Output Section - Scrollable */}
           <div className='flex-1 overflow-y-auto p-6'>
             <div className='space-y-4'>
-              <div className='flex items-center justify-between'>
-                <h3 className='text-sm font-medium text-foreground'>Output</h3>
-                {transcribedText && (
+              {/* Header - Only show when there's transcribed text */}
+              {transcribedText && (
+                <div className='flex items-center justify-between'>
+                  <h3 className='text-sm font-medium text-foreground'>Output</h3>
                   <div className='flex items-center gap-2'>
                     <Button
                       variant='outline'
@@ -530,8 +531,8 @@ export function SpeechToTextPlayground({
                       </Button>
                     </TooltipWrapper>
                   </div>
-                )}
-              </div>
+                </div>
+              )}
               
               {isTranscribing ? (
                 <div className='flex items-center justify-center min-h-[400px]'>
