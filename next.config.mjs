@@ -45,17 +45,6 @@ const nextConfig = {
       },
     ];
   },
-  async rewrites() {
-    return {
-      beforeFiles: [
-        // Ensure playground routes are handled by Next.js
-        {
-          source: '/playground/:modelId',
-          destination: '/playground/:modelId',
-        },
-      ],
-    };
-  },
 };
 
 export default nextConfig;
