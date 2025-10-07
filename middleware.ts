@@ -35,6 +35,8 @@ const routeConfigs = {
     '/support',
     '/settings/profile',
     '/dashboard/profile-completion',
+    '/playground',
+    '/model-hub',
   ],
   full: ['*'], // Wildcard for full access
 };
