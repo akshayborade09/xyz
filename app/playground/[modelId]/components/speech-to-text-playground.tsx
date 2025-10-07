@@ -250,11 +250,6 @@ export function SpeechToTextPlayground({
     setTimeout(() => setShowCostShimmer(false), 2000);
 
     setIsTranscribing(false);
-
-    toast({
-      title: 'Transcription complete',
-      description: `Cost: ₹${cost.toFixed(6)}`,
-    });
   };
 
   // Handle copy transcription
@@ -662,7 +657,7 @@ export function SpeechToTextPlayground({
                                 <Mic className='h-5 w-5 text-foreground' />
                               </button>
                             </TooltipWrapper>
-                            <span className='text-xs text-muted-foreground'>
+                            <span className='text-xs text-muted-foreground font-medium'>
                               Click to start speaking
                             </span>
                           </>
