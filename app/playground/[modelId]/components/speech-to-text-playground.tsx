@@ -607,56 +607,87 @@ export function SpeechToTextPlayground({
                     className='hidden'
                   />
                   
-                  <div className='space-y-3'>
-                    {/* Top Row: Recording and Upload buttons side by side */}
-                    {!audioFile ? (
-                      <div className='flex items-center justify-between gap-6'>
-                        {/* Left Side: Recording Button */}
-                        <div className='flex items-center gap-3'>
-                          <TooltipWrapper content={isRecording ? 'Stop recording' : 'Click to start speaking'}>
-                            <button
-                              onClick={handleRecording}
-                              onFocus={() => setIsInputFocused(true)}
-                              className={`flex items-center justify-center w-10 h-10 rounded-full transition-all flex-shrink-0 ${
-                                isRecording
-                                  ? 'bg-red-500 hover:bg-red-600 animate-pulse'
-                                  : 'bg-[#10A554] hover:bg-[#0d8a45]'
-                              }`}
-                            >
-                              <Mic className='h-4 w-4 text-white' />
-                            </button>
-                          </TooltipWrapper>
-                          
-                          <span className='text-sm text-muted-foreground'>
-                            {isRecording ? 'Recording...' : 'Click to start speaking'}
-                          </span>
-                        </div>
-
-                        {/* Center: OR */}
-                        <span className='text-sm text-muted-foreground/60 font-medium'>OR</span>
-
-                        {/* Right Side: Upload Button + File Format Info */}
-                        <div className='flex items-center gap-3'>
+                  {/* Single Row Layout - All elements horizontally aligned */}
+                  {!audioFile ? (
+                    <div className='flex items-center gap-6'>
+                      {/* Left: Recording Button */}
+                      <div className='flex flex-col items-center gap-2'>
+                        <TooltipWrapper content={isRecording ? 'Stop recording' : 'Click to start speaking'}>
                           <button
-                            onClick={() => fileInputRef.current?.click()}
+                            onClick={handleRecording}
                             onFocus={() => setIsInputFocused(true)}
-                            className='flex items-center gap-2 text-sm text-[#10A554] hover:text-[#0d8a45] font-medium'
+                            className={`flex items-center justify-center w-12 h-12 rounded-full transition-all flex-shrink-0 ${
+                              isRecording
+                                ? 'bg-red-500 hover:bg-red-600 animate-pulse'
+                                : 'bg-white border-2 border-border hover:border-[#10A554]'
+                            }`}
                           >
-                            <Upload className='h-4 w-4' />
-                            Upload File
+                            <Mic className={`h-5 w-5 ${isRecording ? 'text-white' : 'text-foreground'}`} />
                           </button>
-                          
-                          <div className='text-xs text-muted-foreground text-right flex-shrink-0'>
-                            <div>Supports WAV format</div>
-                            <div>Max file size 5MB and below 16khz</div>
-                          </div>
+                        </TooltipWrapper>
+                        <span className='text-xs text-muted-foreground text-center'>
+                          {isRecording ? 'Recording...' : 'Click to start speaking'}
+                        </span>
+                      </div>
+
+                      {/* OR Divider */}
+                      <span className='text-sm text-muted-foreground/60 font-medium'>OR</span>
+
+                      {/* Center: Upload Section */}
+                      <div className='flex flex-col items-center gap-2 flex-1'>
+                        <button
+                          onClick={() => fileInputRef.current?.click()}
+                          onFocus={() => setIsInputFocused(true)}
+                          className='flex items-center justify-center w-12 h-12 rounded-full border-2 border-border hover:border-[#10A554] transition-all bg-white'
+                        >
+                          <Upload className='h-5 w-5 text-foreground' />
+                        </button>
+                        <div className='text-center'>
+                          <p className='text-xs text-muted-foreground font-medium'>Upload File</p>
+                          <p className='text-xs text-muted-foreground/70'>Supports WAV format</p>
+                          <p className='text-xs text-muted-foreground/70'>Max file size 5MB and below 16khz</p>
                         </div>
                       </div>
-                    ) : (
-                      /* File Info Display - Horizontal */
-                      <div className='flex items-center gap-3'>
-                        <div className='w-9 h-9 rounded-lg bg-[#10A554]/10 flex items-center justify-center flex-shrink-0'>
-                          <Mic className='h-4 w-4 text-[#10A554]' />
+
+                      {/* Right: Language Selector and Transcribe Button */}
+                      <div className='flex flex-col gap-2 min-w-[280px]'>
+                        <Select value={selectedLanguage} onValueChange={setSelectedLanguage}>
+                          <SelectTrigger className='h-10' onFocus={() => setIsInputFocused(true)}>
+                            <SelectValue placeholder='Language selector' />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {languages.map((lang) => (
+                              <SelectItem key={lang.value} value={lang.value}>
+                                {lang.label}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+
+                        <Button
+                          onClick={handleTranscribe}
+                          disabled={!audioFile || !selectedLanguage || isTranscribing}
+                          size='lg'
+                          className='w-full h-10'
+                        >
+                          {isTranscribing ? (
+                            <>
+                              <Loader2 className='h-4 w-4 mr-2 animate-spin' />
+                              Transcribing...
+                            </>
+                          ) : (
+                            'Transcribe button'
+                          )}
+                        </Button>
+                      </div>
+                    </div>
+                  ) : (
+                    /* File Uploaded State */
+                    <div className='flex items-center gap-6'>
+                      {/* File Info */}
+                      <div className='flex items-center gap-3 flex-1'>
+                        <div className='w-10 h-10 rounded-lg bg-[#10A554]/10 flex items-center justify-center flex-shrink-0'>
+                          <Mic className='h-5 w-5 text-[#10A554]' />
                         </div>
                         <div className='flex-1 min-w-0'>
                           <p className='text-sm font-medium truncate'>{audioFile.name}</p>
@@ -679,14 +710,12 @@ export function SpeechToTextPlayground({
                           <X className='h-4 w-4' />
                         </Button>
                       </div>
-                    )}
 
-                    {/* Bottom Row: Language Selector and Transcribe Button */}
-                    <div className='flex items-center gap-3'>
-                      <div className='flex-1'>
+                      {/* Right: Language Selector and Transcribe Button */}
+                      <div className='flex flex-col gap-2 min-w-[280px]'>
                         <Select value={selectedLanguage} onValueChange={setSelectedLanguage}>
-                          <SelectTrigger className='h-9' onFocus={() => setIsInputFocused(true)}>
-                            <SelectValue placeholder='Select target language' />
+                          <SelectTrigger className='h-10' onFocus={() => setIsInputFocused(true)}>
+                            <SelectValue placeholder='Language selector' />
                           </SelectTrigger>
                           <SelectContent>
                             {languages.map((lang) => (
@@ -696,25 +725,25 @@ export function SpeechToTextPlayground({
                             ))}
                           </SelectContent>
                         </Select>
-                      </div>
 
-                      <Button
-                        onClick={handleTranscribe}
-                        disabled={!audioFile || !selectedLanguage || isTranscribing}
-                        size='sm'
-                        className='px-6'
-                      >
-                        {isTranscribing ? (
-                          <>
-                            <Loader2 className='h-4 w-4 mr-2 animate-spin' />
-                            Transcribing...
-                          </>
-                        ) : (
-                          'Transcribe'
-                        )}
-                      </Button>
+                        <Button
+                          onClick={handleTranscribe}
+                          disabled={!audioFile || !selectedLanguage || isTranscribing}
+                          size='lg'
+                          className='w-full h-10'
+                        >
+                          {isTranscribing ? (
+                            <>
+                              <Loader2 className='h-4 w-4 mr-2 animate-spin' />
+                              Transcribing...
+                            </>
+                          ) : (
+                            'Transcribe button'
+                          )}
+                        </Button>
+                      </div>
                     </div>
-                  </div>
+                  )}
                 </motion.div>
               </div>
             </div>
