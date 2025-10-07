@@ -650,10 +650,10 @@ export function SpeechToTextPlayground({
                   
                   {/* Single Row Layout - All elements horizontally aligned */}
                   {!audioFile ? (
-                    <div className='flex items-center justify-between gap-6'>
+                    <div className='flex items-center gap-6'>
                       {/* Left: Recording Button or Recording Waveform */}
                       {!isRecording ? (
-                        <div className='flex flex-col items-center gap-2 flex-1'>
+                        <div className='flex items-center gap-3'>
                           <TooltipWrapper content='Click to start speaking'>
                             <button
                               onClick={handleRecording}
@@ -663,12 +663,12 @@ export function SpeechToTextPlayground({
                               <Mic className='h-5 w-5 text-foreground' />
                             </button>
                           </TooltipWrapper>
-                          <span className='text-xs text-muted-foreground text-center'>
+                          <span className='text-xs text-muted-foreground'>
                             Click to start speaking
                           </span>
                         </div>
                       ) : (
-                        <div className='flex items-center gap-3 flex-1 bg-white rounded-full px-4 py-2 border-2 border-border'>
+                        <div className='flex items-center gap-3 bg-white rounded-full px-4 py-2 border-2 border-border'>
                           <span className='text-sm font-mono font-medium text-foreground'>
                             {formatRecordingTime(recordingTime)}
                           </span>
@@ -689,17 +689,17 @@ export function SpeechToTextPlayground({
 
                       {/* Center: Upload Section */}
                       {!isRecording && (
-                        <div className='flex flex-col items-center gap-2 flex-1'>
+                        <div className='flex items-center gap-3 flex-1'>
                           <button
                             onClick={() => fileInputRef.current?.click()}
                             onFocus={() => setIsInputFocused(true)}
-                            className='flex items-center justify-center w-12 h-12 rounded-full border-2 border-border hover:border-[#10A554] transition-all bg-white'
+                            className='flex items-center justify-center w-12 h-12 rounded-full border-2 border-border hover:border-[#10A554] transition-all bg-white flex-shrink-0'
                           >
                             <Upload className='h-5 w-5 text-foreground' />
                           </button>
-                          <div className='text-center'>
+                          <div>
                             <p className='text-xs text-muted-foreground font-medium'>Upload File</p>
-                            <p className='text-xs text-muted-foreground/70'>WAV format • Max file size 5MB and below 16khz</p>
+                            <p className='text-xs text-muted-foreground/70'>WAV format • File size 5MB • Below 16khz</p>
                           </div>
                         </div>
                       )}
