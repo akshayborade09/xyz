@@ -1,11 +1,5 @@
 {
   "framework": "nextjs",
   "installCommand": "npm install",
-  "buildCommand": "npm run build",
-  "rewrites": [
-    {
-      "source": "/playground/:modelId",
-      "destination": "/playground/:modelId"
-    }
-  ]
+  "buildCommand": "npm run build"
 }
