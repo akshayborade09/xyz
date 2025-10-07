@@ -3,6 +3,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams } from 'next/navigation';
 import { PageShell } from '@/components/page-shell';
+
+// Force dynamic rendering for this route
+export const dynamic = 'force-dynamic';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
