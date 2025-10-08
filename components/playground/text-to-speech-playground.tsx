@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef } from 'react';
+import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent } from '@/components/ui/card';
@@ -8,6 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { useToast } from '@/hooks/use-toast';
+import { GlowEffect } from '@/components/ui/glow-effect';
 import { 
   Volume2, 
   Download, 
@@ -54,6 +56,7 @@ export function TextToSpeechPlayground({
   const [duration, setDuration] = useState(0);
   const [selectedVoice, setSelectedVoice] = useState('female-en');
   const [selectedSpeed, setSelectedSpeed] = useState('1.0');
+  const [isInputFocused, setIsInputFocused] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
 
   const maxCharacters = 5000;
@@ -395,74 +398,112 @@ export function TextToSpeechPlayground({
             </div>
           </div>
 
-          {/* Input Section - Sticky at bottom */}
-          <div className='border-t p-6 space-y-4'>
-            <div className='space-y-2'>
-              <Textarea
-                placeholder='Enter text to convert to speech...'
-                value={inputText}
-                onChange={(e) => setInputText(e.target.value)}
-                className='min-h-[120px] resize-none'
-                maxLength={maxCharacters}
-              />
-              <div className='flex items-center justify-between text-xs text-muted-foreground'>
-                <span>
-                  Characters: {characterCount.toLocaleString()} / {maxCharacters.toLocaleString()}
-                </span>
-                {characterCount > maxCharacters * 0.9 && (
-                  <span className='text-amber-600'>
-                    {maxCharacters - characterCount} characters remaining
-                  </span>
-                )}
+          {/* Input Section - Sticky at bottom with glow effect */}
+          <div className='flex-shrink-0 border-t bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60'>
+            <div className='p-6'>
+              {/* Unified Input Card with Glow Effect */}
+              <div className='relative w-full'>
+                {/* Glow Effect Background */}
+                <motion.div
+                  className="absolute inset-0"
+                  animate={{
+                    opacity: isInputFocused || inputText ? 0.35 : 0.2,
+                    scale: isInputFocused || inputText ? 1.03 : 1.02,
+                  }}
+                  transition={{ duration: 0.3, ease: "easeInOut" }}
+                >
+                  <GlowEffect
+                    colors={['#0894FF', '#C959DD', '#FF2E54', '#FF9004']}
+                    mode='rotate'
+                    blur='stronger'
+                    duration={8}
+                    className='rounded-[24px]'
+                  />
+                </motion.div>
+
+                {/* Input Container */}
+                <motion.div
+                  className='relative w-full bg-white rounded-[24px] p-6 shadow-[0_2px_8px_0_rgba(0,0,0,0.08)]'
+                  animate={{
+                    boxShadow: isInputFocused || inputText 
+                      ? "0 8px 32px 0 rgba(0,0,0,0.16)" 
+                      : "0 2px 8px 0 rgba(0,0,0,0.08)"
+                  }}
+                  transition={{ type: "spring", stiffness: 120, damping: 18 }}
+                >
+                  <div className='space-y-4'>
+                    <div className='space-y-2'>
+                      <Textarea
+                        placeholder='Enter text to convert to speech...'
+                        value={inputText}
+                        onChange={(e) => setInputText(e.target.value)}
+                        onFocus={() => setIsInputFocused(true)}
+                        onBlur={() => setIsInputFocused(false)}
+                        className='min-h-[120px] resize-none'
+                        maxLength={maxCharacters}
+                      />
+                      <div className='flex items-center justify-between text-xs text-muted-foreground'>
+                        <span>
+                          Characters: {characterCount.toLocaleString()} / {maxCharacters.toLocaleString()}
+                        </span>
+                        {characterCount > maxCharacters * 0.9 && (
+                          <span className='text-amber-600'>
+                            {maxCharacters - characterCount} characters remaining
+                          </span>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className='flex items-center gap-3'>
+                      <div className='flex-1 grid grid-cols-2 gap-3'>
+                        <Select value={selectedVoice} onValueChange={setSelectedVoice}>
+                          <SelectTrigger onFocus={() => setIsInputFocused(true)} onBlur={() => setIsInputFocused(false)}>
+                            <SelectValue placeholder='Select Voice' />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {voices.map((voice) => (
+                              <SelectItem key={voice.value} value={voice.value}>
+                                {voice.label}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+
+                        <Select value={selectedSpeed} onValueChange={setSelectedSpeed}>
+                          <SelectTrigger onFocus={() => setIsInputFocused(true)} onBlur={() => setIsInputFocused(false)}>
+                            <SelectValue placeholder='Select Speed' />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {speeds.map((speed) => (
+                              <SelectItem key={speed.value} value={speed.value}>
+                                {speed.label}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+
+                      <Button
+                        onClick={handleGenerateSpeech}
+                        disabled={!inputText.trim() || isGenerating || characterCount > maxCharacters}
+                        className='px-8'
+                      >
+                        {isGenerating ? (
+                          <>
+                            <div className='w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2' />
+                            Generating...
+                          </>
+                        ) : (
+                          <>
+                            <Volume2 className='w-4 h-4 mr-2' />
+                            Generate Speech
+                          </>
+                        )}
+                      </Button>
+                    </div>
+                  </div>
+                </motion.div>
               </div>
-            </div>
-
-            <div className='flex items-center gap-3'>
-              <div className='flex-1 grid grid-cols-2 gap-3'>
-                <Select value={selectedVoice} onValueChange={setSelectedVoice}>
-                  <SelectTrigger>
-                    <SelectValue placeholder='Select Voice' />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {voices.map((voice) => (
-                      <SelectItem key={voice.value} value={voice.value}>
-                        {voice.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-
-                <Select value={selectedSpeed} onValueChange={setSelectedSpeed}>
-                  <SelectTrigger>
-                    <SelectValue placeholder='Select Speed' />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {speeds.map((speed) => (
-                      <SelectItem key={speed.value} value={speed.value}>
-                        {speed.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <Button
-                onClick={handleGenerateSpeech}
-                disabled={!inputText.trim() || isGenerating || characterCount > maxCharacters}
-                className='px-8'
-              >
-                {isGenerating ? (
-                  <>
-                    <div className='w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2' />
-                    Generating...
-                  </>
-                ) : (
-                  <>
-                    <Volume2 className='w-4 h-4 mr-2' />
-                    Generate Speech
-                  </>
-                )}
-              </Button>
             </div>
           </div>
         </CardContent>
