@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
-import { renderToStaticMarkup } from 'react-dom/server';
 import { Search, Check, ChevronDown } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 
@@ -16,23 +15,44 @@ interface ModelSelectorProps {
   }>;
 }
 
-// Helper function to make SVG IDs unique by rendering to string and replacing IDs
-function renderLogoWithUniqueIds(logo: React.ReactNode, uniqueSuffix: string): string {
-  if (!logo) return '';
-  
-  try {
-    // Render the React element to static HTML string
-    const svgString = renderToStaticMarkup(logo as React.ReactElement);
-    
-    // Replace all gradient IDs and their references
-    const withUniqueIds = svgString
-      .replace(/id="([^"]+)"/g, `id="$1-${uniqueSuffix}"`)
-      .replace(/url\(#([^)]+)\)/g, `url(#$1-${uniqueSuffix})`);
-    
-    return withUniqueIds;
-  } catch {
-    return '';
-  }
+// Component to render logo with unique IDs using DOM manipulation
+function LogoWithUniqueIds({ logo, uniqueSuffix }: { logo: React.ReactNode; uniqueSuffix: string }) {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+
+    // Find all SVG elements and update their gradient IDs
+    const svgs = containerRef.current.querySelectorAll('svg');
+    svgs.forEach((svg) => {
+      // Update all ID attributes
+      const elementsWithId = svg.querySelectorAll('[id]');
+      elementsWithId.forEach((el) => {
+        const oldId = el.getAttribute('id');
+        if (oldId) {
+          el.setAttribute('id', `${oldId}-${uniqueSuffix}`);
+        }
+      });
+
+      // Update all url() references in fill, stroke, etc.
+      const elementsWithUrl = svg.querySelectorAll('[fill*="url("], [stroke*="url("]');
+      elementsWithUrl.forEach((el) => {
+        ['fill', 'stroke'].forEach((attr) => {
+          const value = el.getAttribute(attr);
+          if (value && value.includes('url(#')) {
+            const updated = value.replace(/url\(#([^)]+)\)/g, `url(#$1-${uniqueSuffix})`);
+            el.setAttribute(attr, updated);
+          }
+        });
+      });
+    });
+  }, [uniqueSuffix]);
+
+  return (
+    <div ref={containerRef} className='flex-shrink-0'>
+      {logo}
+    </div>
+  );
 }
 
 export function ModelSelector({ value, onChange, modelData }: ModelSelectorProps) {
@@ -77,10 +97,7 @@ export function ModelSelector({ value, onChange, modelData }: ModelSelectorProps
         className='w-full h-auto min-h-[40px] py-3 px-3 flex items-center justify-between border border-input bg-background rounded-md hover:bg-accent hover:text-accent-foreground transition-colors'
       >
         <div className='flex items-center gap-2 w-full'>
-          <div 
-            className='flex-shrink-0'
-            dangerouslySetInnerHTML={{ __html: renderLogoWithUniqueIds(selectedModel?.logo, `selected-${value}`) }}
-          />
+          <LogoWithUniqueIds logo={selectedModel?.logo} uniqueSuffix={`selected-${value}`} />
           <span className='truncate text-left flex-1 text-sm'>{selectedModel?.name}</span>
         </div>
         <ChevronDown className='h-4 w-4 opacity-50 flex-shrink-0 ml-2' />
@@ -117,10 +134,7 @@ export function ModelSelector({ value, onChange, modelData }: ModelSelectorProps
                   className='w-full flex items-center justify-between px-2 py-3 text-sm hover:bg-accent hover:text-accent-foreground rounded-sm transition-colors'
                 >
                   <div className='flex items-center gap-2 w-full'>
-                    <div 
-                      className='flex-shrink-0'
-                      dangerouslySetInnerHTML={{ __html: renderLogoWithUniqueIds(model.logo, `dropdown-${modelId}`) }}
-                    />
+                    <LogoWithUniqueIds logo={model.logo} uniqueSuffix={`dropdown-${modelId}`} />
                     <div className='flex flex-col items-start flex-1'>
                       <span className='font-medium truncate'>{model.name}</span>
                       <span className='text-xs text-muted-foreground'>{model.provider}</span>
