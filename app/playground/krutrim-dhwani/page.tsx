@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { PageShell } from '@/components/page-shell';
 import { Button } from '@/components/ui/button';
 import { SpeechToTextPlayground } from '@/components/playground/speech-to-text-playground';
@@ -70,11 +71,19 @@ const allModelData = {
 };
 
 export default function KrutrimDhwaniPage() {
+  const router = useRouter();
   const [selectedModel, setSelectedModel] = useState('krutrim-dhwani');
   const [isSetupCodeModalOpen, setIsSetupCodeModalOpen] = useState(false);
   const [isCreateApiKeyModalOpen, setIsCreateApiKeyModalOpen] = useState(false);
 
   const model = modelData['krutrim-dhwani'];
+  
+  // Handle model change - redirect to dynamic playground for other models
+  useEffect(() => {
+    if (selectedModel !== 'krutrim-dhwani') {
+      router.push(`/playground/${selectedModel}`);
+    }
+  }, [selectedModel, router]);
 
   return (
     <>

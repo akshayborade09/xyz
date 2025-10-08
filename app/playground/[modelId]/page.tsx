@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { PageShell } from '@/components/page-shell';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -124,6 +124,7 @@ const quickActions = [
 
 export default function PlaygroundPage() {
   const params = useParams();
+  const router = useRouter();
   const modelId = params.modelId as string;
   const { toast } = useToast();
   
@@ -132,6 +133,19 @@ export default function PlaygroundPage() {
   
   // State management
   const [selectedModel, setSelectedModel] = useState(modelId);
+  
+  // Handle model change - redirect to appropriate route
+  useEffect(() => {
+    if (selectedModel !== modelId) {
+      // If Krutrim-Dhwani is selected, redirect to its dedicated page
+      if (selectedModel === 'krutrim-dhwani') {
+        router.push('/playground/krutrim-dhwani');
+      } else {
+        // For other models, update the URL
+        router.push(`/playground/${selectedModel}`);
+      }
+    }
+  }, [selectedModel, modelId, router]);
   
   // Get currently selected model data
   const model = modelData[selectedModel as keyof typeof modelData] || initialModel;
