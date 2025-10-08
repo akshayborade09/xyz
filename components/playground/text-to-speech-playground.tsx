@@ -396,7 +396,7 @@ export function TextToSpeechPlayground({
           </div>
 
           {/* Input Section - Sticky at bottom */}
-          <div className='border-t bg-white p-6 space-y-4'>
+          <div className='border-t p-6 space-y-4'>
             <div className='space-y-2'>
               <Textarea
                 placeholder='Enter text to convert to speech...'
