@@ -7,7 +7,6 @@ import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { useToast } from '@/hooks/use-toast';
 import { GlowEffect } from '@/components/ui/glow-effect';
 import { 
@@ -16,7 +15,6 @@ import {
   Play, 
   Pause, 
   RotateCcw,
-  Info,
   ExternalLink,
   Sparkles
 } from 'lucide-react';
