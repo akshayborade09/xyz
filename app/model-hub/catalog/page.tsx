@@ -62,6 +62,13 @@ export default function ModelCatalogPage() {
     setActiveTab(tabId);
   };
 
+  const handleOpenCreateApiKeyFromSetup = () => {
+    // Close the Setup Code Modal
+    setIsSetupCodeModalOpen(false);
+    // Open the Create API Key Modal
+    setIsCreateApiKeyModalOpen(true);
+  };
+
   return (
     <PageShell
       title='Models'
@@ -513,6 +520,7 @@ export default function ModelCatalogPage() {
         open={isSetupCodeModalOpen}
         onClose={() => setIsSetupCodeModalOpen(false)}
         modelId={selectedModelId}
+        onOpenCreateApiKey={handleOpenCreateApiKeyFromSetup}
       />
 
       {/* Create API Key Modal */}
