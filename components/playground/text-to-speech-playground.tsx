@@ -54,31 +54,39 @@ export function TextToSpeechPlayground({
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
-  const [selectedVoice, setSelectedVoice] = useState('female-en');
-  const [selectedSpeed, setSelectedSpeed] = useState('1.0');
+  const [selectedInputLanguage, setSelectedInputLanguage] = useState('english');
+  const [selectedOutputLanguage, setSelectedOutputLanguage] = useState('english');
+  const [selectedVoice, setSelectedVoice] = useState('female');
   const [isInputFocused, setIsInputFocused] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
 
   const maxCharacters = 5000;
   const characterCount = inputText.length;
 
-  // Voice options
-  const voices = [
-    { value: 'female-en', label: 'Female (English)' },
-    { value: 'male-en', label: 'Male (English)' },
-    { value: 'female-hi', label: 'Female (Hindi)' },
-    { value: 'male-hi', label: 'Male (Hindi)' },
-    { value: 'female-ta', label: 'Female (Tamil)' },
-    { value: 'male-ta', label: 'Male (Tamil)' },
+  // Input Language options
+  const inputLanguages = [
+    { value: 'english', label: 'English' },
+    { value: 'hindi', label: 'Hindi' },
+    { value: 'tamil', label: 'Tamil' },
+    { value: 'telugu', label: 'Telugu' },
+    { value: 'bengali', label: 'Bengali' },
+    { value: 'marathi', label: 'Marathi' },
   ];
 
-  // Speed options
-  const speeds = [
-    { value: '0.5', label: '0.5x (Slow)' },
-    { value: '0.75', label: '0.75x' },
-    { value: '1.0', label: '1.0x (Normal)' },
-    { value: '1.25', label: '1.25x' },
-    { value: '1.5', label: '1.5x (Fast)' },
+  // Output Language options
+  const outputLanguages = [
+    { value: 'english', label: 'English' },
+    { value: 'hindi', label: 'Hindi' },
+    { value: 'tamil', label: 'Tamil' },
+    { value: 'telugu', label: 'Telugu' },
+    { value: 'bengali', label: 'Bengali' },
+    { value: 'marathi', label: 'Marathi' },
+  ];
+
+  // Voice options
+  const voices = [
+    { value: 'female', label: 'Female' },
+    { value: 'male', label: 'Male' },
   ];
 
   const handleGenerateSpeech = () => {
@@ -379,14 +387,22 @@ export function TextToSpeechPlayground({
                   {/* Audio Info */}
                   <div className='flex items-center gap-4 pt-4 border-t text-xs text-gray-600'>
                     <div className='flex items-center gap-2'>
+                      <span className='text-muted-foreground'>Input:</span>
+                      <span className='font-medium'>
+                        {inputLanguages.find((l) => l.value === selectedInputLanguage)?.label}
+                      </span>
+                    </div>
+                    <div className='flex items-center gap-2'>
+                      <span className='text-muted-foreground'>Output:</span>
+                      <span className='font-medium'>
+                        {outputLanguages.find((l) => l.value === selectedOutputLanguage)?.label}
+                      </span>
+                    </div>
+                    <div className='flex items-center gap-2'>
                       <span className='text-muted-foreground'>Voice:</span>
                       <span className='font-medium'>
                         {voices.find((v) => v.value === selectedVoice)?.label}
                       </span>
-                    </div>
-                    <div className='flex items-center gap-2'>
-                      <span className='text-muted-foreground'>Speed:</span>
-                      <span className='font-medium'>{selectedSpeed}x</span>
                     </div>
                     <div className='flex items-center gap-2'>
                       <span className='text-muted-foreground'>Characters:</span>
@@ -455,28 +471,41 @@ export function TextToSpeechPlayground({
                     </div>
 
                     <div className='flex items-center gap-3'>
-                      <div className='flex-1 grid grid-cols-2 gap-3'>
-                        <Select value={selectedVoice} onValueChange={setSelectedVoice}>
+                      <div className='flex-1 grid grid-cols-3 gap-3'>
+                        <Select value={selectedInputLanguage} onValueChange={setSelectedInputLanguage}>
                           <SelectTrigger onFocus={() => setIsInputFocused(true)} onBlur={() => setIsInputFocused(false)}>
-                            <SelectValue placeholder='Select Voice' />
+                            <SelectValue placeholder='Input Language' />
                           </SelectTrigger>
                           <SelectContent>
-                            {voices.map((voice) => (
-                              <SelectItem key={voice.value} value={voice.value}>
-                                {voice.label}
+                            {inputLanguages.map((lang) => (
+                              <SelectItem key={lang.value} value={lang.value}>
+                                {lang.label}
                               </SelectItem>
                             ))}
                           </SelectContent>
                         </Select>
 
-                        <Select value={selectedSpeed} onValueChange={setSelectedSpeed}>
+                        <Select value={selectedOutputLanguage} onValueChange={setSelectedOutputLanguage}>
                           <SelectTrigger onFocus={() => setIsInputFocused(true)} onBlur={() => setIsInputFocused(false)}>
-                            <SelectValue placeholder='Select Speed' />
+                            <SelectValue placeholder='Output Language' />
                           </SelectTrigger>
                           <SelectContent>
-                            {speeds.map((speed) => (
-                              <SelectItem key={speed.value} value={speed.value}>
-                                {speed.label}
+                            {outputLanguages.map((lang) => (
+                              <SelectItem key={lang.value} value={lang.value}>
+                                {lang.label}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+
+                        <Select value={selectedVoice} onValueChange={setSelectedVoice}>
+                          <SelectTrigger onFocus={() => setIsInputFocused(true)} onBlur={() => setIsInputFocused(false)}>
+                            <SelectValue placeholder='Voice' />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {voices.map((voice) => (
+                              <SelectItem key={voice.value} value={voice.value}>
+                                {voice.label}
                               </SelectItem>
                             ))}
                           </SelectContent>
@@ -494,10 +523,7 @@ export function TextToSpeechPlayground({
                             Generating...
                           </>
                         ) : (
-                          <>
-                            <Volume2 className='w-4 h-4 mr-2' />
-                            Generate Speech
-                          </>
+                          'Generate Speech'
                         )}
                       </Button>
                     </div>
