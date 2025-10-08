@@ -16,8 +16,7 @@ import {
   Play, 
   Pause, 
   RotateCcw,
-  ExternalLink,
-  Sparkles
+  ExternalLink
 } from 'lucide-react';
 
 interface TextToSpeechPlaygroundProps {
@@ -278,25 +277,26 @@ export function TextToSpeechPlayground({
 
         {/* Total Cost Card - Fixed at bottom, only show after audio is generated */}
         {generatedAudio && totalCost > 0 && (
-          <div
-            className='absolute bottom-0 left-0 right-0'
-            style={{
-              background: 'linear-gradient(180deg, transparent 0%, rgba(255,255,255,0.8) 20%, rgba(255,255,255,0.95) 100%)',
-              backdropFilter: 'blur(8px)',
-              borderTop: '1px solid rgba(0,0,0,0.06)',
-              padding: '1.5rem',
-            }}
-          >
-            <div className='flex items-center justify-between w-full'>
-              <div className='text-sm text-foreground flex items-center gap-1'>
-                <span>Total cost:</span>
-                {showCostShimmer ? (
-                  <TextShimmer duration={1.5} className='font-semibold text-sm inline-block'>{`₹${totalCost.toFixed(6)}`}</TextShimmer>
-                ) : (
-                  <span className='font-semibold text-gray-900'>₹{totalCost.toFixed(6)}</span>
-                )}
+          <div className='absolute bottom-0 left-0 right-0 p-4'>
+            <div
+              style={{
+                borderRadius: '16px',
+                border: '4px solid #FFF',
+                background: 'linear-gradient(265deg, #FFF -13.17%, #F0F7FF 133.78%)',
+                boxShadow: '0px 8px 39.1px -9px rgba(0, 27, 135, 0.08)',
+                padding: '1.5rem',
+              }}
+            >
+              <div className='flex items-center justify-between w-full'>
+                <div className='text-sm text-foreground flex items-center gap-1'>
+                  <span>Total cost:</span>
+                  {showCostShimmer ? (
+                    <TextShimmer duration={1.5} className='font-semibold text-sm inline-block'>{`₹${totalCost.toFixed(6)}`}</TextShimmer>
+                  ) : (
+                    <span className='font-semibold text-gray-900'>₹{totalCost.toFixed(6)}</span>
+                  )}
+                </div>
               </div>
-              <Sparkles className='w-4 h-4 text-yellow-500' />
             </div>
           </div>
         )}
@@ -388,13 +388,15 @@ export function TextToSpeechPlayground({
                     </div>
                   </div>
 
-                  {/* Metrics - Below audio player */}
+                  {/* Metrics - Below audio player, aligned to right */}
                   {audioMetrics && (
-                    <div className='bg-muted/50 rounded-md px-3 py-1.5 text-xs text-muted-foreground'>
-                      <span className='font-medium'>TTFT:</span> {audioMetrics.ttft} ms <span className='mx-1'>|</span>
-                      <span className='font-medium'>Latency:</span> {audioMetrics.latency} ms <span className='mx-1'>|</span>
-                      <span className='font-medium'>TPS:</span> {audioMetrics.tps} <span className='mx-1'>|</span>
-                      <span className='font-medium'>Estimated Cost:</span> ₹{audioMetrics.cost.toFixed(6)}
+                    <div className='flex justify-end'>
+                      <div className='bg-muted/50 rounded-md px-3 py-1.5 text-xs text-muted-foreground'>
+                        <span className='font-medium'>TTFT:</span> {audioMetrics.ttft} ms <span className='mx-1'>|</span>
+                        <span className='font-medium'>Latency:</span> {audioMetrics.latency} ms <span className='mx-1'>|</span>
+                        <span className='font-medium'>TPS:</span> {audioMetrics.tps} <span className='mx-1'>|</span>
+                        <span className='font-medium'>Estimated Cost:</span> ₹{audioMetrics.cost.toFixed(6)}
+                      </div>
                     </div>
                   )}
                 </div>
