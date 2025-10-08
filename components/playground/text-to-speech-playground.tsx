@@ -223,10 +223,10 @@ export function TextToSpeechPlayground({
                 </SelectTrigger>
                 <SelectContent>
                   {Object.entries(modelData).map(([key, data]: [string, any]) => (
-                    <SelectItem key={key} value={key}>
-                      <div className='flex items-center gap-2'>
+                    <SelectItem key={key} value={key} className='py-3'>
+                      <div className='flex items-center gap-2 w-full'>
                         {data.logo}
-                        <span className='font-medium'>{data.name}</span>
+                        <span className='text-sm'>{data.name}</span>
                       </div>
                     </SelectItem>
                   ))}
@@ -234,44 +234,38 @@ export function TextToSpeechPlayground({
               </Select>
             </div>
 
-            {/* Pricing Card */}
-            <Card>
-              <CardContent className='p-4 space-y-3'>
+            {/* Model Info Card */}
+            <div className={`rounded-lg border p-4 space-y-4 ${model.cardGradient}`}>
+              {/* Pricing */}
+              <div className='space-y-1'>
                 <div className='flex items-center justify-between'>
-                  <div>
-                    <div className='text-2xl font-bold'>₹{model.inputPrice}</div>
-                    <div className='text-xs text-muted-foreground'>Per 1M Characters</div>
-                  </div>
-                  <div className='text-right'>
-                    <div className='text-2xl font-bold'>₹{model.outputPrice}</div>
-                    <div className='text-xs text-muted-foreground'>Output</div>
-                  </div>
+                  <span className='text-base font-semibold text-gray-900'>₹{model.inputPrice}</span>
+                  <span className='text-base font-semibold text-gray-900'>₹{model.outputPrice}</span>
                 </div>
+                <div className='flex items-center justify-between text-xs text-gray-500'>
+                  <span>Per 1M Characters</span>
+                  <span>Output</span>
+                </div>
+              </div>
 
-                {/* Tags */}
-                <div className='flex flex-wrap gap-1.5'>
-                  {model.tags?.map((tag) => (
-                    <Badge
-                      key={tag}
-                      variant='secondary'
-                      className='text-xs px-2 py-0.5 bg-gray-100 text-gray-700 hover:bg-gray-200'
-                    >
-                      {tag}
-                    </Badge>
-                  ))}
-                </div>
+              {/* Tags */}
+              <div className='flex flex-wrap gap-2'>
+                {model.tags.map((tag, index) => (
+                  <span key={index} className='px-2 py-1 bg-white border border-gray-300 text-gray-700 text-xs rounded font-medium'>
+                    {tag}
+                  </span>
+                ))}
+              </div>
 
-                {/* Links */}
-                <div className='flex items-center gap-3 text-xs pt-2 border-t'>
-                  <button className='text-blue-600 hover:text-blue-700 flex items-center gap-1'>
-                    Learn more
-                    <ExternalLink className='w-3 h-3' />
-                  </button>
-                  <span className='text-gray-400'>|</span>
-                  <span className='text-gray-600'>{model.license}</span>
-                </div>
-              </CardContent>
-            </Card>
+              <div className='flex items-center gap-4 text-xs text-muted-foreground'>
+                <button className='hover:text-foreground flex items-center gap-1'>
+                  Learn more
+                  <ExternalLink className='h-3 w-3' />
+                </button>
+                <span>|</span>
+                <span>{model.license}</span>
+              </div>
+            </div>
           </div>
         </div>
 
