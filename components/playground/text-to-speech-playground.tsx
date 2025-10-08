@@ -218,10 +218,21 @@ export function TextToSpeechPlayground({
           <div className='space-y-3'>
             <div className='relative z-50'>
               <Select value={selectedModel} onValueChange={onModelChange}>
-                <SelectTrigger className='w-full bg-white border-gray-200'>
-                  <SelectValue />
+                <SelectTrigger className='w-full h-auto min-h-[40px] py-3'>
+                  <SelectValue>
+                    <div className='flex items-center gap-2 w-full'>
+                      {model.logo}
+                      <span className='truncate text-left flex-1'>{model.name}</span>
+                    </div>
+                  </SelectValue>
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent 
+                  className='z-[100] max-h-60 w-[var(--radix-select-trigger-width)]'
+                  position="popper"
+                  side="bottom"
+                  align="start"
+                  sideOffset={4}
+                >
                   {Object.entries(modelData).map(([key, data]: [string, any]) => (
                     <SelectItem key={key} value={key} className='py-3'>
                       <div className='flex items-center gap-2 w-full'>
