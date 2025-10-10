@@ -509,6 +509,90 @@ print(response.json())`;
               </div>
             </div>
           </div>
+
+          {/* Card 4 - Qwen3-Image */}
+          <div className='bg-gradient-to-bl from-indigo-100/50 via-purple-50/30 to-white rounded-xl border border-indigo-200/60 p-6 flex flex-col h-full'>
+            {/* Top Content - Flexible */}
+            <div className='flex-1 flex flex-col'>
+              {/* Provider Logo */}
+              <div className='flex justify-start mb-4'>
+                <div className='w-8 h-8 flex items-center justify-center'>
+                  <svg width="32" height="32" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-8 h-8" aria-hidden="true">
+                    <path d="M8.43952 0.247391C8.72534 0.749204 9.0097 1.25247 9.29333 1.75647C9.30479 1.77662 9.32141 1.79337 9.34147 1.805C9.36153 1.81663 9.38432 1.82272 9.40751 1.82265H13.4453C13.5718 1.82265 13.6795 1.90265 13.7696 2.06046L14.8271 3.92954C14.9653 4.17463 15.0016 4.27717 14.8445 4.53826C14.6554 4.85098 14.4714 5.16662 14.2918 5.48371L14.0249 5.96225C13.9478 6.10479 13.8627 6.16588 13.9958 6.33461L15.9245 9.70694C16.0496 9.92585 16.0052 10.0662 15.8932 10.2669C15.5754 10.8378 15.2518 11.4044 14.9223 11.9687C14.8067 12.1666 14.6663 12.2415 14.4278 12.2378C13.8627 12.2262 13.2991 12.2306 12.7355 12.2495C12.7234 12.2501 12.7116 12.2537 12.7014 12.2601C12.6911 12.2665 12.6825 12.2753 12.6766 12.2858C12.0263 13.438 11.3705 14.5871 10.7093 15.7331C10.5864 15.9462 10.4329 15.9971 10.182 15.9978C9.45696 16 8.72606 16.0007 7.98789 15.9992C7.91916 15.9991 7.85171 15.9807 7.79233 15.9461C7.73295 15.9115 7.68375 15.8619 7.64971 15.8022L6.67881 14.1127C6.67317 14.1017 6.66449 14.0924 6.65381 14.0861C6.64312 14.0798 6.63086 14.0767 6.61845 14.0771H2.89632C2.68905 14.0989 2.49414 14.0764 2.31087 14.0102L1.14507 11.9956C1.11059 11.936 1.09232 11.8684 1.09206 11.7995C1.09181 11.7306 1.10958 11.6628 1.14361 11.6029L2.02142 10.0611C2.03392 10.0393 2.0405 10.0146 2.0405 9.98948C2.0405 9.96435 2.03392 9.93965 2.02142 9.91784C1.56417 9.1262 1.10962 8.33299 0.657801 7.53823L0.0832629 6.5237C-0.0330993 6.29824 -0.0425537 6.16297 0.152353 5.82188C0.49053 5.23062 0.826526 4.64008 1.16107 4.05026C1.25707 3.88008 1.38216 3.80736 1.58579 3.80663C2.21341 3.80399 2.84105 3.80374 3.46867 3.8059C3.48453 3.80578 3.50007 3.80148 3.51373 3.79344C3.52739 3.78539 3.53869 3.77389 3.54649 3.76009L5.58719 0.200118C5.61812 0.145961 5.66277 0.10091 5.71665 0.0695016C5.77053 0.0380933 5.83173 0.0214373 5.8941 0.021211C6.27518 0.0204837 6.65991 0.0212109 7.04536 0.0168473L7.78498 0.00012023C8.03298 -0.00206157 8.31152 0.0233928 8.43952 0.247391ZM5.94355 0.540479C5.93589 0.540474 5.92836 0.542488 5.92172 0.546318C5.91508 0.550148 5.90957 0.555659 5.90573 0.562297L3.8214 4.20954C3.81139 4.22672 3.79707 4.241 3.77985 4.25095C3.76263 4.2609 3.7431 4.26618 3.72322 4.26626H1.63888C1.59815 4.26626 1.58797 4.28444 1.60906 4.32008L5.83446 11.7062C5.85264 11.7367 5.84392 11.7513 5.80974 11.752L3.77703 11.7629C3.74732 11.7619 3.71792 11.7693 3.6922 11.7842C3.66648 11.7991 3.64548 11.821 3.63158 11.8473L2.67159 13.5273C2.63959 13.584 2.65632 13.6131 2.72105 13.6131L6.87809 13.6189C6.91154 13.6189 6.93627 13.6334 6.95372 13.6633L7.97407 15.448C8.00753 15.5069 8.04098 15.5076 8.07516 15.448L11.7158 9.07713L12.2853 8.07204C12.2888 8.06584 12.2938 8.06067 12.3 8.05707C12.3061 8.05347 12.3131 8.05157 12.3202 8.05157C12.3273 8.05157 12.3343 8.05347 12.3404 8.05707C12.3466 8.06067 12.3516 8.06584 12.3551 8.07204L13.3907 9.91203C13.3985 9.92579 13.4098 9.93723 13.4235 9.94516C13.4372 9.95309 13.4527 9.95722 13.4685 9.95712L15.478 9.94257C15.4831 9.94262 15.4882 9.9413 15.4927 9.93874C15.4971 9.93618 15.5009 9.93249 15.5034 9.92803C15.5059 9.92358 15.5072 9.91857 15.5072 9.91348C15.5072 9.90839 15.5059 9.90338 15.5034 9.89894L13.3944 6.20006C13.3868 6.1877 13.3828 6.17348 13.3828 6.15897C13.3828 6.14447 13.3868 6.13024 13.3944 6.11788L13.6075 5.74916L14.422 4.31135C14.4394 4.28153 14.4307 4.26626 14.3965 4.26626H5.96392C5.92101 4.26626 5.91082 4.24735 5.93264 4.21026L6.97554 2.38846C6.98335 2.37605 6.9875 2.36168 6.9875 2.34701C6.9875 2.33234 6.98335 2.31797 6.97554 2.30555L5.9821 0.563024C5.9783 0.556143 5.97271 0.550416 5.96593 0.546447C5.95914 0.542479 5.95141 0.540417 5.94355 0.540479ZM10.518 6.37315C10.5515 6.37315 10.5602 6.3877 10.5428 6.41679L9.93768 7.48223L8.03734 10.8167C8.03377 10.8232 8.0285 10.8286 8.02209 10.8323C8.01569 10.8361 8.00839 10.838 8.00098 10.8378C7.9936 10.8378 7.98636 10.8358 7.97998 10.8321C7.9736 10.8284 7.96831 10.8231 7.96462 10.8167L5.45338 6.42988C5.43883 6.40515 5.4461 6.39206 5.47374 6.3906L5.63083 6.38188L10.5195 6.37315H10.518Z" fill="url(#prefix__paint0_linear_16251_34570)"></path>
+                    <defs>
+                      <linearGradient id="prefix__paint0_linear_16251_34570" x1="0" y1="0" x2="1600" y2="0" gradientUnits="userSpaceOnUse">
+                        <stop stopColor="#00055F" stopOpacity="0.84"></stop>
+                        <stop offset="1" stopColor="#6F69F7" stopOpacity="0.84"></stop>
+                      </linearGradient>
+                    </defs>
+                  </svg>
+                </div>
+              </div>
+
+              {/* Model ID with Copy */}
+              <div className='space-y-1 mb-10'>
+                <div className='flex items-center gap-2'>
+                  <h3 className='text-lg font-semibold text-gray-900'>Qwen/Qwen3-Image</h3>
+                  <TooltipWrapper content="Copy model ID">
+                    <button 
+                      onClick={() => handleCopyModelId('Qwen/Qwen3-Image')}
+                      className='p-1 hover:bg-gray-100 rounded transition-colors'
+                    >
+                      <svg className='w-4 h-4 text-gray-500' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                        <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z' />
+                      </svg>
+                    </button>
+                  </TooltipWrapper>
+                </div>
+                <p className='text-sm text-gray-600'>Advanced text-to-image generation model creating high-quality images from text prompts</p>
+              </div>
+            </div>
+
+            {/* Bottom Content - Fixed to bottom */}
+            <div className='mt-auto space-y-4'>
+              {/* Pricing */}
+              <div className='space-y-1'>
+                <div className='flex items-center justify-between'>
+                  <span className='text-lg font-semibold text-gray-900'>₹8</span>
+                  <span className='text-lg font-semibold text-gray-400'>—</span>
+                </div>
+                <div className='flex items-center justify-between text-xs text-gray-500'>
+                  <span>Per Image Generated</span>
+                  <span>Output</span>
+                </div>
+              </div>
+
+              {/* Tags */}
+              <div className='flex flex-wrap gap-2'>
+                <span className='px-2 py-1 bg-white border border-gray-300 text-gray-700 text-xs rounded font-medium'>Text-to-Image</span>
+                <span className='px-2 py-1 bg-white border border-gray-300 text-gray-700 text-xs rounded font-medium'>Image Generation</span>
+                <span className='px-2 py-1 bg-white border border-gray-300 text-gray-700 text-xs rounded font-medium'>AI Art</span>
+              </div>
+
+              {/* Action Buttons */}
+              <div className='flex space-x-3'>
+                <Button className='flex-1' asChild>
+                  <a href='/playground/qwen3-image'>
+                    Playground
+                  </a>
+                </Button>
+                <TooltipWrapper content="View starter code">
+                  <Button 
+                    variant='outline' 
+                    className='px-3 border-gray-500 text-gray-500 hover:bg-gray-900 hover:text-white hover:border-gray-900'
+                    onClick={() => {
+                      setSelectedModelId('qwen3-image');
+                      setIsSetupCodeModalOpen(true);
+                    }}
+                  >
+                    <svg className='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                      <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4' />
+                    </svg>
+                  </Button>
+                </TooltipWrapper>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
