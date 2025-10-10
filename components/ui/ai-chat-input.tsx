@@ -20,6 +20,7 @@ interface AIChatInputProps {
   onChange?: (value: string) => void;
   onSend?: () => void;
   onAttach?: () => void;
+  onPaste?: (e: React.ClipboardEvent) => void;
   attachedImages?: string[];
   onRemoveImage?: (index: number) => void;
   placeholder?: string[];
@@ -31,6 +32,7 @@ const AIChatInput = ({
   onChange, 
   onSend,
   onAttach,
+  onPaste,
   attachedImages = [],
   onRemoveImage,
   placeholder = PLACEHOLDERS,
@@ -239,6 +241,7 @@ const AIChatInput = ({
                 value={value}
                 onChange={(e) => handleChange(e.target.value)}
                 onKeyDown={handleKeyDown}
+                onPaste={onPaste}
                 className="flex-1 border-0 outline-0 rounded-md py-2 text-base bg-transparent w-full font-normal"
                 style={{ position: "relative", zIndex: 1 }}
                 onFocus={handleActivate}

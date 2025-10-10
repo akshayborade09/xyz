@@ -34,7 +34,8 @@ import {
   BookOpen,
   RotateCcw,
   User,
-  ChevronUp
+  ChevronUp,
+  Upload
 } from 'lucide-react';
 
 // Mock model data - in real app, this would come from API
@@ -209,6 +210,7 @@ export default function PlaygroundPage() {
   const fileInputRef = React.useRef<HTMLInputElement>(null);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [isSystemPromptVisible, setIsSystemPromptVisible] = useState(true);
+  const [isDraggingImage, setIsDraggingImage] = useState(false);
 
   const handleCopySystemPrompt = async () => {
     try {
@@ -259,6 +261,74 @@ export default function PlaygroundPage() {
 
   const handleRemoveImage = (index: number) => {
     setAttachedImages(prev => prev.filter((_, i) => i !== index));
+  };
+
+  const handlePasteImage = (e: React.ClipboardEvent) => {
+    const items = e.clipboardData?.items;
+    if (!items) return;
+
+    for (let i = 0; i < items.length; i++) {
+      const item = items[i];
+      if (item.type.startsWith('image/')) {
+        const file = item.getAsFile();
+        if (file) {
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            setAttachedImages(prev => [...prev, reader.result as string]);
+            toast({
+              title: "Image pasted",
+              description: "Image has been attached to your message.",
+            });
+          };
+          reader.readAsDataURL(file);
+        }
+      }
+    }
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDraggingImage(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDraggingImage(false);
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDraggingImage(false);
+
+    const files = e.dataTransfer.files;
+    if (!files) return;
+
+    const imageFiles = Array.from(files).filter(file => file.type.startsWith('image/'));
+    
+    if (imageFiles.length === 0) {
+      toast({
+        title: "No images found",
+        description: "Please drop image files only.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    imageFiles.forEach(file => {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setAttachedImages(prev => [...prev, reader.result as string]);
+      };
+      reader.readAsDataURL(file);
+    });
+
+    toast({
+      title: "Images added",
+      description: `${imageFiles.length} image(s) have been attached to your message.`,
+    });
   };
 
   const handleSendMessage = () => {
@@ -1083,7 +1153,22 @@ export default function PlaygroundPage() {
 
                 {/* Message Input */}
                 <div className='pt-4 flex-shrink-0 px-6 pb-6'>
-                  <div className='w-full'>
+                  <div 
+                    className='w-full relative'
+                    onDragOver={handleDragOver}
+                    onDragLeave={handleDragLeave}
+                    onDrop={handleDrop}
+                  >
+                    {/* Drag overlay */}
+                    {isDraggingImage && (
+                      <div className='absolute inset-0 z-50 bg-primary/5 border-2 border-dashed border-primary rounded-lg flex items-center justify-center pointer-events-none'>
+                        <div className='text-center'>
+                          <Upload className='h-8 w-8 mx-auto mb-2 text-primary' />
+                          <p className='text-sm font-medium text-primary'>Drop images here</p>
+                        </div>
+                      </div>
+                    )}
+                    
                     {/* Hidden File Input */}
                     <input
                       ref={fileInputRef}
@@ -1101,6 +1186,7 @@ export default function PlaygroundPage() {
                       onAttach={handleImageAttach}
                       attachedImages={attachedImages}
                       onRemoveImage={handleRemoveImage}
+                      onPaste={handlePasteImage}
                       placeholder={[
                         "Find hiking boots for wide feet",
                         "Explain quantum computing in simple terms",
