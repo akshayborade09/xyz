@@ -10,6 +10,7 @@ interface ModelSelectorProps {
   modelData: Record<string, {
     name: string;
     provider: string;
+    modality: string;
     logo: React.ReactNode;
     [key: string]: any;
   }>;
@@ -83,7 +84,8 @@ export function ModelSelector({ value, onChange, modelData }: ModelSelectorProps
     const searchLower = searchTerm.toLowerCase();
     return (
       model.name.toLowerCase().includes(searchLower) ||
-      model.provider.toLowerCase().includes(searchLower)
+      model.provider.toLowerCase().includes(searchLower) ||
+      model.modality.toLowerCase().includes(searchLower)
     );
   });
 
@@ -137,7 +139,7 @@ export function ModelSelector({ value, onChange, modelData }: ModelSelectorProps
                     <LogoWithUniqueIds logo={model.logo} uniqueSuffix={`dropdown-${modelId}`} />
                     <div className='flex flex-col items-start flex-1'>
                       <span className='font-medium truncate'>{model.name}</span>
-                      <span className='text-xs text-muted-foreground'>{model.provider}</span>
+                      <span className='text-xs text-muted-foreground'>{model.modality}</span>
                     </div>
                   </div>
                   {value === modelId && (

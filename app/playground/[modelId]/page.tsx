@@ -45,6 +45,7 @@ const modelData = {
   'qwen3-coder-480b': {
     name: 'Qwen/Qwen3-Coder-480B-A35B-Instruct',
     provider: 'Qwen',
+    modality: 'Text-to-Text',
     license: 'Apache 2.0 License',
     costPerToken: 0.01,
     inputPrice: '12.5',
@@ -67,6 +68,7 @@ const modelData = {
   'gpt-oss-20b': {
     name: 'OpenAI/GPT-OSS-20B',
     provider: 'OpenAI',
+    modality: 'Text-to-Text',
     license: 'MIT License', 
     costPerToken: 0.015,
     inputPrice: '4.2',
@@ -83,6 +85,7 @@ const modelData = {
   'kimi-k2-instruct': {
     name: 'moonshotai/Kimi-K2-Instruct-0905',
     provider: 'MoonshotAI',
+    modality: 'Text-to-Text',
     license: 'Apache 2.0 License',
     costPerToken: 0.083,
     inputPrice: '83.5',
@@ -100,6 +103,7 @@ const modelData = {
   'krutrim-dhwani': {
     name: 'Krutrim/Krutrim-Dhwani',
     provider: 'Krutrim',
+    modality: 'Speech-to-Text',
     license: 'Proprietary',
     costPerToken: 0,
     inputPrice: '24',
@@ -118,6 +122,7 @@ const modelData = {
   'krutrim-text-to-speech': {
     name: 'Krutrim/Krutrim-Text-to-Speech',
     provider: 'Krutrim',
+    modality: 'Text-to-Speech',
     license: 'Proprietary',
     costPerToken: 0,
     inputPrice: '5',
@@ -136,6 +141,7 @@ const modelData = {
   'krutrim-speech-to-speech': {
     name: 'Krutrim/Krutrim-Speech-to-Speech',
     provider: 'Krutrim',
+    modality: 'Speech-to-Speech',
     license: 'Proprietary',
     costPerToken: 0,
     inputPrice: '30',
