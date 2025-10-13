@@ -210,11 +210,11 @@ export function TextToSpeechPlayground({
   };
 
   return (
-    <div className='flex gap-6 h-[calc(100vh-280px)]'>
+    <div className='flex flex-col lg:flex-row gap-6 min-h-[600px] lg:h-[calc(100vh-280px)]'>
       {/* LEFT SIDEBAR */}
-      <div className='w-80 flex-shrink-0 flex flex-col h-full relative'>
+      <div className='w-full lg:w-80 flex-shrink-0 flex flex-col lg:h-full relative'>
         {/* Scrollable Content */}
-        <div className='flex-1 space-y-3 overflow-y-auto min-h-0 pb-32'>
+        <div className='flex-1 space-y-3 overflow-y-auto min-h-0 pb-4 lg:pb-32'>
           {/* Model Section */}
           <div className='space-y-3'>
             <ModelSelector
@@ -260,7 +260,7 @@ export function TextToSpeechPlayground({
 
         {/* Total Cost Card - Fixed at bottom, only show after audio is generated */}
         {generatedAudio && totalCost > 0 && (
-          <div className='absolute bottom-0 left-0 right-0 p-4'>
+          <div className='mt-3 p-3 lg:absolute lg:bottom-0 lg:left-0 lg:right-0 lg:p-4'>
             <div
               style={{
                 borderRadius: '16px',
@@ -286,7 +286,7 @@ export function TextToSpeechPlayground({
       </div>
 
       {/* MAIN CONTENT - Output/Input Layout */}
-      <Card className='flex-1 flex flex-col min-h-0 relative' style={{ background: 'linear-gradient(180deg, #8e92981a 0%, #ffffff 100%)' }}>
+      <Card className='flex-1 flex flex-col min-h-[400px] lg:min-h-0 relative' style={{ background: 'linear-gradient(180deg, #8e92981a 0%, #ffffff 100%)' }}>
         <CardContent className='flex-1 flex flex-col min-h-0 p-0 relative'>
           {/* Output Section - Scrollable */}
           <div className='flex-1 overflow-y-auto p-6'>

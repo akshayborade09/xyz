@@ -272,11 +272,11 @@ export function SpeechToTextPlayground({
   };
 
   return (
-    <div className='flex gap-6 h-[calc(100vh-280px)]'>
+    <div className='flex flex-col lg:flex-row gap-6 min-h-[600px] lg:h-[calc(100vh-280px)]'>
       {/* LEFT SIDEBAR */}
-      <div className='w-80 flex-shrink-0 flex flex-col h-full relative'>
+      <div className='w-full lg:w-80 flex-shrink-0 flex flex-col lg:h-full relative'>
         {/* Scrollable Content */}
-        <div className='flex-1 space-y-3 overflow-y-auto min-h-0 pb-32'>
+        <div className='flex-1 space-y-3 overflow-y-auto min-h-0 pb-4 lg:pb-32'>
           {/* Model Section */}
           <div className='space-y-3'>
             <ModelSelector
@@ -325,7 +325,7 @@ export function SpeechToTextPlayground({
 
         {/* Fixed Cost Information - Only show when there's a cost */}
         {totalCost > 0 && (
-          <div className='absolute bottom-0 left-0 right-0'>
+          <div className='mt-3 lg:absolute lg:bottom-0 lg:left-0 lg:right-0'>
             <Popover open={isCostPopoverOpen} onOpenChange={setIsCostPopoverOpen}>
               <PopoverTrigger asChild>
                 <div 
@@ -386,10 +386,10 @@ export function SpeechToTextPlayground({
       </div>
 
       {/* MAIN CONTENT - Input/Output Layout */}
-      <Card className='flex-1 flex flex-col min-h-0 relative' style={{ background: 'linear-gradient(180deg, #8e92981a 0%, #ffffff 100%)' }}>
+      <Card className='flex-1 flex flex-col min-h-[400px] lg:min-h-0 relative' style={{ background: 'linear-gradient(180deg, #8e92981a 0%, #ffffff 100%)' }}>
         <CardContent className='flex-1 flex flex-col min-h-0 p-0 relative'>
           {/* Output Section - Scrollable */}
-          <div className='flex-1 overflow-y-auto p-6'>
+          <div className='flex-1 overflow-y-auto p-4 md:p-6'>
             <div className='space-y-4'>
               {/* Header - Only show when there's transcribed text */}
               {transcribedText && (
@@ -468,7 +468,7 @@ export function SpeechToTextPlayground({
 
           {/* Input Section - Sticky at bottom with glow effect like chat input */}
           <div className='flex-shrink-0 border-t bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60'>
-            <div className='p-6'>
+            <div className='p-3 md:p-6 space-y-3'>
               {/* Credit Warning Banner */}
               {showCreditWarning && onAddCredits && (
                 <CreditWarningBanner onAddCredits={onAddCredits} />
