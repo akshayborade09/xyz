@@ -1,60 +1,53 @@
 'use client';
 
-import { useState } from 'react';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogPortal,
-  DialogOverlay,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { XMarkIcon } from '@heroicons/react/24/outline';
+import { AlertTriangle, Copy, Check } from 'lucide-react';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
-import { SaveApiKeyModal } from './save-api-key-modal';
+import { useState } from 'react';
+import { useToast } from '@/hooks/use-toast';
 
-interface CreateApiKeyModalProps {
+interface SaveApiKeyModalProps {
   open: boolean;
   onClose: () => void;
+  apiKey: string;
 }
 
-export function CreateApiKeyModal({ open, onClose }: CreateApiKeyModalProps) {
-  const [secretName, setSecretName] = useState('');
-  const [showSaveModal, setShowSaveModal] = useState(false);
-  const [generatedApiKey, setGeneratedApiKey] = useState('');
+export function SaveApiKeyModal({ open, onClose, apiKey }: SaveApiKeyModalProps) {
+  const [copied, setCopied] = useState(false);
+  const { toast } = useToast();
 
-  const generateMockApiKey = () => {
-    // Generate a mock API key (similar to the format in the screenshot)
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    let apiKey = '';
-    for (let i = 0; i < 48; i++) {
-      apiKey += characters.charAt(Math.floor(Math.random() * characters.length));
-    }
-    return apiKey;
+  const handleCopy = () => {
+    navigator.clipboard.writeText(apiKey);
+    setCopied(true);
+    toast({
+      variant: "black",
+      title: "API key copied",
+      description: "The API key has been copied to your clipboard.",
+    });
+    setTimeout(() => setCopied(false), 2000);
   };
 
-  const handleCreate = () => {
-    // Mock API key creation
-    console.log('Creating API key with name:', secretName);
-    const newApiKey = generateMockApiKey();
-    setGeneratedApiKey(newApiKey);
-    
-    // Close create modal and open save modal
+  const handleCopyAndClose = () => {
+    navigator.clipboard.writeText(apiKey);
+    toast({
+      variant: "black",
+      title: "API key copied",
+      description: "The API key has been copied to your clipboard.",
+    });
     onClose();
-    setShowSaveModal(true);
-    setSecretName('');
-  };
-
-  const handleCloseSaveModal = () => {
-    setShowSaveModal(false);
-    setGeneratedApiKey('');
   };
 
   return (
-    <>
     <Dialog open={open} onOpenChange={onClose}>
       <DialogPortal>
         {/* Custom overlay with higher z-index */}
@@ -70,53 +63,53 @@ export function CreateApiKeyModal({ open, onClose }: CreateApiKeyModalProps) {
 
           <DialogHeader>
             <DialogTitle className='text-base font-semibold text-black'>
-              Create New API Key
+              Save API key
             </DialogTitle>
-            <p className='text-sm text-muted-foreground pt-2'>
-              API keys are used for authentication in your Krutrim AI Studio API requests. Keep your keys private.
-            </p>
           </DialogHeader>
 
           <div className='space-y-6'>
-            <div className='space-y-2'>
-              <Label htmlFor='secret-name' className='text-sm font-medium'>
-                Secret Name
-              </Label>
+            {/* Warning Alert */}
+            <Alert className='border-amber-200 bg-amber-50'>
+              <AlertTriangle className='h-5 w-5 text-amber-600' />
+              <AlertDescription className='ml-2 text-sm text-amber-800'>
+                Save this API key safely and accessibly. After you close this window, you will not be able to see the key again. If you lose it, you will need to create a new key.
+              </AlertDescription>
+            </Alert>
+
+            {/* API Key Display */}
+            <div className='flex gap-2'>
               <Input
-                id='secret-name'
-                placeholder='Enter Name'
-                value={secretName}
-                onChange={(e) => setSecretName(e.target.value)}
+                value={apiKey}
+                readOnly
+                className='font-mono text-sm'
               />
+              <Button
+                variant='outline'
+                size='icon'
+                onClick={handleCopy}
+                className='shrink-0'
+              >
+                {copied ? (
+                  <Check className='h-4 w-4 text-green-600' />
+                ) : (
+                  <Copy className='h-4 w-4' />
+                )}
+              </Button>
             </div>
 
             {/* Actions */}
-            <div className='flex items-center justify-end gap-3'>
+            <div className='flex items-center justify-end'>
               <Button
-                variant='outline'
-                onClick={onClose}
+                onClick={handleCopyAndClose}
                 size='sm'
               >
-                Cancel
-              </Button>
-              <Button
-                onClick={handleCreate}
-                size='sm'
-              >
-                Create API Key
+                Copy and Close
               </Button>
             </div>
           </div>
         </DialogPrimitive.Content>
       </DialogPortal>
     </Dialog>
-    
-    {/* Save API Key Modal */}
-    <SaveApiKeyModal
-      open={showSaveModal}
-      onClose={handleCloseSaveModal}
-      apiKey={generatedApiKey}
-    />
-  </>
   );
 }
+
