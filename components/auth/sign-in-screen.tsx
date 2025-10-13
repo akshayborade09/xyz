@@ -86,6 +86,7 @@ export function SignInScreen() {
         accountType: userType === 'new' ? 'individual' : 'organization', // Set based on userType
         signinCompletedAt: new Date().toISOString(),
         userType: userType,
+        credits: userType === 'new' ? 0 : 1000, // New users have 0 credits, existing users have 1000 credits
       };
 
       // Set auth token

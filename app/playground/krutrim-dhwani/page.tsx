@@ -7,6 +7,8 @@ import { Button } from '@/components/ui/button';
 import { SpeechToTextPlayground } from '@/components/playground/speech-to-text-playground';
 import { SetupCodeModal } from '@/components/modals/setup-code-modal';
 import { CreateApiKeyModal } from '@/components/modals/create-api-key-modal';
+import { AddCreditsModal } from '@/components/modals/add-credits-modal';
+import { useUserCredits } from '@/hooks/use-user-credits';
 
 // Model data for Krutrim-Dhwani
 const modelData = {
@@ -156,9 +158,11 @@ const allModelData = {
 
 export default function KrutrimDhwaniPage() {
   const router = useRouter();
+  const { hasCredits, updateCredits } = useUserCredits();
   const [selectedModel, setSelectedModel] = useState('krutrim-dhwani');
   const [isSetupCodeModalOpen, setIsSetupCodeModalOpen] = useState(false);
   const [isCreateApiKeyModalOpen, setIsCreateApiKeyModalOpen] = useState(false);
+  const [isAddCreditsModalOpen, setIsAddCreditsModalOpen] = useState(false);
 
   const model = modelData['krutrim-dhwani'];
   
@@ -208,6 +212,8 @@ export default function KrutrimDhwaniPage() {
           onModelChange={setSelectedModel}
           onOpenSetupCode={() => setIsSetupCodeModalOpen(true)}
           onOpenCreateApiKey={() => setIsCreateApiKeyModalOpen(true)}
+          showCreditWarning={!hasCredits}
+          onAddCredits={() => setIsAddCreditsModalOpen(true)}
         />
       </PageShell>
 
@@ -222,6 +228,12 @@ export default function KrutrimDhwaniPage() {
       <CreateApiKeyModal
         open={isCreateApiKeyModalOpen}
         onClose={() => setIsCreateApiKeyModalOpen(false)}
+      />
+
+      <AddCreditsModal
+        open={isAddCreditsModalOpen}
+        onClose={() => setIsAddCreditsModalOpen(false)}
+        onCreditsUpdated={updateCredits}
       />
     </>
   );

@@ -12,6 +12,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { TextShimmer } from '@/components/ui/text-shimmer';
 import { GlowEffect } from '@/components/ui/glow-effect';
 import { ModelSelector } from '@/components/playground/model-selector';
+import { CreditWarningBanner } from '@/components/playground/credit-warning-banner';
 import { useToast } from '@/hooks/use-toast';
 import { motion } from 'framer-motion';
 import { Mic, Upload, Copy, Loader2, ExternalLink, ChevronRight, ChevronDown, ChevronUp, X, Square } from 'lucide-react';
@@ -33,6 +34,8 @@ interface SpeechToTextPlaygroundProps {
   onModelChange: (model: string) => void;
   onOpenSetupCode: () => void;
   onOpenCreateApiKey: () => void;
+  showCreditWarning?: boolean;
+  onAddCredits?: () => void;
 }
 
 const languages = [
@@ -57,6 +60,8 @@ export function SpeechToTextPlayground({
   onModelChange,
   onOpenSetupCode,
   onOpenCreateApiKey,
+  showCreditWarning = false,
+  onAddCredits,
 }: SpeechToTextPlaygroundProps) {
   const { toast } = useToast();
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -462,6 +467,10 @@ export function SpeechToTextPlayground({
           {/* Input Section - Sticky at bottom with glow effect like chat input */}
           <div className='flex-shrink-0 border-t bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60'>
             <div className='p-6'>
+              {/* Credit Warning Banner */}
+              {showCreditWarning && onAddCredits && (
+                <CreditWarningBanner onAddCredits={onAddCredits} />
+              )}
               {/* Unified Input Card with Glow Effect */}
               <div className='relative w-full'>
                 {/* Glow Effect Background */}
