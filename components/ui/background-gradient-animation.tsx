@@ -172,7 +172,7 @@ export const BackgroundGradientAnimation = ({
             `[mix-blend-mode:var(--blending-value)] w-[var(--size)] h-[var(--size)] top-[calc(60%-var(--size)/2)] left-[calc(50%-var(--size)/2)]`,
             `[transform-origin:center_center]`,
             `animate-first`,
-            `opacity-50`,
+            `opacity-30`,
           )}
         ></div>
         <div
@@ -181,7 +181,7 @@ export const BackgroundGradientAnimation = ({
             `[mix-blend-mode:var(--blending-value)] w-[var(--size)] h-[var(--size)] top-[calc(60%-var(--size)/2)] left-[calc(50%-var(--size)/2)]`,
             `[transform-origin:calc(50%-400px)]`,
             `animate-second`,
-            `opacity-50`,
+            `opacity-30`,
           )}
         ></div>
         <div
@@ -190,7 +190,7 @@ export const BackgroundGradientAnimation = ({
             `[mix-blend-mode:var(--blending-value)] w-[var(--size)] h-[var(--size)] top-[calc(60%-var(--size)/2)] left-[calc(50%-var(--size)/2)]`,
             `[transform-origin:calc(50%+400px)]`,
             `animate-third`,
-            `opacity-50`,
+            `opacity-30`,
           )}
         ></div>
         <div
@@ -199,7 +199,7 @@ export const BackgroundGradientAnimation = ({
             `[mix-blend-mode:var(--blending-value)] w-[var(--size)] h-[var(--size)] top-[calc(60%-var(--size)/2)] left-[calc(50%-var(--size)/2)]`,
             `[transform-origin:calc(50%-200px)]`,
             `animate-fourth`,
-            `opacity-40`,
+            `opacity-25`,
           )}
         ></div>
         <div
@@ -208,7 +208,7 @@ export const BackgroundGradientAnimation = ({
             `[mix-blend-mode:var(--blending-value)] w-[var(--size)] h-[var(--size)] top-[calc(60%-var(--size)/2)] left-[calc(50%-var(--size)/2)]`,
             `[transform-origin:calc(50%-800px)_calc(50%+800px)]`,
             `animate-fifth`,
-            `opacity-50`,
+            `opacity-30`,
           )}
         ></div>
 
@@ -219,7 +219,7 @@ export const BackgroundGradientAnimation = ({
             className={classNames(
               `absolute [background:radial-gradient(circle_at_center,_rgba(var(--pointer-color),_0.8)_0,_rgba(var(--pointer-color),_0)_50%)_no-repeat]`,
               `[mix-blend-mode:var(--blending-value)] w-full h-full -top-1/2 -left-1/2`,
-              `opacity-40`,
+              `opacity-25`,
             )}
           ></div>
         )}
