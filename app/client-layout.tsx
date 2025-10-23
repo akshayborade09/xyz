@@ -9,6 +9,7 @@ import { TopHeader } from '@/components/navigation/top-header';
 import { LeftNavigation } from '@/components/navigation/left-navigation';
 import { Toaster } from '@/components/ui/toaster';
 import { ScrollFadeContainer } from '@/components/ui/scroll-fade-container';
+import { ThemeProvider } from '@/components/theme-provider';
 
 export default function ClientLayout({
   children,
@@ -37,58 +38,60 @@ export default function ClientLayout({
 
   return (
     <AuthProvider>
-      {isAuthPage ? (
-        <>{children}</>
-      ) : (
-        <div
-          className='flex h-screen w-full overflow-hidden flex-col'
-          style={{ backgroundColor: '#F2F2F7' }}
-        >
-          {/* Full width Top Header */}
-          <TopHeader
-            onMenuClick={() => setMobileSidebarOpen(true)}
-            isMobile={!isMounted ? false : window.innerWidth < 1024}
-          />
+      <ThemeProvider attribute='class' defaultTheme='light' enableSystem>
+        {isAuthPage ? (
+          <>{children}</>
+        ) : (
+          <div
+            className='flex h-screen w-full overflow-hidden flex-col'
+            style={{ backgroundColor: '#F2F2F7' }}
+          >
+            {/* Full width Top Header */}
+            <TopHeader
+              onMenuClick={() => setMobileSidebarOpen(true)}
+              isMobile={!isMounted ? false : window.innerWidth < 1024}
+            />
 
-          <div className='flex flex-1 overflow-hidden'>
-            {/* Left Navigation Sidebar */}
-            <div
-              className={`fixed inset-y-0 left-0 top-[56px] z-50 transform transition-transform duration-300 ease-in-out lg:static lg:w-64 ${
-                mobileSidebarOpen
-                  ? 'translate-x-0'
-                  : '-translate-x-full lg:translate-x-0'
-              }`}
-              style={{ width: '16rem' }}
-            >
-              <LeftNavigation onClose={() => setMobileSidebarOpen(false)} />
-            </div>
-
-            {/* Mobile sidebar backdrop */}
-            {mobileSidebarOpen && (
+            <div className='flex flex-1 overflow-hidden'>
+              {/* Left Navigation Sidebar */}
               <div
-                className='fixed inset-0 top-[56px] z-40 bg-black/50 backdrop-blur-sm lg:hidden'
-                onClick={() => setMobileSidebarOpen(false)}
-              />
-            )}
-
-            {/* Main Content with Scroll Fade */}
-            <main
-              className='flex-1 relative z-0 mx-4 mb-2 rounded-2xl overflow-hidden'
-              style={{ backgroundColor: '#ffffff' }}
-            >
-              <ScrollFadeContainer
-                className='h-full'
-                fadeHeight={24}
-                showTopFade={true}
-                showBottomFade={true}
+                className={`fixed inset-y-0 left-0 top-[56px] z-50 transform transition-transform duration-300 ease-in-out lg:static lg:w-64 ${
+                  mobileSidebarOpen
+                    ? 'translate-x-0'
+                    : '-translate-x-full lg:translate-x-0'
+                }`}
+                style={{ width: '16rem' }}
               >
-                <div className='w-full p-4'>{children}</div>
-              </ScrollFadeContainer>
-            </main>
+                <LeftNavigation onClose={() => setMobileSidebarOpen(false)} />
+              </div>
+
+              {/* Mobile sidebar backdrop */}
+              {mobileSidebarOpen && (
+                <div
+                  className='fixed inset-0 top-[56px] z-40 bg-black/50 backdrop-blur-sm lg:hidden'
+                  onClick={() => setMobileSidebarOpen(false)}
+                />
+              )}
+
+              {/* Main Content with Scroll Fade */}
+              <main
+                className='flex-1 relative z-0 mx-4 mb-2 rounded-2xl overflow-hidden'
+                style={{ backgroundColor: '#ffffff' }}
+              >
+                <ScrollFadeContainer
+                  className='h-full'
+                  fadeHeight={24}
+                  showTopFade={true}
+                  showBottomFade={true}
+                >
+                  <div className='w-full p-4'>{children}</div>
+                </ScrollFadeContainer>
+              </main>
+            </div>
           </div>
-        </div>
-      )}
-      <Toaster />
+        )}
+        <Toaster />
+      </ThemeProvider>
     </AuthProvider>
   );
 }

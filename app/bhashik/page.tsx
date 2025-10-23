@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { BackgroundGradientAnimation } from '@/components/ui/background-gradient-animation';
 import Link from 'next/link';
 import {
   Languages,
@@ -23,44 +24,34 @@ export default function BhashikPage() {
   return (
     <div className='space-y-12'>
       {/* Hero Section */}
-      <div
-        className='grid grid-cols-1 gap-8 items-center min-h-[420px] px-6 lg:px-12 py-10 rounded-2xl relative overflow-hidden'
-        style={{ backgroundColor: '#f0fdf4' }}
-      >
-        <div className='absolute inset-0 opacity-100 pointer-events-none'>
-            <svg className='w-full h-full object-cover' viewBox='0 0 1232 640' fill='none' xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='xMidYMid slice'>
-              <g clipPath='url(#clip0_bhashik)'>
-                <rect width='1232' height='640' fill='#f0fdf4'></rect>
-                <path
-                  fillRule='evenodd'
-                  clipRule='evenodd'
-                  d='M929.704 412C928.178 412 927.047 410.582 927.387 409.094L933.471 382.466C933.811 380.979 932.681 379.561 931.155 379.561H853.876C853.18 379.561 852.519 379.256 852.068 378.726L733.568 239.754C732.811 238.866 732.811 237.559 733.568 236.671L850.74 99.2564C851.192 98.727 851.852 98.422 852.548 98.422H941.134C943.161 98.422 944.258 100.797 942.942 102.34L828.4 236.671C827.642 237.559 827.642 238.866 828.4 239.754L933.912 363.495C935.181 364.982 937.602 364.388 938.037 362.483L1005.58 66.847C1005.83 65.7664 1006.79 65 1007.9 65H1072.45C1073.97 65 1075.1 66.4179 1074.76 67.9056L1068.46 95.5164C1068.12 97.0041 1069.25 98.422 1070.77 98.422H1150.65C1151.35 98.422 1152.01 98.727 1152.46 99.2564L1269.63 236.671C1270.39 237.559 1270.39 238.866 1269.63 239.754L1151.13 378.726C1150.68 379.256 1150.02 379.561 1149.32 379.561H1131.57L1060.85 379.42C1058.83 379.416 1057.73 377.043 1059.05 375.502L1174.8 239.754C1175.56 238.866 1175.56 237.559 1174.8 236.671L1068.56 112.083C1067.3 110.596 1064.87 111.19 1064.44 113.095L996.567 410.153C996.32 411.234 995.359 412 994.251 412H929.704Z'
-                  fill='#dcfce7'
-                />
-              </g>
-              <defs>
-                <clipPath id='clip0_bhashik'>
-                  <rect width='1232' height='640' fill='white' />
-                </clipPath>
-              </defs>
-            </svg>
-        </div>
-
-        {/* Centered content */}
-        <div className='space-y-6 relative z-10 text-center max-w-3xl mx-auto'>
-          <h2 className='text-2xl lg:text-3xl font-semibold tracking-tight text-foreground'>
-            Unlock seamless communication across India&apos;s diverse languages with our proprietary speech and text models.
-          </h2>
-          {/* Badges removed as requested */}
-          <div className='flex flex-col sm:flex-row gap-4 pt-2 justify-center'>
-            <Button size='lg' variant='outline' className='px-6 border-foreground text-foreground' asChild>
-              <Link href='/playground/text-to-speech'>Explore Speech Playground</Link>
-            </Button>
-            <Button size='lg' variant='outline' className='px-6 border-foreground text-foreground' asChild>
-              <Link href='/playground/text-translation'>Explore Text Playground</Link>
-            </Button>
+      <div className='relative rounded-2xl overflow-hidden'>
+        <BackgroundGradientAnimation
+          // Tailor colors to our green theme while keeping base bg '#f0fdf4'
+          firstColor='16, 185, 129'       
+          secondColor='52, 211, 153'     
+          thirdColor='5, 150, 105'       
+          fourthColor='22, 163, 74'      
+          fifthColor='110, 231, 183'     
+          pointerColor='34, 197, 94'
+          size='70%'
+          blendingValue='soft-light'
+          containerClassName='min-h-[420px] rounded-2xl'
+          className='grid grid-cols-1 gap-8 items-center px-6 lg:px-12 py-10'
+        >
+          <div className='space-y-6 relative z-10 text-center max-w-3xl mx-auto'>
+            <h2 className='text-2xl lg:text-3xl font-semibold tracking-tight text-foreground'>
+              Unlock seamless communication across India&apos;s diverse languages with our proprietary speech and text models.
+            </h2>
+            <div className='flex flex-col sm:flex-row gap-4 pt-2 justify-center'>
+              <Button size='lg' variant='outline' className='px-6 border-foreground text-foreground' asChild>
+                <Link href='/playground/text-to-speech'>Explore Speech Playground</Link>
+              </Button>
+              <Button size='lg' variant='outline' className='px-6 border-foreground text-foreground' asChild>
+                <Link href='/playground/text-translation'>Explore Text Playground</Link>
+              </Button>
+            </div>
           </div>
-        </div>
+        </BackgroundGradientAnimation>
       </div>
 
       {/* Why Bhashik */}
