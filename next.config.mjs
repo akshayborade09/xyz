@@ -36,16 +36,15 @@ const nextConfig = {
     };
     return config;
   },
-  // Temporarily disabled redirect to test Vercel build
-  // async redirects() {
-  //   return [
-  //     {
-  //       source: '/administration/billing/usage',
-  //       destination: '/billing/usage',
-  //       permanent: true,
-  //     },
-  //   ];
-  // },
+  async redirects() {
+    return [
+      {
+        source: '/administration/billing/usage',
+        destination: '/billing/usage',
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;

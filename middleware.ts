@@ -73,8 +73,7 @@ export function middleware(request: NextRequest) {
     pathname.startsWith('/_next') ||
     pathname.startsWith('/api') ||
     pathname.includes('.') ||
-    pathname.startsWith('/favicon') ||
-    pathname === '/billing/usage'
+    pathname.startsWith('/favicon')
   ) {
     return NextResponse.next();
   }
