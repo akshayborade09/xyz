@@ -347,8 +347,8 @@ const mockNodePools = [
 const nodePoolsTotal = 130;
 
 const mockK8sVolumes = [
-  { volumeName: 'vol1', clusterName: 'abc', storageType: 'default', averageSize: '70 GB', rate: '₹5 /hour/gb', totalTimeUsed: '10 hrs', credits: 3500 },
-  { volumeName: 'vol2', clusterName: 'abc2', storageType: 'default', averageSize: '100 GB', rate: '₹5 /hour/gb', totalTimeUsed: '10 hrs', credits: 5000 },
+  { volumeName: 'vol1', clusterName: 'abc', storageType: 'default', averageSize: '70 GB', rate: '₹5 /hr/gb', totalTimeUsed: '10 hrs', credits: 3500 },
+  { volumeName: 'vol2', clusterName: 'abc2', storageType: 'default', averageSize: '100 GB', rate: '₹5 /hr/gb', totalTimeUsed: '10 hrs', credits: 5000 },
 ];
 const k8sVolumesTotal = 8500;
 
@@ -915,7 +915,7 @@ export default function UsageMetricsPage() {
                     <td className='px-3 py-2'>{row.flavor}</td>
                     <td className='px-3 py-2'>{row.time}</td>
                     <td className='px-3 py-2'>{row.rate}</td>
-                    <td className='px-3 py-2 text-right'>
+                    <td className='px-3 py-2 text-right font-semibold'>
                       ₹
                       {row.credits.toLocaleString(undefined, {
                         minimumFractionDigits: 2,
@@ -980,7 +980,7 @@ export default function UsageMetricsPage() {
                     <td className='px-3 py-2'>{row.time}</td>
                     <td className='px-3 py-2'>{row.size}</td>
                     <td className='px-3 py-2'>{row.rate}</td>
-                    <td className='px-3 py-2 text-right'>
+                    <td className='px-3 py-2 text-right font-semibold'>
                       ₹
                       {row.credits.toLocaleString(undefined, {
                         minimumFractionDigits: 2,
@@ -2677,15 +2677,15 @@ export default function UsageMetricsPage() {
                       </AccordionTrigger>
                       <AccordionContent className='px-4 pb-4'>
                         <div className='rounded-md border mt-2'>
-                          <table className='min-w-full text-sm'>
+                          <table className='min-w-full text-sm table-fixed'>
                             <thead>
                               <tr className='bg-muted'>
-                                <th className='px-3 py-2 text-left text-muted-foreground font-medium'>Name</th>
-                                <th className='px-3 py-2 text-left text-muted-foreground font-medium'>Flavour</th>
-                                <th className='px-3 py-2 text-left text-muted-foreground font-medium'>VM Count</th>
-                                <th className='px-3 py-2 text-left text-muted-foreground font-medium'>Rate</th>
-                                <th className='px-3 py-2 text-left text-muted-foreground font-medium'>Time Used</th>
-                                <th className='px-3 py-2 text-right text-muted-foreground font-medium'>Credits</th>
+                                <th className='px-3 py-2 text-left text-muted-foreground font-medium w-1/6'>Name</th>
+                                <th className='px-3 py-2 text-left text-muted-foreground font-medium w-1/6'>Flavour</th>
+                                <th className='px-3 py-2 text-center text-muted-foreground font-medium w-1/6'>VM Count</th>
+                                <th className='px-3 py-2 text-left text-muted-foreground font-medium w-1/6'>Rate</th>
+                                <th className='px-3 py-2 text-center text-muted-foreground font-medium w-1/6'>Time Used</th>
+                                <th className='px-3 py-2 text-right text-muted-foreground font-medium w-1/6'>Credits</th>
                               </tr>
                             </thead>
                             <tbody>
@@ -2695,10 +2695,10 @@ export default function UsageMetricsPage() {
                                   <tr key={idx} className='border-b transition-colors hover:bg-gray-50/40'>
                                     <td className='px-3 py-2'>{nodePool.nodePoolName}</td>
                                     <td className='px-3 py-2'>{nodePool.instanceFlavour}</td>
-                                    <td className='px-3 py-2'>{nodePool.desiredVMCount}</td>
+                                    <td className='px-3 py-2 text-center'>{nodePool.desiredVMCount}</td>
                                     <td className='px-3 py-2'>{nodePool.rate}</td>
-                                    <td className='px-3 py-2'>{nodePool.totalTimeUsed}</td>
-                                    <td className='px-3 py-2 text-right'>₹{nodePool.credits.toLocaleString()}</td>
+                                    <td className='px-3 py-2 text-center'>{nodePool.totalTimeUsed}</td>
+                                    <td className='px-3 py-2 text-right font-semibold'>₹{nodePool.credits.toLocaleString()}</td>
                                   </tr>
                                 ))}
                             </tbody>
@@ -2730,15 +2730,15 @@ export default function UsageMetricsPage() {
                       </AccordionTrigger>
                       <AccordionContent className='px-4 pb-4'>
                         <div className='rounded-md border mt-2'>
-                          <table className='min-w-full text-sm'>
+                          <table className='min-w-full text-sm table-fixed'>
                             <thead>
                               <tr className='bg-muted'>
-                                <th className='px-3 py-2 text-left text-muted-foreground font-medium'>Name</th>
-                                <th className='px-3 py-2 text-left text-muted-foreground font-medium'>Type</th>
-                                <th className='px-3 py-2 text-left text-muted-foreground font-medium'>Size</th>
-                                <th className='px-3 py-2 text-left text-muted-foreground font-medium'>Rate</th>
-                                <th className='px-3 py-2 text-left text-muted-foreground font-medium'>Time Used</th>
-                                <th className='px-3 py-2 text-right text-muted-foreground font-medium'>Credits</th>
+                                <th className='px-3 py-2 text-left text-muted-foreground font-medium w-1/6'>Name</th>
+                                <th className='px-3 py-2 text-left text-muted-foreground font-medium w-1/6'>Type</th>
+                                <th className='px-3 py-2 text-left text-muted-foreground font-medium w-1/6'>Size</th>
+                                <th className='px-3 py-2 text-left text-muted-foreground font-medium w-1/6'>Rate</th>
+                                <th className='px-3 py-2 text-center text-muted-foreground font-medium w-1/6'>Time Used</th>
+                                <th className='px-3 py-2 text-right text-muted-foreground font-medium w-1/6'>Credits</th>
                               </tr>
                             </thead>
                             <tbody>
@@ -2750,8 +2750,8 @@ export default function UsageMetricsPage() {
                                     <td className='px-3 py-2'>{volume.storageType}</td>
                                     <td className='px-3 py-2'>{volume.averageSize}</td>
                                     <td className='px-3 py-2'>{volume.rate}</td>
-                                    <td className='px-3 py-2'>{volume.totalTimeUsed}</td>
-                                    <td className='px-3 py-2 text-right'>₹{volume.credits.toLocaleString()}</td>
+                                    <td className='px-3 py-2 text-center'>{volume.totalTimeUsed}</td>
+                                    <td className='px-3 py-2 text-right font-semibold'>₹{volume.credits.toLocaleString()}</td>
                                   </tr>
                                 ))}
                             </tbody>
@@ -2783,15 +2783,15 @@ export default function UsageMetricsPage() {
                       </AccordionTrigger>
                       <AccordionContent className='px-4 pb-4'>
                         <div className='rounded-md border mt-2'>
-                          <table className='min-w-full text-sm'>
+                          <table className='min-w-full text-sm table-fixed'>
                             <thead>
                               <tr className='bg-muted'>
-                                <th className='px-3 py-2 text-left text-muted-foreground font-medium'>Name</th>
-                                <th className='px-3 py-2 text-left text-muted-foreground font-medium'>Type</th>
-                                <th className='px-3 py-2 text-left text-muted-foreground font-medium'>Base Charge</th>
-                                <th className='px-3 py-2 text-left text-muted-foreground font-medium'>Data Processed</th>
-                                <th className='px-3 py-2 text-left text-muted-foreground font-medium'>Data Rate</th>
-                                <th className='px-3 py-2 text-right text-muted-foreground font-medium'>Credits</th>
+                                <th className='px-3 py-2 text-left text-muted-foreground font-medium w-1/6'>Name</th>
+                                <th className='px-3 py-2 text-left text-muted-foreground font-medium w-1/6'>Type</th>
+                                <th className='px-3 py-2 text-right text-muted-foreground font-medium w-1/6'>Base Charge</th>
+                                <th className='px-3 py-2 text-center text-muted-foreground font-medium w-1/6'>Data Processed</th>
+                                <th className='px-3 py-2 text-right text-muted-foreground font-medium w-1/6'>Data Rate</th>
+                                <th className='px-3 py-2 text-right text-muted-foreground font-medium w-1/6'>Credits</th>
                               </tr>
                             </thead>
                             <tbody>
@@ -2801,10 +2801,10 @@ export default function UsageMetricsPage() {
                                   <tr key={idx} className='border-b transition-colors hover:bg-gray-50/40'>
                                     <td className='px-3 py-2'>{loadBalancer.lbName}</td>
                                     <td className='px-3 py-2'>{loadBalancer.lbType}</td>
-                                    <td className='px-3 py-2'>{loadBalancer.baseCharge}</td>
-                                    <td className='px-3 py-2'>{loadBalancer.totalDataProcessed}</td>
-                                    <td className='px-3 py-2'>{loadBalancer.dataProcessingCharges}</td>
-                                    <td className='px-3 py-2 text-right'>₹{loadBalancer.credits.toLocaleString()}</td>
+                                    <td className='px-3 py-2 text-right'>{loadBalancer.baseCharge}</td>
+                                    <td className='px-3 py-2 text-center'>{loadBalancer.totalDataProcessed}</td>
+                                    <td className='px-3 py-2 text-right'>{loadBalancer.dataProcessingCharges}</td>
+                                    <td className='px-3 py-2 text-right font-semibold'>₹{loadBalancer.credits.toLocaleString()}</td>
                                   </tr>
                                 ))}
                             </tbody>
@@ -2836,13 +2836,13 @@ export default function UsageMetricsPage() {
                       </AccordionTrigger>
                       <AccordionContent className='px-4 pb-4'>
                         <div className='rounded-md border mt-2'>
-                          <table className='min-w-full text-sm'>
+                          <table className='min-w-full text-sm table-fixed'>
                             <thead>
                               <tr className='bg-muted'>
-                                <th className='px-3 py-2 text-left text-muted-foreground font-medium'>IP Address</th>
-                                <th className='px-3 py-2 text-left text-muted-foreground font-medium'>Rate</th>
-                                <th className='px-3 py-2 text-left text-muted-foreground font-medium'>Time Used</th>
-                                <th className='px-3 py-2 text-right text-muted-foreground font-medium'>Credits</th>
+                                <th className='px-3 py-2 text-left text-muted-foreground font-medium w-1/4'>IP Address</th>
+                                <th className='px-3 py-2 text-left text-muted-foreground font-medium w-1/4'>Rate</th>
+                                <th className='px-3 py-2 text-center text-muted-foreground font-medium w-1/4'>Time Used</th>
+                                <th className='px-3 py-2 text-right text-muted-foreground font-medium w-1/4'>Credits</th>
                               </tr>
                             </thead>
                             <tbody>
@@ -2852,8 +2852,8 @@ export default function UsageMetricsPage() {
                                   <tr key={idx} className='border-b transition-colors hover:bg-gray-50/40'>
                                     <td className='px-3 py-2'>{ipAddress.ipAddress}</td>
                                     <td className='px-3 py-2'>{ipAddress.rate}</td>
-                                    <td className='px-3 py-2'>{ipAddress.totalTimeUsed}</td>
-                                    <td className='px-3 py-2 text-right'>
+                                    <td className='px-3 py-2 text-center'>{ipAddress.totalTimeUsed}</td>
+                                    <td className='px-3 py-2 text-right font-semibold'>
                                       ₹{ipAddress.credits.toLocaleString(undefined, {
                                         minimumFractionDigits: 2,
                                         maximumFractionDigits: 2,
