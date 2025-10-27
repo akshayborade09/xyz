@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, Fragment } from 'react';
+import { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import { PageLayout } from '@/components/page-layout';
 import { VercelTabs } from '@/components/ui/vercel-tabs';
@@ -34,7 +34,6 @@ import {
   ArrowDownTrayIcon,
   CalendarIcon,
   ChevronDownIcon,
-  ChevronRightIcon,
   FunnelIcon,
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
@@ -347,25 +346,6 @@ const mockNodePools = [
 ];
 const nodePoolsTotal = 130;
 
-// Mock VM data mapped by node pool name for drawer expansion
-type VMRow = {
-  vmName: string;
-  status: 'Running' | 'Stopped' | 'Pending';
-  totalTimeUsed: string;
-  rate: string;
-  credits: number;
-};
-
-const mockVMsByNodePool: Record<string, VMRow[]> = {
-  xyz: [
-    { vmName: 'xyz-vm-01', status: 'Running', totalTimeUsed: '6 hrs', rate: '₹0.5 /hr', credits: 3 },
-    { vmName: 'xyz-vm-02', status: 'Stopped', totalTimeUsed: '2 hrs', rate: '₹0.5 /hr', credits: 1 },
-  ],
-  xyz2: [
-    { vmName: 'xyz2-vm-01', status: 'Running', totalTimeUsed: '10 hrs', rate: '₹1 /hr', credits: 10 },
-  ],
-};
-
 const mockK8sVolumes = [
   { volumeName: 'vol1', clusterName: 'abc', storageType: 'default', averageSize: '70 GB', rate: '₹5 /hr/gb', totalTimeUsed: '10 hrs', credits: 3500 },
   { volumeName: 'vol2', clusterName: 'abc2', storageType: 'default', averageSize: '100 GB', rate: '₹5 /hr/gb', totalTimeUsed: '10 hrs', credits: 5000 },
@@ -481,15 +461,13 @@ export default function UsageMetricsPage() {
 
   // State for nested tabs
   const [coreTab, setCoreTab] = useState('compute');
-  const [kubernetesTab, setKubernetesTab] = useState('controlPlane');
+  // Removed top-level Kubernetes tab
   const [studioTab, setStudioTab] = useState('model');
   const [solutionsTab, setSolutionsTab] = useState('bhashik');
 
   // State for cluster details drawer
   const [clusterDrawerOpen, setClusterDrawerOpen] = useState(false);
   const [selectedCluster, setSelectedCluster] = useState<any>(null);
-  // Expanded node pools for VM toggle in drawer
-  const [expandedNodePools, setExpandedNodePools] = useState<Record<string, boolean>>({});
 
   // Apply demo user filtering to all billing data
   const filteredPieData = filterBillingDataForUser(pieData);
@@ -522,10 +500,6 @@ export default function UsageMetricsPage() {
   const handleViewClusterDetails = (cluster: any) => {
     setSelectedCluster(cluster);
     setClusterDrawerOpen(true);
-  };
-
-  const toggleNodePoolExpand = (nodePoolName: string) => {
-    setExpandedNodePools((prev) => ({ ...prev, [nodePoolName]: !prev[nodePoolName] }));
   };
 
   useEffect(() => {
@@ -1115,7 +1089,7 @@ export default function UsageMetricsPage() {
                   <th className='px-3 py-2 text-center text-muted-foreground font-medium w-1/6'>
                     Total Time Used
                   </th>
-                  <th className='px-3 py-2 text-right text-muted-foreground font-medium w-1/6 rounded-tr-md whitespace-nowrap'>
+                  <th className='px-3 py-2 text-right text-muted-foreground font-medium w-1/6 rounded-tr-md'>
                     Total Credits Used
                   </th>
                 </tr>
@@ -1673,7 +1647,7 @@ export default function UsageMetricsPage() {
                   <th className='px-3 py-2 text-center text-muted-foreground font-medium w-1/6'>
                     Total Time Used
                   </th>
-                  <th className='px-3 py-2 text-right text-muted-foreground font-medium w-1/6 rounded-tr-md whitespace-nowrap'>
+                  <th className='px-3 py-2 text-right text-muted-foreground font-medium w-1/6 rounded-tr-md'>
                     Total Credits Used
                   </th>
                 </tr>
@@ -1749,7 +1723,7 @@ export default function UsageMetricsPage() {
                   <th className='px-3 py-2 text-center text-muted-foreground font-medium w-1/7'>
                     Total Time Used
                   </th>
-                  <th className='px-3 py-2 text-right text-muted-foreground font-medium rounded-tr-md w-1/7 whitespace-nowrap'>
+                  <th className='px-3 py-2 text-right text-muted-foreground font-medium rounded-tr-md w-1/7'>
                     Total Credits Used
                   </th>
                 </tr>
@@ -1819,7 +1793,7 @@ export default function UsageMetricsPage() {
                   <th className='px-3 py-2 text-center text-muted-foreground font-medium w-1/7'>
                     Total Time Used
                   </th>
-                  <th className='px-3 py-2 text-right text-muted-foreground font-medium rounded-tr-md w-1/7 whitespace-nowrap'>
+                  <th className='px-3 py-2 text-right text-muted-foreground font-medium rounded-tr-md w-1/7'>
                     Total Credits Used
                   </th>
                 </tr>
@@ -1892,7 +1866,7 @@ export default function UsageMetricsPage() {
                   <th className='px-3 py-2 text-right text-muted-foreground font-medium w-1/8'>
                     Data Processing Charges
                   </th>
-                  <th className='px-3 py-2 text-right text-muted-foreground font-medium rounded-tr-md w-1/8 whitespace-nowrap'>
+                  <th className='px-3 py-2 text-right text-muted-foreground font-medium rounded-tr-md w-1/8'>
                     Total Credits Used
                   </th>
                 </tr>
@@ -1958,7 +1932,7 @@ export default function UsageMetricsPage() {
                   <th className='px-3 py-2 text-center text-muted-foreground font-medium w-1/5'>
                     Total Time Used
                   </th>
-                  <th className='px-3 py-2 text-right text-muted-foreground font-medium rounded-tr-md w-1/5 whitespace-nowrap'>
+                  <th className='px-3 py-2 text-right text-muted-foreground font-medium rounded-tr-md w-1/5'>
                     Total Credits Used
                   </th>
                 </tr>
@@ -2629,7 +2603,7 @@ export default function UsageMetricsPage() {
 
         {/* Cluster Details Drawer */}
         <Sheet open={clusterDrawerOpen} onOpenChange={setClusterDrawerOpen}>
-          <SheetContent className='w-full sm:max-w-3xl overflow-y-auto'>
+          <SheetContent className='w-full sm:max-w-2xl overflow-y-auto'>
             {selectedCluster && (
               <div className='space-y-6'>
                 {/* Header Section */}
@@ -2781,69 +2755,14 @@ export default function UsageMetricsPage() {
                               {filteredMockNodePools
                                 .filter((np: any) => np.clusterName === selectedCluster.clusterName)
                                 .map((nodePool: any, idx: number) => (
-                                  <Fragment key={`${nodePool.nodePoolName}-${idx}`}>
-                                  <tr key={`${idx}-np`} className='border-b transition-colors hover:bg-gray-50/40'>
-                                    <td className='px-3 py-2'>
-                                      <button
-                                        onClick={() => toggleNodePoolExpand(nodePool.nodePoolName)}
-                                        className='flex items-center gap-2 text-primary font-medium underline cursor-pointer'
-                                      >
-                                        {expandedNodePools[nodePool.nodePoolName] ? (
-                                          <ChevronDownIcon className='h-4 w-4' />
-                                        ) : (
-                                          <ChevronRightIcon className='h-4 w-4' />
-                                        )}
-                                        {nodePool.nodePoolName}
-                                      </button>
-                                    </td>
+                                  <tr key={idx} className='border-b transition-colors hover:bg-gray-50/40'>
+                                    <td className='px-3 py-2'>{nodePool.nodePoolName}</td>
                                     <td className='px-3 py-2'>{nodePool.instanceFlavour}</td>
                                     <td className='px-3 py-2 text-center'>{nodePool.desiredVMCount}</td>
                                     <td className='px-3 py-2'>{nodePool.rate}</td>
                                     <td className='px-3 py-2 text-center'>{nodePool.totalTimeUsed}</td>
                                     <td className='px-3 py-2 text-right font-semibold'>₹{nodePool.credits.toLocaleString()}</td>
                                   </tr>
-                                  {expandedNodePools[nodePool.nodePoolName] && (
-                                    <tr key={`${idx}-vm`} className='bg-muted/30'>
-                                      <td colSpan={6} className='p-0'>
-                                        <div className='p-3'>
-                                          <div className='rounded-md border'>
-                                            <table className='min-w-full text-sm table-fixed'>
-                                              <colgroup>
-                                                <col className='w-1/5' />
-                                                <col className='w-1/5' />
-                                                <col className='w-1/5' />
-                                                <col className='w-1/5' />
-                                                <col className='w-1/5' />
-                                              </colgroup>
-                                              <thead>
-                                                <tr className='bg-muted'>
-                                                  <th className='px-3 py-2 text-left text-muted-foreground font-medium w-1/5'>VM name</th>
-                                                  <th className='px-3 py-2 text-left text-muted-foreground font-medium w-1/5'>Status</th>
-                                                  <th className='px-3 py-2 text-center text-muted-foreground font-medium w-1/5 whitespace-nowrap'>Total Time Used</th>
-                                                  <th className='px-3 py-2 text-left text-muted-foreground font-medium w-1/5'>Rate</th>
-                                                  <th className='px-3 py-2 text-right text-muted-foreground font-medium w-1/5 whitespace-nowrap'>Total Credits Used</th>
-                                                </tr>
-                                              </thead>
-                                              <tbody>
-                                                {(mockVMsByNodePool[nodePool.nodePoolName] || []).map((vm, vmIdx) => (
-                                                  <tr key={vmIdx} className='border-b'>
-                                                    <td className='px-3 py-2 w-1/5'>{vm.vmName}</td>
-                                                    <td className='px-3 py-2 w-1/5'>
-                                                      <StatusBadge status={vm.status} />
-                                                    </td>
-                                                    <td className='px-3 py-2 text-center w-1/5 whitespace-nowrap'>{vm.totalTimeUsed}</td>
-                                                    <td className='px-3 py-2 w-1/5'>{vm.rate}</td>
-                                                    <td className='px-3 py-2 text-right font-semibold w-1/5'>₹{vm.credits.toLocaleString()}</td>
-                                                  </tr>
-                                                ))}
-                                              </tbody>
-                                            </table>
-                                          </div>
-                                        </div>
-                                      </td>
-                                    </tr>
-                                  )}
-                                  </Fragment>
                                 ))}
                             </tbody>
                           </table>
