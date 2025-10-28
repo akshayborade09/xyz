@@ -2740,90 +2740,106 @@ export default function UsageMetricsPage() {
                         </div>
                       </AccordionTrigger>
                       <AccordionContent className='px-4 pb-4'>
-                        {/* Column Headers */}
-                        <div className='flex items-center gap-4 px-4 py-3 bg-muted rounded-md text-sm font-medium text-muted-foreground mb-2'>
-                          <div className='w-4'></div>
-                          <div className='grid grid-cols-6 gap-4 flex-1'>
-                            <div className='text-left'>Name</div>
-                            <div className='text-left'>Flavour</div>
-                            <div className='text-center'>VM Count</div>
-                            <div className='text-left'>Rate</div>
-                            <div className='text-center'>Time Used</div>
-                            <div className='text-right'>Credits</div>
-                          </div>
+                        <div className='rounded-md border mt-2'>
+                          <table className='min-w-full text-sm table-fixed'>
+                            <thead>
+                              <tr className='bg-muted'>
+                                <th className='px-3 py-2 text-left text-muted-foreground font-medium w-[40px]'></th>
+                                <th className='px-3 py-2 text-left text-muted-foreground font-medium w-1/6'>Name</th>
+                                <th className='px-3 py-2 text-left text-muted-foreground font-medium w-1/6'>Flavour</th>
+                                <th className='px-3 py-2 text-center text-muted-foreground font-medium w-1/6'>VM Count</th>
+                                <th className='px-3 py-2 text-left text-muted-foreground font-medium w-1/6'>Rate</th>
+                                <th className='px-3 py-2 text-center text-muted-foreground font-medium w-1/6'>Time Used</th>
+                                <th className='px-3 py-2 text-right text-muted-foreground font-medium w-1/6'>Credits</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {filteredMockNodePools
+                                .filter((np: any) => np.clusterName === selectedCluster.clusterName)
+                                .map((nodePool: any, idx: number) => {
+                                  const isExpanded = expandedNodePools.has(idx);
+                                  return (
+                                    <React.Fragment key={idx}>
+                                      <tr className='border-b transition-colors hover:bg-gray-50/40'>
+                                        <td className='px-3 py-2'>
+                                          <button
+                                            onClick={() => toggleNodePool(idx)}
+                                            className='p-0 hover:bg-transparent flex items-center'
+                                          >
+                                            <ChevronRightIcon 
+                                              className={`h-4 w-4 transition-transform duration-200 ${isExpanded ? 'rotate-90' : ''}`}
+                                            />
+                                          </button>
+                                        </td>
+                                        <td className='px-3 py-2 font-semibold'>{nodePool.nodePoolName}</td>
+                                        <td className='px-3 py-2'>{nodePool.instanceFlavour}</td>
+                                        <td className='px-3 py-2 text-center'>{nodePool.desiredVMCount}</td>
+                                        <td className='px-3 py-2'>{nodePool.rate}</td>
+                                        <td className='px-3 py-2 text-center'>{nodePool.totalTimeUsed}</td>
+                                        <td className='px-3 py-2 text-right font-semibold'>₹{nodePool.credits.toLocaleString()}</td>
+                                      </tr>
+                                      {isExpanded && (
+                                        <tr>
+                                          <td colSpan={7} className='p-0 bg-gray-50/50'>
+                                            <div className='px-3 py-2'>
+                                              <div className='rounded-md border bg-white'>
+                                                <table className='min-w-full text-sm'>
+                                                  <thead>
+                                                    <tr className='bg-blue-50'>
+                                                      <th className='px-3 py-2 text-left text-muted-foreground font-medium'>VM Name</th>
+                                                      <th className='px-3 py-2 text-left text-muted-foreground font-medium'>Status</th>
+                                                      <th className='px-3 py-2 text-center text-muted-foreground font-medium'>Total Time Used</th>
+                                                      <th className='px-3 py-2 text-left text-muted-foreground font-medium'>Rate</th>
+                                                      <th className='px-3 py-2 text-right text-muted-foreground font-medium'>Total Credits Used</th>
+                                                    </tr>
+                                                  </thead>
+                                                  <tbody>
+                                                    <tr className='border-b transition-colors hover:bg-gray-50/40'>
+                                                      <td className='px-3 py-2'>vm-node-001</td>
+                                                      <td className='px-3 py-2'>
+                                                        <span className='inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800'>
+                                                          Running
+                                                        </span>
+                                                      </td>
+                                                      <td className='px-3 py-2 text-center'>10 hrs</td>
+                                                      <td className='px-3 py-2'>₹3 /hr</td>
+                                                      <td className='px-3 py-2 text-right font-semibold'>₹30.00</td>
+                                                    </tr>
+                                                    <tr className='border-b transition-colors hover:bg-gray-50/40'>
+                                                      <td className='px-3 py-2'>vm-node-002</td>
+                                                      <td className='px-3 py-2'>
+                                                        <span className='inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800'>
+                                                          Running
+                                                        </span>
+                                                      </td>
+                                                      <td className='px-3 py-2 text-center'>10 hrs</td>
+                                                      <td className='px-3 py-2'>₹3 /hr</td>
+                                                      <td className='px-3 py-2 text-right font-semibold'>₹30.00</td>
+                                                    </tr>
+                                                    <tr className='transition-colors hover:bg-gray-50/40'>
+                                                      <td className='px-3 py-2'>vm-node-003</td>
+                                                      <td className='px-3 py-2'>
+                                                        <span className='inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800'>
+                                                          Running
+                                                        </span>
+                                                      </td>
+                                                      <td className='px-3 py-2 text-center'>10 hrs</td>
+                                                      <td className='px-3 py-2'>₹3 /hr</td>
+                                                      <td className='px-3 py-2 text-right font-semibold'>₹30.00</td>
+                                                    </tr>
+                                                  </tbody>
+                                                </table>
+                                              </div>
+                                            </div>
+                                          </td>
+                                        </tr>
+                                      )}
+                                    </React.Fragment>
+                                  );
+                                })}
+                            </tbody>
+                          </table>
                         </div>
-                        
-                        <Accordion type='multiple' defaultValue={[]} className='space-y-2'>
-                          {filteredMockNodePools
-                            .filter((np: any) => np.clusterName === selectedCluster.clusterName)
-                            .map((nodePool: any, idx: number) => (
-                              <AccordionItem key={idx} value={`nodepool-${idx}`} className='border rounded-lg'>
-                                <AccordionTrigger className='px-4 hover:no-underline [&[data-state=open]>div>svg]:rotate-90 [&>svg]:hidden'>
-                                  <div className='flex items-center gap-4 w-full pr-4 text-sm'>
-                                    <ChevronRightIcon className='h-4 w-4 transition-transform duration-200' />
-                                    <div className='grid grid-cols-6 gap-4 flex-1'>
-                                      <div className='text-left font-semibold'>{nodePool.nodePoolName}</div>
-                                      <div className='text-left text-muted-foreground'>{nodePool.instanceFlavour}</div>
-                                      <div className='text-center text-muted-foreground'>{nodePool.desiredVMCount}</div>
-                                      <div className='text-left text-muted-foreground'>{nodePool.rate}</div>
-                                      <div className='text-center text-muted-foreground'>{nodePool.totalTimeUsed}</div>
-                                      <div className='text-right font-semibold'>₹{nodePool.credits.toLocaleString()}</div>
-                                    </div>
-                                  </div>
-                                </AccordionTrigger>
-                                <AccordionContent className='px-4 pb-4'>
-                                  <div className='rounded-md border bg-white mt-2'>
-                                    <table className='min-w-full text-sm'>
-                                      <thead>
-                                        <tr className='bg-blue-50'>
-                                          <th className='px-3 py-2 text-left text-muted-foreground font-medium'>VM Name</th>
-                                          <th className='px-3 py-2 text-left text-muted-foreground font-medium'>Status</th>
-                                          <th className='px-3 py-2 text-center text-muted-foreground font-medium'>Total Time Used</th>
-                                          <th className='px-3 py-2 text-left text-muted-foreground font-medium'>Rate</th>
-                                          <th className='px-3 py-2 text-right text-muted-foreground font-medium'>Total Credits Used</th>
-                                        </tr>
-                                      </thead>
-                                      <tbody>
-                                        <tr className='border-b transition-colors hover:bg-gray-50/40'>
-                                          <td className='px-3 py-2'>vm-node-001</td>
-                                          <td className='px-3 py-2'>
-                                            <span className='inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800'>
-                                              Running
-                                            </span>
-                                          </td>
-                                          <td className='px-3 py-2 text-center'>10 hrs</td>
-                                          <td className='px-3 py-2'>₹3 /hr</td>
-                                          <td className='px-3 py-2 text-right font-semibold'>₹30.00</td>
-                                        </tr>
-                                        <tr className='border-b transition-colors hover:bg-gray-50/40'>
-                                          <td className='px-3 py-2'>vm-node-002</td>
-                                          <td className='px-3 py-2'>
-                                            <span className='inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800'>
-                                              Running
-                                            </span>
-                                          </td>
-                                          <td className='px-3 py-2 text-center'>10 hrs</td>
-                                          <td className='px-3 py-2'>₹3 /hr</td>
-                                          <td className='px-3 py-2 text-right font-semibold'>₹30.00</td>
-                                        </tr>
-                                        <tr className='transition-colors hover:bg-gray-50/40'>
-                                          <td className='px-3 py-2'>vm-node-003</td>
-                                          <td className='px-3 py-2'>
-                                            <span className='inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800'>
-                                              Running
-                                            </span>
-                                          </td>
-                                          <td className='px-3 py-2 text-center'>10 hrs</td>
-                                          <td className='px-3 py-2'>₹3 /hr</td>
-                                          <td className='px-3 py-2 text-right font-semibold'>₹30.00</td>
-                                        </tr>
-                                      </tbody>
-                                    </table>
-                                  </div>
-                                </AccordionContent>
-                              </AccordionItem>
-                            ))}
-                        </Accordion>
                       </AccordionContent>
                     </AccordionItem>
                   )}
