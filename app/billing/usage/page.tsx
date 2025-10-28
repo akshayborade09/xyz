@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import { PageLayout } from '@/components/page-layout';
 import { VercelTabs } from '@/components/ui/vercel-tabs';
