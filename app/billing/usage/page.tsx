@@ -2745,7 +2745,7 @@ export default function UsageMetricsPage() {
                             .filter((np: any) => np.clusterName === selectedCluster.clusterName)
                             .map((nodePool: any, idx: number) => (
                               <AccordionItem key={idx} value={`nodepool-${idx}`} className='border rounded-lg'>
-                                <AccordionTrigger className='px-4 hover:no-underline [&[data-state=open]>div>svg]:rotate-90'>
+                                <AccordionTrigger className='px-4 hover:no-underline [&[data-state=open]>div>svg]:rotate-90 [&>svg]:hidden'>
                                   <div className='flex items-center gap-4 w-full pr-4 text-sm'>
                                     <ChevronRightIcon className='h-4 w-4 transition-transform duration-200' />
                                     <div className='grid grid-cols-6 gap-4 flex-1'>
