@@ -273,10 +273,16 @@ export function ExtractTextPlayground({ model, selectedModel, modelData, onModel
                               <SelectValue placeholder='Select' />
                             </SelectTrigger>
                             <SelectContent>
-                              <SelectItem value='English'>English</SelectItem>
-                              <SelectItem value='Hindi'>Hindi</SelectItem>
-                              <SelectItem value='Tamil'>Tamil</SelectItem>
-                              <SelectItem value='Bengali'>Bengali</SelectItem>
+                              {isPII ? (
+                                <SelectItem value='English'>English</SelectItem>
+                              ) : (
+                                <>
+                                  <SelectItem value='English'>English</SelectItem>
+                                  <SelectItem value='Hindi'>Hindi</SelectItem>
+                                  <SelectItem value='Tamil'>Tamil</SelectItem>
+                                  <SelectItem value='Bengali'>Bengali</SelectItem>
+                                </>
+                              )}
                             </SelectContent>
                           </Select>
                         </div>

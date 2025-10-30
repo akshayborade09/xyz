@@ -40,7 +40,7 @@ export function TextExtractionPlayground({
   const [extractedText, setExtractedText] = useState<string | null>(null);
   const [isExtracting, setIsExtracting] = useState(false);
   const [sourceLanguage, setSourceLanguage] = useState('english');
-  const [targetLanguage, setTargetLanguage] = useState('hindi');
+  const [entityType, setEntityType] = useState('NER');
   const [isInputFocused, setIsInputFocused] = useState(false);
   const [totalCost, setTotalCost] = useState(0);
   const [showCostShimmer, setShowCostShimmer] = useState(false);
@@ -97,7 +97,7 @@ export function TextExtractionPlayground({
       setShowCostShimmer(true);
       setTimeout(() => setShowCostShimmer(false), 2000);
 
-      const output = `Extraction (${sourceLanguage} → ${targetLanguage})\n\n` +
+      const output = `Extraction (${entityType} in ${sourceLanguage})\n\n` +
         `Input Preview:\n${inputText.slice(0, 200)}${inputText.length > 200 ? '…' : ''}\n\n` +
         `Result:\n- Sample output for demo purposes.`;
       setExtractedText(output);
@@ -267,22 +267,21 @@ export function TextExtractionPlayground({
                     <div className='flex items-end gap-3'>
                       <div className='flex-1 grid grid-cols-2 gap-3'>
                         <div className='space-y-1.5'>
-                          <label className='text-xs font-medium text-gray-600'>Source Language</label>
-                          <Select value={sourceLanguage} onValueChange={setSourceLanguage}>
+                          <label className='text-xs font-medium text-gray-600'>Entity Type</label>
+                          <Select value={entityType} onValueChange={setEntityType}>
                             <SelectTrigger onFocus={() => setIsInputFocused(true)} onBlur={() => setIsInputFocused(false)}>
                               <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
-                              {languages.map(lang => (
-                                <SelectItem key={lang.value} value={lang.value}>{lang.label}</SelectItem>
-                              ))}
+                              <SelectItem value='NER'>Named Entity Recognition (NER)</SelectItem>
+                              <SelectItem value='PII'>Personally Identifiable Information (PII)</SelectItem>
                             </SelectContent>
                           </Select>
                         </div>
 
                         <div className='space-y-1.5'>
-                          <label className='text-xs font-medium text-gray-600'>Target Language</label>
-                          <Select value={targetLanguage} onValueChange={setTargetLanguage}>
+                          <label className='text-xs font-medium text-gray-600'>Source Language</label>
+                          <Select value={sourceLanguage} onValueChange={setSourceLanguage}>
                             <SelectTrigger onFocus={() => setIsInputFocused(true)} onBlur={() => setIsInputFocused(false)}>
                               <SelectValue />
                             </SelectTrigger>
