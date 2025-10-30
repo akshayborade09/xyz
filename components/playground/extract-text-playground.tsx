@@ -113,13 +113,17 @@ export function ExtractTextPlayground({ model, selectedModel, modelData, onModel
             <div className={`rounded-lg border p-4 space-y-4 ${model.cardGradient}`}>
               {/* Pricing */}
               <div className='space-y-1'>
-                <div className='flex items-center justify-between'>
-                  <span className='text-base font-semibold text-gray-900'>₹{model.inputPrice}</span>
-                  <span className='text-base font-semibold text-gray-900'>₹{model.outputPrice}</span>
+                <div className={`flex items-center ${model.outputPrice ? 'justify-between' : 'justify-start'}`}>
+                  <span className='text-base font-semibold text-gray-900'>{model.inputPrice}</span>
+                  {model.outputPrice ? (
+                    <span className='text-base font-semibold text-gray-900'>{model.outputPrice}</span>
+                  ) : null}
                 </div>
-                <div className='flex items-center justify-between text-xs text-gray-500'>
-                  <span>Per Image</span>
-                  <span>Output</span>
+                <div className={`flex items-center text-xs text-gray-500 ${model.outputPrice ? 'justify-between' : 'justify-start'}`}>
+                  <span>{(model as any).inputLabel ?? 'per Document'}</span>
+                  {model.outputPrice ? (
+                    <span>{(model as any).outputLabel ?? 'per OCR'}</span>
+                  ) : null}
                 </div>
               </div>
 

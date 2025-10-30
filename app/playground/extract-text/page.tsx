@@ -11,6 +11,8 @@ import { CreateApiKeyModal } from '@/components/modals/create-api-key-modal';
 export default function ExtractTextPlaygroundPage() {
   const [selectedModel, setSelectedModel] = useState('extract-text');
   const router = useRouter();
+  const [isSetupCodeModalOpen, setIsSetupCodeModalOpen] = useState(false);
+  const [isCreateApiKeyModalOpen, setIsCreateApiKeyModalOpen] = useState(false);
 
   const modelData = {
     'extract-text': {
@@ -20,6 +22,8 @@ export default function ExtractTextPlaygroundPage() {
       license: 'Proprietary',
       inputPrice: '₹99.60',
       outputPrice: '₹398.4',
+      inputLabel: 'per Document',
+      outputLabel: 'per OCR',
       description: 'Seamlessly extract text from documents, scanned files and images',
       tags: ['OCR', 'PDF/Image', 'Multilingual'],
       cardGradient: 'bg-gradient-to-bl from-slate-100/50 via-white/80 to-white border-slate-200/60',
@@ -32,6 +36,7 @@ export default function ExtractTextPlaygroundPage() {
       license: 'Proprietary',
       inputPrice: '₹1726.40',
       outputPrice: '',
+      inputLabel: 'per Document',
       description: 'Extract key information from your unstructured data',
       tags: ['Custom schema', 'Entities', 'JSON'],
       cardGradient: 'bg-gradient-to-bl from-indigo-100/50 via-purple-50/30 to-white border-indigo-200/60',
@@ -44,6 +49,8 @@ export default function ExtractTextPlaygroundPage() {
       license: 'Proprietary',
       inputPrice: '₹166.00',
       outputPrice: '₹531.20',
+      inputLabel: 'per Document',
+      outputLabel: 'per OCR',
       description: 'Upload your file to generate a summary',
       tags: ['Abstractive', 'Configurable length'],
       cardGradient: 'bg-gradient-to-bl from-green-100/50 via-emerald-50/30 to-white border-green-200/60',
@@ -56,6 +63,7 @@ export default function ExtractTextPlaygroundPage() {
       license: 'Proprietary',
       inputPrice: '₹232.40',
       outputPrice: '',
+      inputLabel: 'per Document',
       description: 'Get PII data masked in your documents',
       tags: ['PII', 'GDPR', 'HIPAA'],
       cardGradient: 'bg-gradient-to-bl from-orange-100/40 via-amber-50/30 to-white border-amber-200/60',
@@ -75,6 +83,16 @@ export default function ExtractTextPlaygroundPage() {
       <PageShell
         title='Document Intelligence / Extract Text'
         description='Seamlessly extract text from documents, scanned files and images'
+        headerActions={
+          <div className='flex items-center gap-2'>
+            <Button variant='outline' size='sm' onClick={() => setIsSetupCodeModalOpen(true)}>
+              View code
+            </Button>
+            <Button variant='default' size='sm' onClick={() => setIsCreateApiKeyModalOpen(true)}>
+              Get API key
+            </Button>
+          </div>
+        }
       >
         <ExtractTextPlayground
           model={model}
@@ -90,7 +108,15 @@ export default function ExtractTextPlaygroundPage() {
         />
       </PageShell>
 
-      {/* No header actions or modals required for this playground per spec */}
+      <SetupCodeModal
+        open={isSetupCodeModalOpen}
+        onClose={() => setIsSetupCodeModalOpen(false)}
+        modelId={selectedModel}
+      />
+      <CreateApiKeyModal
+        open={isCreateApiKeyModalOpen}
+        onClose={() => setIsCreateApiKeyModalOpen(false)}
+      />
     </>
   );
 }

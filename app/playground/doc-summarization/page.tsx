@@ -4,10 +4,15 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { PageShell } from '@/components/page-shell';
 import { ExtractTextPlayground } from '@/components/playground/extract-text-playground';
+import { Button } from '@/components/ui/button';
+import { SetupCodeModal } from '@/components/modals/setup-code-modal';
+import { CreateApiKeyModal } from '@/components/modals/create-api-key-modal';
 
 export default function DocSummarizationPlaygroundPage() {
   const [selectedModel, setSelectedModel] = useState('doc-summarization');
   const router = useRouter();
+  const [isSetupCodeModalOpen, setIsSetupCodeModalOpen] = useState(false);
+  const [isCreateApiKeyModalOpen, setIsCreateApiKeyModalOpen] = useState(false);
 
   const modelData = {
     'extract-text': {
@@ -15,10 +20,12 @@ export default function DocSummarizationPlaygroundPage() {
       provider: 'Krutrim',
       modality: 'OCR',
       license: 'Proprietary',
-      inputPrice: '8',
-      outputPrice: '—',
-      description: 'OCR-based text extraction from images',
-      tags: ['OCR', 'Images', 'Text Extraction'],
+      inputPrice: '₹99.60',
+      outputPrice: '₹398.4',
+      description: 'Seamlessly extract text from documents, scanned files and images',
+      tags: ['OCR', 'PDF/Image', 'Multilingual'],
+      inputLabel: 'per Document',
+      outputLabel: 'per OCR',
       cardGradient: 'bg-gradient-to-bl from-slate-100/50 via-white/80 to-white border-slate-200/60',
       logo: null,
     },
@@ -27,10 +34,11 @@ export default function DocSummarizationPlaygroundPage() {
       provider: 'Krutrim',
       modality: 'OCR',
       license: 'Proprietary',
-      inputPrice: '8',
-      outputPrice: '—',
+      inputPrice: '₹1726.40',
+      outputPrice: '',
+      inputLabel: 'per Document',
       description: 'Extract key information from your unstructured data',
-      tags: ['OCR', 'Key-Value', 'Entities'],
+      tags: ['Custom schema', 'Entities', 'JSON'],
       cardGradient: 'bg-gradient-to-bl from-indigo-100/50 via-purple-50/30 to-white border-indigo-200/60',
       logo: null,
     },
@@ -39,10 +47,12 @@ export default function DocSummarizationPlaygroundPage() {
       provider: 'Krutrim',
       modality: 'Summarization',
       license: 'Proprietary',
-      inputPrice: '8',
-      outputPrice: '—',
+      inputPrice: '₹166.00',
+      outputPrice: '₹531.20',
+      inputLabel: 'per Document',
+      outputLabel: 'per OCR',
       description: 'Upload your file to generate a summary',
-      tags: ['Summary', 'Abstractive'],
+      tags: ['Abstractive', 'Configurable length'],
       cardGradient: 'bg-gradient-to-bl from-green-100/50 via-emerald-50/30 to-white border-green-200/60',
       logo: null,
     },
@@ -51,10 +61,11 @@ export default function DocSummarizationPlaygroundPage() {
       provider: 'Krutrim',
       modality: 'PII Masking',
       license: 'Proprietary',
-      inputPrice: '8',
-      outputPrice: '—',
+      inputPrice: '₹232.40',
+      outputPrice: '',
+      inputLabel: 'per Document',
       description: 'Get PII data masked in your documents',
-      tags: ['PII', 'Masking', 'Redaction'],
+      tags: ['PII', 'GDPR', 'HIPAA'],
       cardGradient: 'bg-gradient-to-bl from-orange-100/40 via-amber-50/30 to-white border-amber-200/60',
       logo: null,
     },
@@ -70,6 +81,12 @@ export default function DocSummarizationPlaygroundPage() {
     <PageShell
       title='Document Intelligence / Document Summarization'
       description='Upload your file to generate a summary'
+      headerActions={
+        <div className='flex items-center gap-2'>
+          <Button variant='outline' size='sm' onClick={() => setIsSetupCodeModalOpen(true)}>View code</Button>
+          <Button variant='default' size='sm' onClick={() => setIsCreateApiKeyModalOpen(true)}>Get API key</Button>
+        </div>
+      }
     >
       <ExtractTextPlayground
         model={model}
@@ -83,6 +100,8 @@ export default function DocSummarizationPlaygroundPage() {
           if (m === 'pii-masking') router.push('/playground/pii-masking');
         }}
       />
+      <SetupCodeModal open={isSetupCodeModalOpen} onClose={() => setIsSetupCodeModalOpen(false)} modelId={selectedModel} />
+      <CreateApiKeyModal open={isCreateApiKeyModalOpen} onClose={() => setIsCreateApiKeyModalOpen(false)} />
     </PageShell>
   );
 }

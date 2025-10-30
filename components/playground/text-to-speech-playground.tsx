@@ -227,13 +227,17 @@ export function TextToSpeechPlayground({
             <div className={`rounded-lg border p-4 space-y-4 ${model.cardGradient}`}>
               {/* Pricing */}
               <div className='space-y-1'>
-                <div className='flex items-center justify-between'>
-                  <span className='text-base font-semibold text-gray-900'>₹{model.inputPrice}</span>
-                  <span className='text-base font-semibold text-gray-900'>₹{model.outputPrice}</span>
+                <div className={`flex items-center ${model.outputPrice ? 'justify-between' : 'justify-start'}`}>
+                  <span className='text-base font-semibold text-gray-900'>{model.inputPrice}</span>
+                  {model.outputPrice ? (
+                    <span className='text-base font-semibold text-gray-900'>{model.outputPrice}</span>
+                  ) : null}
                 </div>
-                <div className='flex items-center justify-between text-xs text-gray-500'>
-                  <span>Per 1M Characters</span>
-                  <span>Output</span>
+                <div className={`flex items-center text-xs text-gray-500 ${model.outputPrice ? 'justify-between' : 'justify-start'}`}>
+                  <span>{(model as any).inputLabel ?? 'per 1M input characters'}</span>
+                  {model.outputPrice ? (
+                    <span>{(model as any).outputLabel ?? 'output'}</span>
+                  ) : null}
                 </div>
               </div>
 

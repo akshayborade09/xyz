@@ -4,6 +4,9 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { PageShell } from '@/components/page-shell';
 import { TextSummarizationPlayground } from '@/components/playground/text-summarization-playground';
+import { Button } from '@/components/ui/button';
+import { SetupCodeModal } from '@/components/modals/setup-code-modal';
+import { CreateApiKeyModal } from '@/components/modals/create-api-key-modal';
 import { Languages, SearchCheck, FileText, Heart, ScrollText } from 'lucide-react';
 
 const modelData = {
@@ -18,6 +21,7 @@ const modelData = {
     tags: ['Neural', 'Batch & streaming'],
     cardGradient: 'bg-gradient-to-bl from-slate-100/50 via-white/80 to-white border-slate-200/60',
     logo: <Languages className='h-5 w-5' />,
+    inputLabel: 'per 1M input characters',
   },
   'language-detection': {
     name: 'Bhashik / Language Detection',
@@ -30,6 +34,7 @@ const modelData = {
     tags: ['Fast', 'Short & long form'],
     cardGradient: 'bg-gradient-to-bl from-indigo-100/50 via-purple-50/30 to-white border-indigo-200/60',
     logo: <SearchCheck className='h-5 w-5' />,
+    inputLabel: 'per 1M input characters',
   },
   'text-extraction': {
     name: 'Bhashik / Text Extraction',
@@ -42,6 +47,7 @@ const modelData = {
     tags: ['Custom schema', 'Structured output'],
     cardGradient: 'bg-gradient-to-bl from-slate-100/50 via-white/80 to-white border-slate-200/60',
     logo: <FileText className='h-5 w-5' />,
+    inputLabel: 'per 1M input characters',
   },
   'sentiment-analysis': {
     name: 'Bhashik / Sentiment Analysis',
@@ -54,6 +60,7 @@ const modelData = {
     tags: ['Entity-level', 'Multilingual'],
     cardGradient: 'bg-gradient-to-bl from-orange-100/40 via-amber-50/30 to-white border-amber-200/60',
     logo: <Heart className='h-5 w-5' />,
+    inputLabel: 'per 1M input characters',
   },
   'text-summarization': {
     name: 'Bhashik / Summarization',
@@ -66,6 +73,7 @@ const modelData = {
     tags: ['Abstractive', 'Configurable length'],
     cardGradient: 'bg-gradient-to-bl from-green-100/40 via-emerald-50/30 to-white border-green-200/60',
     logo: <ScrollText className='h-5 w-5' />,
+    inputLabel: 'per 1M input characters',
   },
 } as const;
 
@@ -73,13 +81,24 @@ export default function TextSummarizationPage() {
   const router = useRouter();
   const [selectedModel, setSelectedModel] = useState('text-summarization');
   const model = modelData['text-summarization'];
+  const [isSetupCodeModalOpen, setIsSetupCodeModalOpen] = useState(false);
+  const [isCreateApiKeyModalOpen, setIsCreateApiKeyModalOpen] = useState(false);
 
   useEffect(() => {
     setSelectedModel('text-summarization');
   }, []);
 
   return (
-    <PageShell title={model.name} description={model.description}>
+    <PageShell 
+      title={model.name} 
+      description={model.description}
+      headerActions={
+        <div className='flex items-center gap-2'>
+          <Button variant='outline' size='sm' onClick={() => setIsSetupCodeModalOpen(true)}>View code</Button>
+          <Button variant='default' size='sm' onClick={() => setIsCreateApiKeyModalOpen(true)}>Get API key</Button>
+        </div>
+      }
+    >
       <TextSummarizationPlayground
         model={model}
         selectedModel={selectedModel}
@@ -92,6 +111,15 @@ export default function TextSummarizationPage() {
           if (m === 'sentiment-analysis') router.push('/playground/sentiment-analysis');
           if (m === 'text-summarization') router.push('/playground/text-summarization');
         }}
+      />
+      <SetupCodeModal
+        open={isSetupCodeModalOpen}
+        onClose={() => setIsSetupCodeModalOpen(false)}
+        modelId={selectedModel}
+      />
+      <CreateApiKeyModal
+        open={isCreateApiKeyModalOpen}
+        onClose={() => setIsCreateApiKeyModalOpen(false)}
       />
     </PageShell>
   );

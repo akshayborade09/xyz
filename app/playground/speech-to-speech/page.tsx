@@ -5,6 +5,9 @@ import { useRouter } from 'next/navigation';
 import { PageShell } from '@/components/page-shell';
 import { SpeechToSpeechPlayground } from '@/components/playground/speech-to-speech-playground';
 import { AudioLines, Mic, Volume2 } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { SetupCodeModal } from '@/components/modals/setup-code-modal';
+import { CreateApiKeyModal } from '@/components/modals/create-api-key-modal';
 
 // Dedicated model data for Bhashik Speech-to-Speech
 const modelData = {
@@ -53,13 +56,24 @@ export default function BhashikSpeechToSpeechPage() {
   const router = useRouter();
   const [selectedModel, setSelectedModel] = useState('speech-to-speech');
   const model = modelData['speech-to-speech'];
+  const [isSetupCodeModalOpen, setIsSetupCodeModalOpen] = useState(false);
+  const [isCreateApiKeyModalOpen, setIsCreateApiKeyModalOpen] = useState(false);
 
   useEffect(() => {
     setSelectedModel('speech-to-speech');
   }, []);
 
   return (
-    <PageShell title={model.name} description={model.description}>
+    <PageShell 
+      title={model.name} 
+      description={model.description}
+      headerActions={
+        <div className='flex items-center gap-2'>
+          <Button variant='outline' size='sm' onClick={() => setIsSetupCodeModalOpen(true)}>View code</Button>
+          <Button variant='default' size='sm' onClick={() => setIsCreateApiKeyModalOpen(true)}>Get API key</Button>
+        </div>
+      }
+    >
       <SpeechToSpeechPlayground
         model={model}
         selectedModel={selectedModel}
@@ -70,9 +84,11 @@ export default function BhashikSpeechToSpeechPage() {
           if (m === 'speech-to-text') router.push('/playground/speech-to-text');
           if (m === 'speech-to-speech') router.push('/playground/speech-to-speech');
         }}
-        onOpenSetupCode={() => {}}
-        onOpenCreateApiKey={() => {}}
+        onOpenSetupCode={() => setIsSetupCodeModalOpen(true)}
+        onOpenCreateApiKey={() => setIsCreateApiKeyModalOpen(true)}
       />
+      <SetupCodeModal open={isSetupCodeModalOpen} onClose={() => setIsSetupCodeModalOpen(false)} modelId={selectedModel} />
+      <CreateApiKeyModal open={isCreateApiKeyModalOpen} onClose={() => setIsCreateApiKeyModalOpen(false)} />
     </PageShell>
   );
 }
