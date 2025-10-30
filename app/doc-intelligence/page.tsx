@@ -1,4 +1,6 @@
-import type React from 'react';
+'use client';
+
+import { useState, type ReactNode } from 'react';
 import { PageShell } from '@/components/page-shell';
 import { EvervaultCard } from '@/components/ui/evervault-card';
 import { Button } from '@/components/ui/button';
@@ -15,7 +17,7 @@ interface ServiceCardData {
   borderClass: string;
   playgroundUrl: string;
   // Catalog-style additions
-  logo: React.ReactNode;
+  logo: ReactNode;
   tags: string[];
   inputPrice: string; // display string
   outputPrice: string; // display string
@@ -158,8 +160,8 @@ function ServiceCard({ data, onOpenStarterCode }: { data: ServiceCardData; onOpe
 }
 
 export default function DocIntelligenceAllServicesPage() {
-  const [isSetupCodeModalOpen, setIsSetupCodeModalOpen] = React.useState(false);
-  const [selectedModelId, setSelectedModelId] = React.useState('');
+  const [isSetupCodeModalOpen, setIsSetupCodeModalOpen] = useState(false);
+  const [selectedModelId, setSelectedModelId] = useState('');
   return (
     <PageShell
       title='Document Intelligence'
