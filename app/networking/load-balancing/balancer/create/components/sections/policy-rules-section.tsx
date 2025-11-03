@@ -61,16 +61,14 @@ export function PolicyRulesSection({
   ];
 
   const ruleTypeOptions = [
-    { value: 'host-header', label: 'Host Header', requiresKey: false },
-    { value: 'path-pattern', label: 'Path Pattern', requiresKey: false },
-    { value: 'http-header', label: 'HTTP Header', requiresKey: true },
-    {
-      value: 'http-request-method',
-      label: 'HTTP Request Method',
-      requiresKey: false,
-    },
-    { value: 'query-string', label: 'Query String', requiresKey: true },
-    { value: 'source-ip', label: 'Source IP', requiresKey: false },
+    { value: 'cookie', label: 'Cookie', requiresKey: false },
+    { value: 'file-type', label: 'File Type', requiresKey: false },
+    { value: 'header', label: 'Header', requiresKey: true },
+    { value: 'host-name', label: 'Host Name', requiresKey: false },
+    { value: 'path', label: 'Path', requiresKey: false },
+    { value: 'ssl-connection', label: 'SSL Connection (Has Certificate)', requiresKey: false },
+    { value: 'ssl-verify-result', label: 'SSL (Verify Result)', requiresKey: false },
+    { value: 'ssl-dn-field', label: 'SSL Distinguished Name (DN) Field', requiresKey: false },
   ];
 
   const comparatorOptions = [

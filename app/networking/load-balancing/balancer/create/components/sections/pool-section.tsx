@@ -66,19 +66,9 @@ export function PoolSection({
       description: 'Routes to the target with the fewest active connections',
     },
     {
-      value: 'weighted-round-robin',
-      label: 'Weighted Round Robin',
-      description: 'Routes based on target weights in round-robin fashion',
-    },
-    {
-      value: 'ip-hash',
-      label: 'IP Hash',
+      value: 'source-ip',
+      label: 'Source IP',
       description: 'Routes based on a hash of the client IP address',
-    },
-    {
-      value: 'random',
-      label: 'Random',
-      description: 'Routes to a randomly selected healthy target',
     },
   ];
 
