@@ -245,6 +245,8 @@ export function ProfileCompletionDashboard({
   const [showChangePasswordModal, setShowChangePasswordModal] = useState(false);
   // Add state for password change success at the top of the component
   const [changePasswordSuccess, setChangePasswordSuccess] = useState(false);
+  const [showDeleteAccountModal, setShowDeleteAccountModal] = useState(false);
+  const [deleteConfirmText, setDeleteConfirmText] = useState('');
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   // Check if form data has changed
@@ -439,6 +441,26 @@ export function ProfileCompletionDashboard({
   const handleIdentityVerificationCancel = () => {
     // Close modal without completing verification
     setShowIdentityVerificationModal(false);
+  };
+
+  const handleDeleteAccount = () => {
+    // Simulate account deletion (prototype only)
+    // In production, this would call an API to delete the account
+    
+    // Show toast notification
+    toast({
+      title: 'Account Deleted',
+      description: 'Your account has been permanently deleted.',
+      variant: 'destructive',
+    });
+
+    // Close modal
+    setShowDeleteAccountModal(false);
+
+    // Redirect to sign-in page after a short delay
+    setTimeout(() => {
+      router.push('/auth/signin');
+    }, 1500);
   };
 
   const handleSuccessModalClose = () => {
@@ -1061,6 +1083,15 @@ export function ProfileCompletionDashboard({
         >
           Change Password
         </Button>
+
+        {/* Delete Account Link */}
+        <button
+          type='button'
+          onClick={() => setShowDeleteAccountModal(true)}
+          className='w-full text-center text-sm text-red-600 hover:text-red-700 underline transition-colors mt-3'
+        >
+          Delete Account
+        </button>
       </div>
 
       {/* Success Modal */}
@@ -1317,6 +1348,107 @@ export function ProfileCompletionDashboard({
               </div>
             </form>
           )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Delete Account Modal */}
+      <Dialog
+        open={showDeleteAccountModal}
+        onOpenChange={isOpen => {
+          setShowDeleteAccountModal(isOpen);
+          if (!isOpen) {
+            setDeleteConfirmText('');
+          } // Reset on close
+        }}
+      >
+        <DialogContent className='p-0 bg-white max-w-md w-full overflow-hidden flex flex-col'>
+          {/* Header */}
+          <div className='flex-shrink-0 p-6 border-b'>
+            <DialogHeader>
+              <DialogTitle className='text-red-600'>Delete Account</DialogTitle>
+              <DialogDescription>
+                This action cannot be undone. Please read carefully.
+              </DialogDescription>
+            </DialogHeader>
+          </div>
+
+          {/* Main Content */}
+          <div className='flex-1 p-6 space-y-4'>
+            {/* Warning Icon */}
+            <div className='flex justify-center mb-2'>
+              <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 18 18">
+                <title>triangle-warning</title>
+                <g fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" stroke="#dc2626">
+                  <path d="M7.63796 3.48996L2.21295 12.89C1.60795 13.9399 2.36395 15.25 3.57495 15.25H14.425C15.636 15.25 16.392 13.9399 15.787 12.89L10.362 3.48996C9.75696 2.44996 8.24296 2.44996 7.63796 3.48996Z"></path>
+                  <path d="M9 6.75V9.75"></path>
+                  <path d="M9 13.5C8.448 13.5 8 13.05 8 12.5C8 11.95 8.448 11.5 9 11.5C9.552 11.5 10 11.9501 10 12.5C10 13.0499 9.552 13.5 9 13.5Z" fill="#dc2626" data-stroke="none" stroke="none"></path>
+                </g>
+              </svg>
+            </div>
+
+            {/* Warning Text */}
+            <div className='space-y-3'>
+              <div className='text-sm text-gray-700 text-center bg-red-50 p-4 rounded-lg border border-red-200'>
+                <p className='leading-relaxed'>
+                  All existing credits in your account will be lost and services including storage and computation will be terminated within the next 48 hours. Are you sure you want to go ahead with permanent deletion?
+                </p>
+              </div>
+
+              {/* Support Contact */}
+              <div className='text-sm text-center text-gray-600 bg-blue-50 p-3 rounded-lg border border-blue-200'>
+                <p>
+                  Need help or have concerns?{' '}
+                  <a
+                    href='mailto:support@olakrutrim.com'
+                    className='text-blue-600 hover:text-blue-700 font-medium underline'
+                  >
+                    Contact Support
+                  </a>
+                </p>
+              </div>
+            </div>
+
+            {/* Confirmation Input */}
+            <div className='space-y-2 pt-2'>
+              <Label htmlFor='delete-confirmation' className='text-sm font-medium'>
+                Type <span className='font-mono font-bold text-red-600'>DELETE</span> to confirm:
+              </Label>
+              <Input
+                id='delete-confirmation'
+                type='text'
+                value={deleteConfirmText}
+                onChange={(e) => setDeleteConfirmText(e.target.value)}
+                placeholder='Type DELETE here'
+                className='font-mono'
+                autoComplete='off'
+              />
+            </div>
+          </div>
+
+          {/* Footer */}
+          <div className='flex-shrink-0 p-6 border-t bg-gray-50'>
+            <div className='flex gap-3'>
+              <Button
+                type='button'
+                variant='outline'
+                onClick={() => {
+                  setShowDeleteAccountModal(false);
+                  setDeleteConfirmText('');
+                }}
+                className='flex-1'
+              >
+                Cancel
+              </Button>
+              <Button
+                type='button'
+                onClick={handleDeleteAccount}
+                disabled={deleteConfirmText !== 'DELETE'}
+                className='flex-1 bg-red-600 text-white hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed'
+              >
+                Delete Account
+              </Button>
+            </div>
+          </div>
         </DialogContent>
       </Dialog>
     </div>
