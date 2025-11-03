@@ -43,6 +43,7 @@ export interface ALBFormData {
   region: string;
   vpc: string;
   subnet: string;
+  securityGroup: string;
 
   // Performance Tier
   performanceTier: string;
@@ -304,6 +305,7 @@ export function ALBCreateForm({
   const { toast } = useToast();
   const [showCreateVPCModal, setShowCreateVPCModal] = useState(false);
   const [showCreateSubnetModal, setShowCreateSubnetModal] = useState(false);
+  const [showCreateSecurityGroupModal, setShowCreateSecurityGroupModal] = useState(false);
   const [showProgressModal, setShowProgressModal] = useState(false);
   const [taskId, setTaskId] = useState('');
   const [formData, setFormData] = useState<ALBFormData>({
@@ -313,6 +315,7 @@ export function ALBCreateForm({
     region: isEditMode ? editData?.region || '' : '',
     vpc: isEditMode ? editData?.vpc || '' : '',
     subnet: isEditMode ? editData?.subnet || '' : '',
+    securityGroup: isEditMode ? editData?.securityGroup || '' : '',
     performanceTier: isEditMode
       ? editData?.performanceTier || 'standard'
       : 'standard',
@@ -411,6 +414,11 @@ export function ALBCreateForm({
     setShowCreateSubnetModal(false);
   };
 
+  const handleSecurityGroupCreated = (securityGroupId: string) => {
+    setFormData(prev => ({ ...prev, securityGroup: securityGroupId }));
+    setShowCreateSecurityGroupModal(false);
+  };
+
   const handleReviewAndCreate = () => {
     if (isEditMode) {
       // Handle edit save
@@ -451,6 +459,7 @@ export function ALBCreateForm({
       formData.region?.length > 0 &&
       formData.vpc?.length > 0 &&
       formData.subnet?.length > 0 &&
+      formData.securityGroup?.length > 0 &&
       formData.performanceTier?.length > 0;
 
     // At least one listener must have basic configuration
@@ -493,6 +502,7 @@ export function ALBCreateForm({
                   isEditMode={isEditMode}
                   onCreateVPC={() => setShowCreateVPCModal(true)}
                   onCreateSubnet={() => setShowCreateSubnetModal(true)}
+                  onCreateSecurityGroup={() => setShowCreateSecurityGroupModal(true)}
                 />
 
                 <div className='border-t border-gray-200 pt-4'>
@@ -690,6 +700,20 @@ export function ALBCreateForm({
             vpcId={formData.vpc}
             onClose={() => setShowCreateSubnetModal(false)}
             onSuccess={handleSubnetCreated}
+          />
+        </DialogContent>
+      </Dialog>
+
+      {/* Create Security Group Modal */}
+      <Dialog
+        open={showCreateSecurityGroupModal}
+        onOpenChange={setShowCreateSecurityGroupModal}
+      >
+        <DialogContent className='p-0 bg-white max-w-[70vw] max-h-[85vh] w-[70vw] h-[85vh] overflow-hidden flex flex-col'>
+          <CreateSecurityGroupModalContent
+            vpcId={formData.vpc}
+            onClose={() => setShowCreateSecurityGroupModal(false)}
+            onSuccess={handleSecurityGroupCreated}
           />
         </DialogContent>
       </Dialog>
@@ -936,6 +960,174 @@ function CreateSubnetModalContent({
             disabled={loading}
           >
             {loading ? 'Creating...' : 'Create Subnet'}
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Create Security Group Modal Content Component
+function CreateSecurityGroupModalContent({
+  vpcId,
+  onClose,
+  onSuccess,
+}: {
+  vpcId: string;
+  onClose: () => void;
+  onSuccess: (securityGroupId: string) => void;
+}) {
+  const [formData, setFormData] = useState({
+    name: '',
+    description: '',
+    securityGroupFor: 'load-balancer',
+  });
+  const [loading, setLoading] = useState(false);
+  const { toast } = useToast();
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { id, value } = e.target;
+    setFormData(prev => ({ ...prev, [id]: value }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      console.log('Creating security group:', { ...formData, vpcId });
+
+      // Simulate API call delay
+      await new Promise(resolve => setTimeout(resolve, 1000));
+
+      // Simulate created security group ID
+      const newSecurityGroupId = `sg-${Math.random().toString(36).substr(2, 9)}`;
+
+      toast({
+        title: 'Security Group Created',
+        description: `Security Group "${formData.name}" has been created successfully!`,
+      });
+
+      onSuccess(newSecurityGroupId);
+    } catch (error) {
+      console.error('Error creating security group:', error);
+      toast({
+        title: 'Creation Failed',
+        description: 'Failed to create security group. Please try again.',
+        variant: 'destructive',
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const selectedVPC = vpcs.find(vpc => vpc.id === vpcId);
+
+  return (
+    <div className='flex flex-col h-full'>
+      {/* Header */}
+      <div className='flex-shrink-0 p-6 border-b'>
+        <h2 className='text-2xl font-semibold'>Create Security Group</h2>
+        <p className='text-sm text-muted-foreground mt-1'>
+          Create a new security group for your load balancer in {selectedVPC?.name}
+        </p>
+      </div>
+
+      {/* Content */}
+      <div className='flex-1 flex gap-6 min-h-0 p-6'>
+        <div className='flex-1 flex flex-col min-h-0'>
+          <div className='flex-1 overflow-y-auto pr-2'>
+            <form
+              id='security-group-form'
+              onSubmit={handleSubmit}
+              className='space-y-6'
+            >
+              <div className='mb-5'>
+                <Label htmlFor='name' className='block mb-2 font-medium'>
+                  Security Group Name <span className='text-destructive'>*</span>
+                </Label>
+                <Input
+                  id='name'
+                  placeholder='Enter security group name'
+                  value={formData.name}
+                  onChange={handleChange}
+                  className='focus:ring-2 focus:ring-ring focus:ring-offset-2'
+                  required
+                />
+                <p className='text-xs text-muted-foreground mt-1'>
+                  Only alphanumeric characters, hyphens, and underscores allowed.
+                </p>
+              </div>
+
+              <div className='mb-5'>
+                <Label htmlFor='description' className='block mb-2 font-medium'>
+                  Description
+                </Label>
+                <Textarea
+                  id='description'
+                  placeholder='Enter a description for this security group'
+                  value={formData.description}
+                  onChange={handleChange}
+                  className='focus:ring-2 focus:ring-ring focus:ring-offset-2 min-h-[80px]'
+                />
+              </div>
+
+              <div className='mb-6 p-4 bg-gray-50 border border-gray-200 rounded-lg'>
+                <p className='text-gray-600' style={{ fontSize: '13px' }}>
+                  Security groups act as virtual firewalls controlling inbound and
+                  outbound traffic for your load balancer. You can configure specific
+                  rules after creation.
+                </p>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        {/* Side Info Panel */}
+        <div className='w-80 flex-shrink-0'>
+          <Card>
+            <CardContent className='pt-6'>
+              <h3 className='font-semibold mb-3 text-sm'>Security Best Practices</h3>
+              <ul className='space-y-3'>
+                <li className='flex items-start gap-2'>
+                  <div className='w-1.5 h-1.5 bg-primary rounded-full mt-2 flex-shrink-0'></div>
+                  <span className='text-muted-foreground' style={{ fontSize: '13px' }}>
+                    Only allow necessary ports and protocols
+                  </span>
+                </li>
+                <li className='flex items-start gap-2'>
+                  <div className='w-1.5 h-1.5 bg-primary rounded-full mt-2 flex-shrink-0'></div>
+                  <span className='text-muted-foreground' style={{ fontSize: '13px' }}>
+                    Use specific IP ranges when possible
+                  </span>
+                </li>
+                <li className='flex items-start gap-2'>
+                  <div className='w-1.5 h-1.5 bg-primary rounded-full mt-2 flex-shrink-0'></div>
+                  <span className='text-muted-foreground' style={{ fontSize: '13px' }}>
+                    Regularly review and update security rules
+                  </span>
+                </li>
+              </ul>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+
+      {/* Footer */}
+      <div className='flex-shrink-0 p-6 border-t bg-gray-50'>
+        <div className='flex justify-end gap-4'>
+          <Button type='button' variant='outline' onClick={onClose}>
+            Cancel
+          </Button>
+          <Button
+            type='submit'
+            form='security-group-form'
+            className='bg-black text-white hover:bg-black/90 transition-colors'
+            disabled={loading}
+          >
+            {loading ? 'Creating...' : 'Create Security Group'}
           </Button>
         </div>
       </div>

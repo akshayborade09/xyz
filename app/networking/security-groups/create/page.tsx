@@ -228,8 +228,8 @@ export default function CreateSecurityGroupPage() {
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value='vpc'>VPC</SelectItem>
-                        <SelectItem value='load-balancer' disabled>
-                          Load Balancer (Coming Soon)
+                        <SelectItem value='load-balancer'>
+                          Load Balancer
                         </SelectItem>
                       </SelectContent>
                     </Select>

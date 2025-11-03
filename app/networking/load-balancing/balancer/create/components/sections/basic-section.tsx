@@ -18,7 +18,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Checkbox } from '@/components/ui/checkbox';
 import { TooltipWrapper } from '@/components/ui/tooltip-wrapper';
 import { HelpCircle, ChevronDown, Search, Check } from 'lucide-react';
-import { vpcs, subnets } from '@/lib/data';
+import { vpcs, subnets, securityGroups } from '@/lib/data';
 import type { ALBFormData } from '../alb-create-form';
 
 interface BasicSectionProps {
@@ -28,6 +28,7 @@ interface BasicSectionProps {
   isEditMode?: boolean;
   onCreateVPC?: () => void;
   onCreateSubnet?: () => void;
+  onCreateSecurityGroup?: () => void;
 }
 
 export function BasicSection({
@@ -37,6 +38,7 @@ export function BasicSection({
   isEditMode = false,
   onCreateVPC,
   onCreateSubnet,
+  onCreateSecurityGroup,
 }: BasicSectionProps) {
   const [formTouched, setFormTouched] = useState(false);
 
@@ -339,6 +341,7 @@ export function BasicSection({
       formData.region?.length > 0 &&
       formData.vpc?.length > 0 &&
       formData.subnet?.length > 0 &&
+      formData.securityGroup?.length > 0 &&
       formData.performanceTier?.length > 0 &&
       (!isPublicSubnet(formData.subnet) ||
         (formData.ipAddressType?.length > 0 &&
@@ -511,6 +514,22 @@ export function BasicSection({
         isEditMode={isEditMode}
       />
 
+      {/* Security Group */}
+      <SecurityGroupSelectorInline
+        value={formData.securityGroup || ''}
+        vpcId={formData.vpc || ''}
+        onChange={value => {
+          if (value === '__create_new__') {
+            onCreateSecurityGroup?.();
+          } else {
+            handleChange('securityGroup', value);
+          }
+        }}
+        formTouched={formTouched}
+        disabled={!formData.vpc || isEditMode}
+        isEditMode={isEditMode}
+      />
+
       {/* Performance Tier and Configuration */}
       <div className='mb-6'>
         <div className='grid md:grid-cols-2 gap-6'>
@@ -598,16 +617,16 @@ export function BasicSection({
       {formData.subnet && isPublicSubnet(formData.subnet) && (
         <div className='mb-6'>
           <Label className='block mb-2 font-medium'>
-            IP Address Type <span className='text-destructive'>*</span>
+            IP Address Type
           </Label>
           <div className='space-y-3'>
             <div className='flex items-center space-x-2'>
               <Checkbox
                 id='floating-ip'
                 checked={formData.ipAddressType === 'floating-ip'}
-                onCheckedChange={() =>
-                  handleChange('ipAddressType', 'floating-ip')
-                }
+                onCheckedChange={(checked) => {
+                  handleChange('ipAddressType', checked ? 'floating-ip' : '');
+                }}
                 disabled={isEditMode}
               />
               <Label htmlFor='floating-ip' className='flex items-center gap-2'>
@@ -617,44 +636,6 @@ export function BasicSection({
                 </TooltipWrapper>
               </Label>
             </div>
-
-            <div className='flex items-center space-x-2'>
-              <Checkbox
-                id='reserve-ip'
-                checked={formData.ipAddressType === 'reserve-ip'}
-                onCheckedChange={() =>
-                  handleChange('ipAddressType', 'reserve-ip')
-                }
-                disabled={isEditMode}
-              />
-              <Label htmlFor='reserve-ip' className='flex items-center gap-2'>
-                Reserved IP
-                <TooltipWrapper content='Fixed IP that is assigned to your load balancer. You will be billed as long as you have not deleted the IP address. The same IP address will be assigned to the load balancer even if you restart your load balancer'>
-                  <HelpCircle className='h-4 w-4 text-muted-foreground' />
-                </TooltipWrapper>
-              </Label>
-            </div>
-
-            {formData.ipAddressType === 'reserve-ip' && (
-              <div className='ml-6'>
-                <Select
-                  value={formData.reservedIpId || ''}
-                  onValueChange={value => handleChange('reservedIpId', value)}
-                  disabled={isEditMode}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder='Select reserved IP' />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {availableReservedIPs.map(ip => (
-                      <SelectItem key={ip.id} value={ip.id}>
-                        {ip.address}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-            )}
           </div>
         </div>
       )}
@@ -949,6 +930,186 @@ function SubnetSelectorInline({
           {!isEditMode && (
             <p className='text-xs mt-2 text-muted-foreground'>
               Load balancers can be placed in both public and private subnets.
+            </p>
+          )}
+        </>
+      )}
+    </div>
+  );
+}
+
+// Security Group Selector Component
+function SecurityGroupSelectorInline({
+  value,
+  vpcId,
+  onChange,
+  formTouched,
+  disabled,
+  isEditMode = false,
+}: {
+  value: string;
+  vpcId: string;
+  onChange: (value: string) => void;
+  formTouched: boolean;
+  disabled: boolean;
+  isEditMode?: boolean;
+}) {
+  const [open, setOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+
+  // Filter security groups based on selected VPC
+  const selectedVPCName = vpcs.find(vpc => vpc.id === vpcId)?.name;
+  const vpcSecurityGroups = securityGroups.filter(
+    sg => sg.vpcName === selectedVPCName && sg.status !== 'deleting'
+  );
+
+  const filteredSecurityGroups = vpcSecurityGroups.filter(
+    sg =>
+      sg.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      sg.id.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const selectedSecurityGroup = vpcSecurityGroups.find(sg => sg.id === value);
+  const selectedVPC = vpcs.find(vpc => vpc.id === vpcId);
+
+  return (
+    <div className='mb-6'>
+      <div className='flex items-center gap-2 mb-2'>
+        <Label className='font-medium'>
+          Security Group <span className='text-destructive'>*</span>
+        </Label>
+        <TooltipWrapper
+          content='Security groups act as virtual firewalls controlling inbound and outbound traffic for your load balancer.'
+          side='top'
+        >
+          <HelpCircle className='h-4 w-4 text-muted-foreground hover:text-foreground cursor-help' />
+        </TooltipWrapper>
+      </div>
+
+      {!disabled && vpcSecurityGroups.length > 0 ? (
+        <>
+          <div className='relative'>
+            <button
+              type='button'
+              onClick={() => !disabled && setOpen(!open)}
+              disabled={disabled}
+              className={`w-full flex items-center justify-between px-3 py-2 border border-input rounded-md text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${
+                formTouched && !value ? 'border-red-300 bg-red-50' : ''
+              } ${disabled ? 'bg-muted text-muted-foreground cursor-not-allowed' : 'bg-background'}`}
+            >
+              <span
+                className={
+                  selectedSecurityGroup ? 'text-foreground' : 'text-muted-foreground'
+                }
+              >
+                {selectedSecurityGroup
+                  ? `${selectedSecurityGroup.name} (${selectedSecurityGroup.id})`
+                  : 'Select a security group'}
+              </span>
+              <ChevronDown className='h-4 w-4 opacity-50' />
+            </button>
+
+            {open && !disabled && (
+              <div className='absolute z-50 w-full mt-1 bg-popover border border-border rounded-md shadow-md'>
+                <div className='p-2 border-b'>
+                  <div className='relative'>
+                    <Search className='absolute left-2 top-2.5 h-4 w-4 text-muted-foreground' />
+                    <Input
+                      placeholder='Search security groups...'
+                      value={searchTerm}
+                      onChange={e => setSearchTerm(e.target.value)}
+                      className='pl-8'
+                    />
+                  </div>
+                </div>
+
+                <div className='p-1'>
+                  <button
+                    type='button'
+                    onClick={() => {
+                      onChange('__create_new__');
+                      setOpen(false);
+                    }}
+                    className='w-full flex items-center px-2 py-2 text-sm hover:bg-accent hover:text-accent-foreground rounded-sm text-primary font-medium'
+                  >
+                    Create new Security Group
+                  </button>
+
+                  {filteredSecurityGroups.map(sg => (
+                    <button
+                      key={sg.id}
+                      type='button'
+                      onClick={() => {
+                        onChange(sg.id);
+                        setOpen(false);
+                        setSearchTerm('');
+                      }}
+                      className='w-full flex items-center justify-between px-2 py-2 text-sm hover:bg-accent hover:text-accent-foreground rounded-sm'
+                    >
+                      <div className='flex flex-col items-start'>
+                        <div className='flex items-center gap-2'>
+                          <span className='font-medium'>{sg.name}</span>
+                          {sg.status === 'creating' && (
+                            <Badge variant='secondary' className='text-xs bg-blue-100 text-blue-800'>
+                              Creating
+                            </Badge>
+                          )}
+                        </div>
+                        <span className='text-xs text-muted-foreground'>
+                          {sg.id} • {sg.description || 'No description'}
+                        </span>
+                      </div>
+                      {value === sg.id && <Check className='h-4 w-4' />}
+                    </button>
+                  ))}
+
+                  {filteredSecurityGroups.length === 0 && searchTerm && (
+                    <div className='px-2 py-2 text-sm text-muted-foreground'>
+                      No security groups found matching "{searchTerm}"
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+          {!isEditMode && (
+            <p className='text-xs mt-1 text-muted-foreground'>
+              Select the security group to control traffic for your load balancer.
+            </p>
+          )}
+        </>
+      ) : disabled ? (
+        <>
+          <div className='p-3 bg-gray-50 border border-gray-200 rounded-lg'>
+            <p className='text-sm text-gray-600'>
+              Please select a VPC first to see available security groups.
+            </p>
+          </div>
+          {!isEditMode && (
+            <p className='text-xs mt-2 text-muted-foreground'>
+              Security groups will be loaded automatically once you select a VPC.
+            </p>
+          )}
+        </>
+      ) : (
+        <>
+          <div className='p-4 bg-yellow-50 border border-yellow-200 rounded-lg'>
+            <p className='text-sm text-yellow-800 mb-3'>
+              No security groups available in this VPC ({selectedVPC?.name}). You need
+              to create a security group first.
+            </p>
+            <Button
+              type='button'
+              size='sm'
+              className='bg-black text-white hover:bg-black/90 transition-colors'
+              onClick={() => onChange('__create_new__')}
+            >
+              Create Security Group
+            </Button>
+          </div>
+          {!isEditMode && (
+            <p className='text-xs mt-2 text-muted-foreground'>
+              Security groups control inbound and outbound traffic for your load balancer.
             </p>
           )}
         </>
