@@ -233,6 +233,13 @@ print(response.json())`;
                 </div>
               </div>
 
+              {/* Throughput */}
+              <div className='flex items-center gap-2 py-2'>
+                <span className='text-xs text-gray-500'>Throughput</span>
+                <div className='flex-1 border-b border-dotted border-gray-300'></div>
+                <span className='text-sm font-semibold text-gray-900'>8,500 tokens/sec</span>
+              </div>
+
               {/* Tags */}
               <div className='flex flex-wrap gap-2'>
                 <span className='px-2 py-1 bg-white border border-gray-300 text-gray-700 text-xs rounded font-medium'>120B</span>
@@ -310,6 +317,13 @@ print(response.json())`;
                   <span>Per 1M Input Tokens</span>
                   <span>Per 1M Output Tokens</span>
                 </div>
+              </div>
+
+              {/* Throughput */}
+              <div className='flex items-center gap-2 py-2'>
+                <span className='text-xs text-gray-500'>Throughput</span>
+                <div className='flex-1 border-b border-dotted border-gray-300'></div>
+                <span className='text-sm font-semibold text-gray-900'>6,200 tokens/sec</span>
               </div>
 
               {/* Tags */}
@@ -396,6 +410,13 @@ print(response.json())`;
                 </div>
               </div>
 
+              {/* Throughput */}
+              <div className='flex items-center gap-2 py-2'>
+                <span className='text-xs text-gray-500'>Throughput</span>
+                <div className='flex-1 border-b border-dotted border-gray-300'></div>
+                <span className='text-sm font-semibold text-gray-900'>7,800 tokens/sec</span>
+              </div>
+
               {/* Tags */}
               <div className='flex flex-wrap gap-2'>
                 <span className='px-2 py-1 bg-white border border-gray-300 text-gray-700 text-xs rounded font-medium'>80B</span>
@@ -474,6 +495,13 @@ print(response.json())`;
                   <span>Per Hour of Input Audio</span>
                   <span>Output</span>
                 </div>
+              </div>
+
+              {/* Throughput */}
+              <div className='flex items-center gap-2 py-2'>
+                <span className='text-xs text-gray-500'>Throughput</span>
+                <div className='flex-1 border-b border-dotted border-gray-300'></div>
+                <span className='text-sm font-semibold text-gray-900'>120 min/hour</span>
               </div>
 
               {/* Tags */}
@@ -558,6 +586,13 @@ print(response.json())`;
                   <span>Per Image Generated</span>
                   <span>Output</span>
                 </div>
+              </div>
+
+              {/* Throughput */}
+              <div className='flex items-center gap-2 py-2'>
+                <span className='text-xs text-gray-500'>Throughput</span>
+                <div className='flex-1 border-b border-dotted border-gray-300'></div>
+                <span className='text-sm font-semibold text-gray-900'>25 images/min</span>
               </div>
 
               {/* Tags */}

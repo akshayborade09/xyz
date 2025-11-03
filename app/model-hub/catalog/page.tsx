@@ -40,6 +40,7 @@ interface ModelData {
   outputPrice: string;
   inputPriceNumeric: number; // Numeric price for sorting (in rupees per 1M tokens)
   outputPriceNumeric: number; // Numeric price for sorting (in rupees per 1M tokens)
+  throughput: string; // Throughput display value (e.g., "5,000 tokens/sec")
   tags: string[];
   category: string;
   modelType: string; // text-gen, text-to-speech, text-to-image, embedding, audio, vision
@@ -65,6 +66,7 @@ const modelsData: ModelData[] = [
     outputPrice: '₹16.7',
     inputPriceNumeric: 4.2,
     outputPriceNumeric: 16.7,
+    throughput: '8,500 tokens/sec',
     tags: ['120B', '128K', 'Reasoning'],
     category: 'text',
     modelType: 'text-gen',
@@ -91,6 +93,7 @@ const modelsData: ModelData[] = [
     outputPrice: '₹250.5',
     inputPriceNumeric: 83.5,
     outputPriceNumeric: 250.5,
+    throughput: '6,200 tokens/sec',
     tags: ['32K', 'Chat', 'Instruct'],
     category: 'text',
     modelType: 'text-gen',
@@ -118,6 +121,7 @@ const modelsData: ModelData[] = [
     outputPrice: '₹125.3',
     inputPriceNumeric: 12.5,
     outputPriceNumeric: 125.3,
+    throughput: '7,800 tokens/sec',
     tags: ['80B', '32K', 'Instruct'],
     category: 'text',
     modelType: 'text-gen',
@@ -150,6 +154,7 @@ const modelsData: ModelData[] = [
     outputPrice: '—',
     inputPriceNumeric: 24,
     outputPriceNumeric: 0,
+    throughput: '120 min/hour',
     tags: ['Speech-to-Text', 'Audio', 'Transcription'],
     category: 'audio',
     modelType: 'audio',
@@ -178,6 +183,7 @@ const modelsData: ModelData[] = [
     outputPrice: '—',
     inputPriceNumeric: 0.17,
     outputPriceNumeric: 0,
+    throughput: '15,000 tokens/sec',
     tags: ['Embedding', 'Semantic Search', '8K'],
     category: 'embedding',
     modelType: 'embedding',
@@ -204,6 +210,7 @@ const modelsData: ModelData[] = [
     outputPrice: '₹625',
     inputPriceNumeric: 125,
     outputPriceNumeric: 625,
+    throughput: '5,000 tokens/sec',
     tags: ['200K', 'Reasoning', 'Analysis'],
     category: 'text',
     modelType: 'text-gen',
@@ -230,6 +237,7 @@ const modelsData: ModelData[] = [
     outputPrice: '₹16.5',
     inputPriceNumeric: 5.5,
     outputPriceNumeric: 16.5,
+    throughput: '7,200 tokens/sec',
     tags: ['70B', '8K', 'Open Source'],
     category: 'text',
     modelType: 'text-gen',
@@ -256,6 +264,7 @@ const modelsData: ModelData[] = [
     outputPrice: '₹167',
     inputPriceNumeric: 83.5,
     outputPriceNumeric: 167,
+    throughput: '4,500 tokens/sec',
     tags: ['Vision', 'Multimodal', '128K'],
     category: 'vision',
     modelType: 'vision',
@@ -282,6 +291,7 @@ const modelsData: ModelData[] = [
     outputPrice: '—',
     inputPriceNumeric: 8,
     outputPriceNumeric: 0,
+    throughput: '25 images/min',
     tags: ['Text-to-Image', 'Image Generation', 'AI Art'],
     category: 'vision',
     modelType: 'text-to-image',
@@ -495,6 +505,13 @@ export default function ModelCatalogPage() {
             <span>{model.category === 'audio' ? 'Per Hour of Input Audio' : 'Per 1M Input Tokens'}</span>
             <span>{model.category === 'audio' ? 'Output' : 'Per 1M Output Tokens'}</span>
           </div>
+        </div>
+
+        {/* Throughput */}
+        <div className='flex items-center gap-2 py-2'>
+          <span className='text-xs text-gray-500'>Throughput</span>
+          <div className='flex-1 border-b border-dotted border-gray-300'></div>
+          <span className='text-sm font-semibold text-gray-900'>{model.throughput}</span>
         </div>
 
         {/* Tags */}
