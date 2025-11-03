@@ -58,7 +58,7 @@ export function PolicyRulesSection({
   const actionOptions = [
     { value: 'redirect-to-url', label: 'Redirect to URL' },
     { value: 'reject', label: 'Reject' },
-    { value: 'forward-to-target-group', label: 'Forward to Target Group' },
+    { value: 'forward-to-target-group', label: 'Redirect to pool' },
   ];
 
   const ruleTypeOptions = [
