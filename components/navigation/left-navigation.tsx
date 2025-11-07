@@ -1020,10 +1020,10 @@ export function LeftNavigation({ onClose }: LeftNavigationProps) {
       {/* Bottom navigation items */}
       <div className='mt-auto px-3'>
         {/* Contact Support */}
-        <div className='px-2 pb-2 pt-3'>
+        <div className='pb-3 pt-4 border-b border-border/40'>
           <a 
             href='mailto:support@olakrutrim.com'
-            className='text-xs text-muted-foreground hover:text-foreground transition-colors'
+            className='text-[11px] font-medium text-muted-foreground hover:text-foreground transition-colors block px-2'
           >
             Contact Support
           </a>
