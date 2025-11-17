@@ -33,6 +33,7 @@ export function generateBreadcrumbs(pathname: string): Breadcrumb[] {
     "certificates": "Certificate Manager",
     "load-balancing": "Load Balancers",
     "auto-scaling": "Auto Scaling Groups",
+    "database": "Databases",
   }
 
   // Build the rest of the breadcrumbs

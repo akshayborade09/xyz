@@ -10,12 +10,30 @@ import { Card, CardHeader, CardTitle, CardContent } from '../../../components/ui
 import { getDatabase } from '../../../lib/data';
 import { DeleteConfirmationModal } from '../../../components/delete-confirmation-modal';
 import { StatusBadge } from '../../../components/status-badge';
-import { Edit, Trash2, RotateCcw, Pause, Play, Copy, Eye, EyeOff, Plus, TrendingUp, TrendingDown, Activity, AlertCircle } from 'lucide-react';
+import { Edit, Trash2, RotateCcw, Pause, Play, Copy, Eye, EyeOff, Plus, TrendingUp, TrendingDown, Activity, AlertCircle, HelpCircle } from 'lucide-react';
 import { VercelTabs } from '../../../components/ui/vercel-tabs';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import { ShadcnDataTable } from '../../../components/ui/shadcn-data-table';
 import { useToast } from '../../../hooks/use-toast';
+import { TooltipWrapper } from '../../../components/ui/tooltip-wrapper';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '../../../components/ui/dialog';
+import { Input } from '../../../components/ui/input';
+import { Label } from '../../../components/ui/label';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '../../../components/ui/select';
 
 const tabs = [
   { id: 'connection', label: 'Connection Details' },
@@ -160,6 +178,19 @@ export default function DatabaseDetailsPage({ params }: { params: { id: string }
   const [activeTab, setActiveTab] = useState('connection');
   const [showPassword, setShowPassword] = useState(false);
   const [showConnectionURL, setShowConnectionURL] = useState(false);
+  
+  // Create Backup Modal State
+  const [isCreateBackupModalOpen, setIsCreateBackupModalOpen] = useState(false);
+  const [backupFormData, setBackupFormData] = useState({
+    backupName: '',
+    storageBucket: '',
+    maxBackups: 7,
+    minute: '30',
+    hour: '*',
+    day: '*',
+    month: '*',
+    weekday: '*',
+  });
   const database = getDatabase(params.id);
 
   if (!database) {
@@ -198,6 +229,37 @@ export default function DatabaseDetailsPage({ params }: { params: { id: string }
     toast({
       title: 'Copied to clipboard',
       description: `${label} has been copied to your clipboard.`,
+    });
+  };
+
+  // Generate CRON expression from form data
+  const generateCronExpression = () => {
+    return `${backupFormData.minute} ${backupFormData.hour} ${backupFormData.day} ${backupFormData.month} ${backupFormData.weekday}`;
+  };
+
+  // Handle max backups quick select
+  const handleMaxBackupsQuickSelect = (value: number) => {
+    setBackupFormData({ ...backupFormData, maxBackups: value });
+  };
+
+  // Handle backup form submission
+  const handleCreateBackup = () => {
+    console.log('Creating backup with data:', backupFormData);
+    toast({
+      title: 'Backup Schedule Created',
+      description: `Backup schedule "${backupFormData.backupName}" has been created successfully.`,
+    });
+    setIsCreateBackupModalOpen(false);
+    // Reset form
+    setBackupFormData({
+      backupName: '',
+      storageBucket: '',
+      maxBackups: 7,
+      minute: '30',
+      hour: '*',
+      day: '*',
+      month: '*',
+      weekday: '*',
     });
   };
 
@@ -605,11 +667,21 @@ export default function DatabaseDetailsPage({ params }: { params: { id: string }
                 <div>
                   <div className='flex items-center gap-2 mb-3'>
                     <label className='text-sm font-medium text-gray-700'>Host</label>
-                    <button className='text-muted-foreground hover:text-foreground'>
-                      <svg className='w-4 h-4' fill='currentColor' viewBox='0 0 20 20'>
-                        <path fillRule='evenodd' d='M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z' clipRule='evenodd' />
-                      </svg>
-                    </button>
+                    <TooltipWrapper
+                      content={
+                        <div className='space-y-2'>
+                          <p>
+                            The endpoint (hostname or IP address) of your database instance or cluster. It identifies where your database is hosted and is used by clients to connect.
+                          </p>
+                          <p>
+                            In a multi-node setup (like MongoDB replica sets), multiple host entries may appear—one for each node (primary and replicas).
+                          </p>
+                        </div>
+                      }
+                      side='top'
+                    >
+                      <HelpCircle className='h-4 w-4 text-muted-foreground hover:text-foreground cursor-help' />
+                    </TooltipWrapper>
                   </div>
                   <div className='space-y-2'>
                     {connectionDetails.hosts.map((host, index) => (
@@ -631,24 +703,21 @@ export default function DatabaseDetailsPage({ params }: { params: { id: string }
                   </div>
                 </div>
 
-                {/* Port and Username in 2 columns */}
-                <div className='grid grid-cols-2 gap-4'>
-                  {/* Port */}
-                  <div>
-                    <label className='text-sm font-medium text-gray-700 block mb-2'>Port</label>
-                    <div className='text-base'>{connectionDetails.port}</div>
-                  </div>
-
-                  {/* Username */}
-                  <div>
-                    <label className='text-sm font-medium text-gray-700 block mb-2'>Username</label>
-                    <div className='text-base'>{connectionDetails.username}</div>
-                  </div>
+                {/* Port */}
+                <div>
+                  <label className='text-sm font-medium text-gray-700 block mb-2'>Port</label>
+                  <div className='text-base'>{connectionDetails.port}</div>
                 </div>
               </div>
 
               {/* Right Column */}
               <div className='space-y-6'>
+                {/* Username */}
+                <div>
+                  <label className='text-sm font-medium text-gray-700 block mb-2'>Username</label>
+                  <div className='text-base'>{connectionDetails.username}</div>
+                </div>
+
                 {/* Password */}
                 <div>
                   <label className='text-sm font-medium text-gray-700 block mb-2'>Password</label>
@@ -717,8 +786,7 @@ export default function DatabaseDetailsPage({ params }: { params: { id: string }
               <div>
                 <p className='text-sm text-muted-foreground'>{backupSchedules.length} active schedules</p>
               </div>
-              <Button>
-                <Plus className='h-4 w-4 mr-2' />
+              <Button onClick={() => setIsCreateBackupModalOpen(true)}>
                 Create backup
               </Button>
             </div>
@@ -1111,6 +1179,231 @@ export default function DatabaseDetailsPage({ params }: { params: { id: string }
         resourceType='Database'
         onConfirm={handleDelete}
       />
+
+      {/* Create Backup Modal */}
+      <Dialog open={isCreateBackupModalOpen} onOpenChange={setIsCreateBackupModalOpen}>
+        <DialogContent className='max-w-2xl max-h-[90vh] flex flex-col'>
+          <DialogHeader>
+            <DialogTitle>Create Backup Schedule</DialogTitle>
+            <DialogDescription>
+              Configure a backup schedule for your database instance.
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className='space-y-6 py-4 overflow-y-auto flex-1'>
+            {/* Backup Name */}
+            <div className='space-y-2'>
+              <Label htmlFor='backupName'>Backup Name</Label>
+              <Input
+                id='backupName'
+                placeholder='daily-backup'
+                value={backupFormData.backupName}
+                onChange={(e) => setBackupFormData({ ...backupFormData, backupName: e.target.value })}
+              />
+            </div>
+
+            {/* Storage Bucket */}
+            <div className='space-y-2'>
+              <Label htmlFor='storageBucket'>Storage Bucket</Label>
+              <Select
+                value={backupFormData.storageBucket}
+                onValueChange={(value) => setBackupFormData({ ...backupFormData, storageBucket: value })}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder='Select storage bucket' />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value='backup-storage-us-east'>backup-storage-us-east</SelectItem>
+                  <SelectItem value='backup-storage-us-west'>backup-storage-us-west</SelectItem>
+                  <SelectItem value='backup-storage-eu-central'>backup-storage-eu-central</SelectItem>
+                  <SelectItem value='backup-storage-ap-south'>backup-storage-ap-south</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Maximum Backups */}
+            <div className='space-y-3'>
+              <Label>Maximum Backups</Label>
+              <p className='text-sm text-muted-foreground'>
+                Maximum number of backups to retain. Older backups will be automatically deleted when this limit is reached.
+              </p>
+              <div className='flex items-center gap-4 flex-wrap'>
+                <span className='text-sm font-medium'>Quick Select</span>
+                {[3, 7, 14, 30].map((value) => (
+                  <Button
+                    key={value}
+                    type='button'
+                    variant={backupFormData.maxBackups === value ? 'default' : 'outline'}
+                    className={`h-12 w-12 rounded-full ${
+                      backupFormData.maxBackups === value ? 'bg-black text-white hover:bg-black/90' : ''
+                    }`}
+                    onClick={() => handleMaxBackupsQuickSelect(value)}
+                  >
+                    {value}
+                  </Button>
+                ))}
+                <span className='text-sm font-medium'>Custom</span>
+                <Input
+                  type='number'
+                  className='w-24'
+                  value={backupFormData.maxBackups}
+                  onChange={(e) => setBackupFormData({ ...backupFormData, maxBackups: parseInt(e.target.value) || 0 })}
+                />
+                <span className='text-sm text-muted-foreground'>backups</span>
+              </div>
+              <div className='bg-muted p-3 rounded-md border'>
+                <p className='text-sm'>
+                  <strong>Note:</strong> Currently retaining {backupFormData.maxBackups} backups. Set to unlimited by entering a very high number (e.g., 365).
+                </p>
+              </div>
+            </div>
+
+            {/* Backup Schedule */}
+            <div className='space-y-3'>
+              <Label>Backup Schedule</Label>
+              <div className='grid grid-cols-2 gap-4'>
+                <div className='space-y-2'>
+                  <Label htmlFor='minute' className='text-sm'>Minute (0-59)</Label>
+                  <Input
+                    id='minute'
+                    placeholder='30'
+                    value={backupFormData.minute}
+                    onChange={(e) => setBackupFormData({ ...backupFormData, minute: e.target.value })}
+                  />
+                </div>
+                <div className='space-y-2'>
+                  <Label htmlFor='hour' className='text-sm'>Hour (0-23)</Label>
+                  <Select
+                    value={backupFormData.hour}
+                    onValueChange={(value) => setBackupFormData({ ...backupFormData, hour: value })}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder='Any hour' />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value='*'>Any hour</SelectItem>
+                      {Array.from({ length: 24 }, (_, i) => (
+                        <SelectItem key={i} value={i.toString()}>{i}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+              <div className='grid grid-cols-2 gap-4'>
+                <div className='space-y-2'>
+                  <Label htmlFor='day' className='text-sm'>Day (1-31)</Label>
+                  <Select
+                    value={backupFormData.day}
+                    onValueChange={(value) => setBackupFormData({ ...backupFormData, day: value })}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder='Any day' />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value='*'>Any day</SelectItem>
+                      {Array.from({ length: 31 }, (_, i) => (
+                        <SelectItem key={i + 1} value={(i + 1).toString()}>{i + 1}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className='space-y-2'>
+                  <Label htmlFor='month' className='text-sm'>Month</Label>
+                  <Select
+                    value={backupFormData.month}
+                    onValueChange={(value) => setBackupFormData({ ...backupFormData, month: value })}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder='Any month' />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value='*'>Any month</SelectItem>
+                      <SelectItem value='1'>January</SelectItem>
+                      <SelectItem value='2'>February</SelectItem>
+                      <SelectItem value='3'>March</SelectItem>
+                      <SelectItem value='4'>April</SelectItem>
+                      <SelectItem value='5'>May</SelectItem>
+                      <SelectItem value='6'>June</SelectItem>
+                      <SelectItem value='7'>July</SelectItem>
+                      <SelectItem value='8'>August</SelectItem>
+                      <SelectItem value='9'>September</SelectItem>
+                      <SelectItem value='10'>October</SelectItem>
+                      <SelectItem value='11'>November</SelectItem>
+                      <SelectItem value='12'>December</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+              <div className='space-y-2'>
+                <Label htmlFor='weekday' className='text-sm'>Weekday</Label>
+                <Select
+                  value={backupFormData.weekday}
+                  onValueChange={(value) => setBackupFormData({ ...backupFormData, weekday: value })}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder='Any weekday' />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value='*'>Any weekday</SelectItem>
+                    <SelectItem value='0'>Sunday</SelectItem>
+                    <SelectItem value='1'>Monday</SelectItem>
+                    <SelectItem value='2'>Tuesday</SelectItem>
+                    <SelectItem value='3'>Wednesday</SelectItem>
+                    <SelectItem value='4'>Thursday</SelectItem>
+                    <SelectItem value='5'>Friday</SelectItem>
+                    <SelectItem value='6'>Saturday</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            {/* Common Examples */}
+            <div className='space-y-2'>
+              <Label>Common Examples:</Label>
+              <div className='text-sm space-y-1'>
+                <p>• Every 30 minutes: Minute: 30, leave others empty</p>
+                <p>• Daily at 2:30 AM: Minute: 30, Hour: 2, leave others empty</p>
+                <p>• Weekly backup on Sunday at 3:00 AM: Minute: 0, Hour: 3, Weekday: Sunday</p>
+                <p>• Monthly on 1st at midnight: Minute: 0, Hour: 0, Day: 1</p>
+              </div>
+            </div>
+
+            {/* CRON Expression */}
+            <div className='space-y-2'>
+              <Label>CRON Expression:</Label>
+              <div className='flex items-center gap-2'>
+                <Input
+                  value={generateCronExpression()}
+                  readOnly
+                  className='font-mono bg-muted'
+                />
+                <Button
+                  type='button'
+                  variant='outline'
+                  onClick={() => copyToClipboard(generateCronExpression(), 'CRON Expression')}
+                >
+                  Copy
+                </Button>
+              </div>
+              <p className='text-sm text-muted-foreground'>
+                This policy will run based on the schedule configured above.
+              </p>
+            </div>
+          </div>
+
+          <DialogFooter>
+            <Button
+              variant='outline'
+              onClick={() => setIsCreateBackupModalOpen(false)}
+            >
+              Cancel
+            </Button>
+            <Button onClick={handleCreateBackup}>
+              Create Backup
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </PageLayout>
   );
 }

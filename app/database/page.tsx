@@ -307,7 +307,7 @@ export default function DatabaseListPage() {
 
   return (
     <PageShell
-      title='Database'
+      title='Databases'
       description='Create and manage your database instances with support for MySQL, PostgreSQL, and MongoDB.'
       headerActions={
         <CreateButton href='/database/create' label='Create Database' />
