@@ -36,15 +36,6 @@ const nextConfig = {
     };
     return config;
   },
-  async redirects() {
-    return [
-      {
-        source: '/administration/billing/usage',
-        destination: '/billing/usage',
-        permanent: true,
-      },
-    ];
-  },
 };
 
 export default nextConfig;
