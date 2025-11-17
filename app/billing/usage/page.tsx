@@ -1,7 +1,5 @@
 'use client';
 
-export const dynamic = 'force-static';
-
 import React, { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import { PageLayout } from '@/components/page-layout';
