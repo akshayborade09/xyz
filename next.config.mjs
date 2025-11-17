@@ -10,6 +10,8 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
+  // Ensure static generation for all pages
+  output: 'export',
   webpack: (config, { isServer }) => {
     // Optimize chunk loading
     config.optimization = {
@@ -37,8 +39,6 @@ const nextConfig = {
     };
     return config;
   },
-  // Explicitly configure output to ensure proper static generation
-  output: 'standalone',
 };
 
 export default nextConfig;
