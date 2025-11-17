@@ -365,15 +365,6 @@ const mockK8sIP = [
 ];
 const k8sIPTotal = 5.6;
 
-// Data for Databases
-const mockDatabases = [
-  { dbName: 'db-test-123', configuration: '2 vCPUs / 4 GB RAM', dbEngine: 'MySQL', rate: '₹3.15/hr', totalTimeUsed: '27 hrs', storage: '40 GB', credits: 95.85 },
-  { dbName: 'db-prod-456', configuration: '4 vCPUs / 8 GB RAM', dbEngine: 'MongoDB', rate: '₹6.84/hr', totalTimeUsed: '12 hrs', storage: '150 GB', credits: 100.08 },
-  { dbName: 'db-test-456', configuration: '8 vCPUs / 16 GB RAM', dbEngine: 'PostgreSQL', rate: '₹16.22/hr', totalTimeUsed: '5 hrs', storage: '210 GB', credits: 91.60 },
-  { dbName: 'db-test-457', configuration: '16 vCPUs / 32 GB RAM', dbEngine: 'MySQL', rate: '₹32.44/hr', totalTimeUsed: '10 hrs', storage: '400 GB', credits: 364.40 },
-];
-const databasesTotal = 651.93;
-
 // Data for Solutions
 const mockBasic = [
   { id: 1, name: 'Basic-AI-Service-01', status: 'Active', credits: 120 },
@@ -836,7 +827,6 @@ export default function UsageMetricsPage() {
       { id: 'storage', label: 'Storage' },
       { id: 'network', label: 'Network' },
       { id: 'kubernetes', label: 'Kubernetes' },
-      { id: 'databases', label: 'Databases' },
     ];
 
     // Data for each tab (updated to match VPC structure)
@@ -966,16 +956,6 @@ export default function UsageMetricsPage() {
             <EmptyState
               title='No Network Usage Yet'
               description='Your networking, bandwidth, and data transfer costs will appear here once you start using our network services.'
-              className='min-h-[300px]'
-              icon={infrastructureIcon}
-            />
-          );
-        }
-        if (coreTab === 'databases') {
-          return (
-            <EmptyState
-              title='No Database Usage Yet'
-              description='Your database instances and their usage costs will appear here once you start using our database services.'
               className='min-h-[300px]'
               icon={infrastructureIcon}
             />
@@ -1231,73 +1211,6 @@ export default function UsageMetricsPage() {
                   <td className='px-3 py-2 text-right align-middle font-bold rounded-br-md' colSpan={2}>
                     Total&nbsp;&nbsp;&nbsp;₹
                     {controlPlaneTotal.toLocaleString(undefined, {
-                      minimumFractionDigits: 2,
-                      maximumFractionDigits: 2,
-                    })}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        );
-      }
-      if (coreTab === 'databases') {
-        return (
-          <div className='rounded-md border mt-4'>
-            <table className='min-w-full text-sm table-fixed'>
-              <thead>
-                <tr className='bg-muted'>
-                  <th className='px-3 py-2 text-left text-muted-foreground font-medium rounded-tl-md w-[14%]'>
-                    DB Name
-                  </th>
-                  <th className='px-3 py-2 text-left text-muted-foreground font-medium w-[18%]'>
-                    Configuration
-                  </th>
-                  <th className='px-3 py-2 text-left text-muted-foreground font-medium w-[12%]'>
-                    DB Engine
-                  </th>
-                  <th className='px-3 py-2 text-left text-muted-foreground font-medium w-[12%]'>
-                    Rate
-                  </th>
-                  <th className='px-3 py-2 text-center text-muted-foreground font-medium w-[14%]'>
-                    Total Time Used
-                  </th>
-                  <th className='px-3 py-2 text-center text-muted-foreground font-medium w-[12%]'>
-                    Storage
-                  </th>
-                  <th className='px-3 py-2 text-right text-muted-foreground font-medium w-[18%] rounded-tr-md'>
-                    Total Credits Used
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {mockDatabases.map((row: any, idx: number) => (
-                  <tr key={idx} className='border-b transition-colors hover:bg-gray-50/40'>
-                    <td className='px-3 py-2'>{row.dbName}</td>
-                    <td className='px-3 py-2'>{row.configuration}</td>
-                    <td className='px-3 py-2'>{row.dbEngine}</td>
-                    <td className='px-3 py-2'>{row.rate}</td>
-                    <td className='px-3 py-2 text-center'>{row.totalTimeUsed}</td>
-                    <td className='px-3 py-2 text-center'>{row.storage}</td>
-                    <td className='px-3 py-2 text-right font-semibold'>
-                      ₹
-                      {row.credits.toLocaleString(undefined, {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2,
-                      })}
-                    </td>
-                  </tr>
-                ))}
-                <tr className='font-bold'>
-                  <td className='rounded-bl-md'></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td className='px-3 py-2 text-right align-middle font-bold rounded-br-md'>
-                    Total&nbsp;&nbsp;&nbsp;₹
-                    {databasesTotal.toLocaleString(undefined, {
                       minimumFractionDigits: 2,
                       maximumFractionDigits: 2,
                     })}
