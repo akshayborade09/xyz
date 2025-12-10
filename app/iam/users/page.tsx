@@ -13,6 +13,7 @@ import { StatusBadge } from '@/components/status-badge';
 import { InviteUserModal } from '@/components/modals/invite-user-modal';
 import { EditUserAccessModal } from '@/components/modals/edit-user-access-modal';
 import { ResendInviteModal } from '@/components/modals/resend-invite-modal';
+import { ResetPasswordModal } from '@/components/modals/reset-password-modal';
 import { DeleteConfirmationModal } from '@/components/delete-confirmation-modal';
 import { useToast } from '@/hooks/use-toast';
 
@@ -22,6 +23,7 @@ export default function UsersPage() {
   const [inviteModalOpen, setInviteModalOpen] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [resendInviteModalOpen, setResendInviteModalOpen] = useState(false);
+  const [resetPasswordModalOpen, setResetPasswordModalOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [users, setUsers] = useState(mockUsers);
@@ -83,6 +85,21 @@ export default function UsersPage() {
         user.status === 'blocked' ? 'unblocked' : 'blocked'
       }.`,
     });
+  };
+
+  const handleResetPassword = (user: User) => {
+    setSelectedUser(user);
+    setResetPasswordModalOpen(true);
+  };
+
+  const handleResetPasswordSuccess = () => {
+    setResetPasswordModalOpen(false);
+    if (selectedUser) {
+      toast({
+        title: 'Password reset',
+        description: `Password has been reset for ${selectedUser.name}. The user will receive an email with the new password.`,
+      });
+    }
   };
 
   const handleDeleteConfirm = () => {
@@ -223,7 +240,7 @@ export default function UsersPage() {
           <ActionMenu
             viewHref={`/iam/users/${row.id}`}
             onEdit={() => handleEditAccess(row)}
-            onDelete={() => handleDeleteClick(row)}
+            onCustomDelete={() => handleDeleteClick(row)}
             resourceName={row.name}
             resourceType='User'
             customActions={[
@@ -232,6 +249,15 @@ export default function UsersPage() {
                     {
                       label: 'Resend Invite',
                       onClick: () => handleResendInvite(row),
+                      icon: null,
+                    },
+                  ]
+                : []),
+              ...(row.status === 'active'
+                ? [
+                    {
+                      label: 'Reset Password',
+                      onClick: () => handleResetPassword(row),
                       icon: null,
                     },
                   ]
@@ -295,6 +321,13 @@ export default function UsersPage() {
             onOpenChange={setResendInviteModalOpen}
             user={selectedUser}
             onSuccess={handleResendInviteSuccess}
+          />
+
+          <ResetPasswordModal
+            open={resetPasswordModalOpen}
+            onOpenChange={setResetPasswordModalOpen}
+            user={selectedUser}
+            onSuccess={handleResetPasswordSuccess}
           />
 
           <DeleteConfirmationModal
