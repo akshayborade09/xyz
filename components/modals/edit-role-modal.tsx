@@ -142,43 +142,32 @@ export function EditRoleModal({
               />
             </div>
 
-            <div className='max-h-[300px] overflow-y-auto space-y-2'>
+            <div className='max-h-[300px] overflow-y-auto border rounded-md'>
               {filteredPolicies.length > 0 ? (
-                filteredPolicies.map(policy => (
-                  <Card
+                filteredPolicies.map((policy, index) => (
+                  <div
                     key={policy.id}
-                    className={`cursor-pointer transition-colors ${
+                    className={`flex items-center gap-3 px-3 py-2 cursor-pointer transition-colors ${
                       selectedPolicies.includes(policy.id)
-                        ? 'border-primary bg-primary/5'
+                        ? 'bg-primary/5'
                         : 'hover:bg-muted/50'
-                    }`}
+                    } ${index !== filteredPolicies.length - 1 ? 'border-b' : ''}`}
                     onClick={() => togglePolicy(policy.id)}
                   >
-                    <CardContent className='p-3'>
-                      <div className='flex items-center justify-between'>
-                        <div className='flex-1'>
-                          <div className='flex items-center gap-2'>
-                            <h4 className='font-medium text-sm'>
-                              {policy.name}
-                            </h4>
-                            {selectedPolicies.includes(policy.id) && (
-                              <span className='text-xs text-primary font-medium'>
-                                Selected
-                              </span>
-                            )}
-                          </div>
-                          <p className='text-xs text-muted-foreground mt-0.5'>
-                            {policy.description}
-                          </p>
-                        </div>
-                        <Checkbox
-                          checked={selectedPolicies.includes(policy.id)}
-                          onCheckedChange={() => togglePolicy(policy.id)}
-                          onClick={e => e.stopPropagation()}
-                        />
+                    <Checkbox
+                      checked={selectedPolicies.includes(policy.id)}
+                      onCheckedChange={() => togglePolicy(policy.id)}
+                      onClick={e => e.stopPropagation()}
+                    />
+                    <div className='flex-1 min-w-0'>
+                      <div className='font-medium text-sm truncate'>
+                        {policy.name}
                       </div>
-                    </CardContent>
-                  </Card>
+                      <div className='text-xs text-muted-foreground truncate'>
+                        {policy.description}
+                      </div>
+                    </div>
+                  </div>
                 ))
               ) : (
                 <div className='text-center py-8 text-sm text-muted-foreground'>

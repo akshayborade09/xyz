@@ -17,6 +17,10 @@ interface DeleteConfirmationModalProps {
   resourceName: string;
   resourceType: string;
   onConfirm: () => void;
+  title?: string;
+  description?: string;
+  confirmText?: string;
+  variant?: 'destructive' | 'default';
 }
 
 /**
@@ -38,20 +42,29 @@ export function DeleteConfirmationModal({
   resourceName,
   resourceType,
   onConfirm,
+  title,
+  description,
+  confirmText,
+  variant = 'destructive',
 }: DeleteConfirmationModalProps) {
-  const [isDeleting, setIsDeleting] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const handleConfirm = async () => {
-    setIsDeleting(true);
+    setIsProcessing(true);
     try {
       await onConfirm();
     } catch (error) {
-      console.error('Error deleting resource:', error);
+      console.error('Error processing action:', error);
     } finally {
-      setIsDeleting(false);
+      setIsProcessing(false);
       onClose();
     }
   };
+
+  const displayTitle = title || 'Confirm Deletion';
+  const displayDescription = description || `Are you sure you want to delete this ${resourceType.toLowerCase()}? This action cannot be undone.`;
+  const displayConfirmText = confirmText || 'Delete';
+  const processingText = confirmText ? `${confirmText}ing...` : 'Deleting...';
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -64,19 +77,14 @@ export function DeleteConfirmationModal({
       >
         <DialogHeader className='space-y-3 pb-4'>
           <DialogTitle className='text-base font-semibold text-black pr-8'>
-            Confirm Deletion
+            {displayTitle}
           </DialogTitle>
           <hr className='border-border' />
           <DialogDescription className='text-sm text-muted-foreground leading-relaxed'>
-            Are you sure you want to delete this {resourceType.toLowerCase()}?
-            This action cannot be undone.
+            {displayDescription}
           </DialogDescription>
         </DialogHeader>
         <div className='space-y-4 py-2'>
-          <p className='text-sm text-muted-foreground'>
-            Please confirm that you want to delete the following{' '}
-            {resourceType.toLowerCase()}:
-          </p>
           <div className='rounded-md bg-muted p-3 font-medium'>
             {resourceName}
           </div>
@@ -90,18 +98,18 @@ export function DeleteConfirmationModal({
             variant='outline'
             onClick={onClose}
             className='min-w-20'
-            disabled={isDeleting}
+            disabled={isProcessing}
           >
             Cancel
           </Button>
           <Button
             type='button'
-            variant='destructive'
+            variant={variant}
             onClick={handleConfirm}
             className='min-w-20'
-            disabled={isDeleting}
+            disabled={isProcessing}
           >
-            {isDeleting ? 'Deleting...' : 'Delete'}
+            {isProcessing ? processingText : displayConfirmText}
           </Button>
         </DialogFooter>
       </DialogContent>

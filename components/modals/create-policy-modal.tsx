@@ -12,16 +12,10 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 import { Card, CardContent } from '@/components/ui/card';
 import { Trash2, Plus, Info, Eye, EyeOff } from 'lucide-react';
 import { TooltipWrapper } from '@/components/ui/tooltip-wrapper';
+import { SearchableSelect, SearchableMultiSelect } from '@/components/ui/searchable-select';
 import {
   type PolicyAccessRule,
   type PolicyType,
@@ -286,97 +280,68 @@ export function CreatePolicyModal({
                   </div>
 
                   <div className='grid grid-cols-2 gap-4'>
-                        {/* Policy Type - First */}
-                        <div className='space-y-2'>
-                          <Label className='text-xs'>Policy Type</Label>
-                          <Select
-                            value={rule.policyType}
-                            onValueChange={value =>
-                              updateRule(rule.id, 'policyType', value as PolicyType)
-                            }
-                          >
-                            <SelectTrigger>
-                              <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {policyTypeOptions.map(type => (
-                                <SelectItem key={type} value={type}>
-                                  {type}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        </div>
+                    {/* Policy Type - First */}
+                    <div className='space-y-2'>
+                      <Label className='text-xs'>Policy Type</Label>
+                      <SearchableSelect
+                        options={policyTypeOptions.map(type => ({
+                          value: type,
+                          label: type,
+                        }))}
+                        value={rule.policyType}
+                        onValueChange={value =>
+                          updateRule(rule.id, 'policyType', value as PolicyType)
+                        }
+                        placeholder='Select policy type'
+                        searchPlaceholder='Search policy types...'
+                      />
+                    </div>
 
-                        {/* Operations - Second (Multi-select) */}
-                        <div className='space-y-2'>
-                          <Label className='text-xs'>Operation</Label>
-                          <div className='border rounded-md p-2 min-h-[40px]'>
-                            <div className='flex flex-wrap gap-2'>
-                              {crudOperationOptions.map(operation => (
-                                <div
-                                  key={operation}
-                                  className='flex items-center space-x-1'
-                                >
-                                  <input
-                                    type='checkbox'
-                                    id={`${rule.id}-${operation}`}
-                                    checked={rule.operations.includes(operation)}
-                                    onChange={() =>
-                                      toggleOperation(rule.id, operation)
-                                    }
-                                    className='rounded border-gray-300'
-                                  />
-                                  <Label
-                                    htmlFor={`${rule.id}-${operation}`}
-                                    className='text-xs cursor-pointer'
-                                  >
-                                    {operation}
-                                  </Label>
-                                </div>
-                              ))}
-                            </div>
-                            {rule.operations.length === 0 && (
-                              <p className='text-xs text-muted-foreground mt-1'>
-                                Select at least one operation
-                              </p>
-                            )}
-                          </div>
-                        </div>
+                    {/* Operations - Second (Multi-select with search) */}
+                    <div className='space-y-2'>
+                      <Label className='text-xs'>Operations</Label>
+                      <SearchableMultiSelect
+                        options={crudOperationOptions.map(op => ({
+                          value: op,
+                          label: op,
+                        }))}
+                        values={rule.operations}
+                        onValuesChange={values =>
+                          updateRule(rule.id, 'operations', values as CRUDOperation[])
+                        }
+                        placeholder='Select operations'
+                        searchPlaceholder='Search operations...'
+                      />
+                    </div>
 
-                        {/* Effect - Third */}
+                    {/* Effect - Third */}
                     <div className='space-y-2'>
                       <Label className='text-xs'>Effect</Label>
-                      <Select
+                      <SearchableSelect
+                        options={effectOptions.map(effect => ({
+                          value: effect,
+                          label: effect,
+                        }))}
                         value={rule.effect}
                         onValueChange={value =>
                           updateRule(rule.id, 'effect', value as Effect)
                         }
-                      >
-                        <SelectTrigger>
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {effectOptions.map(effect => (
-                            <SelectItem key={effect} value={effect}>
-                              {effect}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
+                        placeholder='Select effect'
+                        searchPlaceholder='Search effects...'
+                      />
                     </div>
 
-                        {/* Resource Name - Fourth */}
+                    {/* Resource Name - Fourth */}
                     <div className='space-y-2'>
-                          <div className='flex items-center gap-1'>
-                            <Label className='text-xs'>Resource Name</Label>
-                            <TooltipWrapper
-                              content='Put * if you want to give access of all resources for this policy'
-                              inModal={true}
-                            >
-                              <Info className='h-3 w-3 text-muted-foreground cursor-help' />
-                            </TooltipWrapper>
-                    </div>
+                      <div className='flex items-center gap-1'>
+                        <Label className='text-xs'>Resource Name</Label>
+                        <TooltipWrapper
+                          content='Put * if you want to give access of all resources for this policy'
+                          inModal={true}
+                        >
+                          <Info className='h-3 w-3 text-muted-foreground cursor-help' />
+                        </TooltipWrapper>
+                      </div>
                       <Input
                         placeholder='e.g., vm-*, storage-*'
                         value={rule.resourceName}

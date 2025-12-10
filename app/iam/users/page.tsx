@@ -24,6 +24,7 @@ export default function UsersPage() {
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [resendInviteModalOpen, setResendInviteModalOpen] = useState(false);
   const [resetPasswordModalOpen, setResetPasswordModalOpen] = useState(false);
+  const [blockModalOpen, setBlockModalOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [users, setUsers] = useState(mockUsers);
@@ -71,20 +72,30 @@ export default function UsersPage() {
     }
   };
 
-  const handleBlockUser = (user: User) => {
-    setUsers(
-      users.map(u =>
-        u.id === user.id
-          ? { ...u, status: u.status === 'blocked' ? 'active' : 'blocked' }
-          : u
-      )
-    );
-    toast({
-      title: user.status === 'blocked' ? 'User unblocked' : 'User blocked',
-      description: `User "${user.name}" has been ${
-        user.status === 'blocked' ? 'unblocked' : 'blocked'
-      }.`,
-    });
+  const handleBlockUserClick = (user: User) => {
+    setSelectedUser(user);
+    setBlockModalOpen(true);
+  };
+
+  const handleBlockUserConfirm = () => {
+    if (selectedUser) {
+      const isBlocking = selectedUser.status !== 'blocked';
+      setUsers(
+        users.map(u =>
+          u.id === selectedUser.id
+            ? { ...u, status: isBlocking ? 'blocked' : 'active' }
+            : u
+        )
+      );
+      toast({
+        title: isBlocking ? 'User blocked' : 'User unblocked',
+        description: `User "${selectedUser.name}" has been ${
+          isBlocking ? 'blocked' : 'unblocked'
+        }.`,
+      });
+      setBlockModalOpen(false);
+      setSelectedUser(null);
+    }
   };
 
   const handleResetPassword = (user: User) => {
@@ -150,18 +161,8 @@ export default function UsersPage() {
       label: 'Name',
       sortable: true,
       searchable: true,
-      render: (value: string, row: User) => (
-        <div className='flex items-center gap-2'>
-          <div
-            className='h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center text-sm font-medium'
-          >
-            {row.name.charAt(0).toUpperCase()}
-          </div>
-          <div>
-            <div className='font-medium text-sm'>{row.name}</div>
-            <div className='text-xs text-muted-foreground'>{row.email}</div>
-          </div>
-        </div>
+      render: (value: string) => (
+        <div className='font-medium text-sm'>{value}</div>
       ),
     },
     {
@@ -264,7 +265,7 @@ export default function UsersPage() {
                 : []),
               {
                 label: row.status === 'blocked' ? 'Unblock User' : 'Block User',
-                onClick: () => handleBlockUser(row),
+                onClick: () => handleBlockUserClick(row),
                 icon: null,
                 variant: row.status === 'blocked' ? 'default' : 'destructive',
               },
@@ -339,6 +340,24 @@ export default function UsersPage() {
             onConfirm={handleDeleteConfirm}
             resourceName={selectedUser.name}
             resourceType='User'
+          />
+
+          <DeleteConfirmationModal
+            isOpen={blockModalOpen}
+            onClose={() => {
+              setBlockModalOpen(false);
+              setSelectedUser(null);
+            }}
+            onConfirm={handleBlockUserConfirm}
+            resourceName={selectedUser.name}
+            resourceType='User'
+            title={selectedUser.status === 'blocked' ? 'Unblock User' : 'Block User'}
+            description={
+              selectedUser.status === 'blocked'
+                ? `Are you sure you want to unblock "${selectedUser.name}"? They will regain access to their account.`
+                : `Are you sure you want to block "${selectedUser.name}"? They will lose access to their account immediately.`
+            }
+            confirmText={selectedUser.status === 'blocked' ? 'Unblock' : 'Block'}
           />
         </>
       )}

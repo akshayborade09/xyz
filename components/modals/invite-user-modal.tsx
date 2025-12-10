@@ -376,46 +376,32 @@ export function InviteUserModal({
                 />
               </div>
 
-              <div className='max-h-[300px] overflow-y-auto space-y-2'>
+              <div className='max-h-[300px] overflow-y-auto border rounded-md'>
                   {filteredRoles.length > 0 ? (
-                    filteredRoles.map(role => (
-                      <Card
+                    filteredRoles.map((role, index) => (
+                      <div
                         key={role.id}
-                        className={`cursor-pointer transition-colors ${
+                        className={`flex items-center gap-3 px-3 py-2 cursor-pointer transition-colors ${
                           selectedRoles.includes(role.id)
-                            ? 'border-primary bg-primary/5'
+                            ? 'bg-primary/5'
                             : 'hover:bg-muted/50'
-                        }`}
+                        } ${index !== filteredRoles.length - 1 ? 'border-b' : ''}`}
                         onClick={() => toggleRole(role.id)}
                       >
-                        <CardContent className='p-4'>
-                          <div className='flex items-start justify-between'>
-                            <div className='flex-1'>
-                              <div className='flex items-center gap-2'>
-                                <h4 className='font-medium text-sm'>
-                                  {role.name}
-                                </h4>
-                                {selectedRoles.includes(role.id) && (
-                                  <Badge variant='default' className='text-xs'>
-                                    Selected
-                                  </Badge>
-                                )}
-                              </div>
-                              <p className='text-xs text-muted-foreground mt-1'>
-                                {role.description}
-                              </p>
-                              <p className='text-xs text-muted-foreground mt-2'>
-                                Created: {new Date(role.createdAt).toLocaleDateString()}
-                              </p>
-                            </div>
-                            <Checkbox
-                              checked={selectedRoles.includes(role.id)}
-                              onCheckedChange={() => toggleRole(role.id)}
-                              onClick={e => e.stopPropagation()}
-                            />
+                        <Checkbox
+                          checked={selectedRoles.includes(role.id)}
+                          onCheckedChange={() => toggleRole(role.id)}
+                          onClick={e => e.stopPropagation()}
+                        />
+                        <div className='flex-1 min-w-0'>
+                          <div className='font-medium text-sm truncate'>
+                            {role.name}
                           </div>
-                        </CardContent>
-                      </Card>
+                          <div className='text-xs text-muted-foreground truncate'>
+                            {role.description}
+                          </div>
+                        </div>
+                      </div>
                     ))
                   ) : (
                     <div className='text-center py-8 text-sm text-muted-foreground'>
@@ -436,53 +422,39 @@ export function InviteUserModal({
                   />
                 </div>
 
-                <div className='max-h-[300px] overflow-y-auto space-y-2'>
+                <div className='max-h-[300px] overflow-y-auto border rounded-md'>
                   {filteredGroups.length > 0 ? (
-                    filteredGroups.map(group => (
-                      <Card
+                    filteredGroups.map((group, index) => (
+                      <div
                         key={group.id}
-                        className={`cursor-pointer transition-colors ${
+                        className={`flex items-center gap-3 px-3 py-2 cursor-pointer transition-colors ${
                           selectedGroups.includes(group.id)
-                            ? 'border-primary bg-primary/5'
+                            ? 'bg-primary/5'
                             : 'hover:bg-muted/50'
-                        }`}
+                        } ${index !== filteredGroups.length - 1 ? 'border-b' : ''}`}
                         onClick={() => toggleGroup(group.id)}
                       >
-                        <CardContent className='p-4'>
-                          <div className='flex items-start justify-between'>
-                            <div className='flex-1'>
-                              <div className='flex items-center gap-2'>
-                                <h4 className='font-medium text-sm'>
-                                  {group.name}
-                                </h4>
-                                {selectedGroups.includes(group.id) && (
-                                  <Badge variant='default' className='text-xs'>
-                                    Selected
-                                  </Badge>
-                                )}
-                              </div>
-                              <p className='text-xs text-muted-foreground mt-1'>
-                                {group.description}
-                              </p>
-                              <p className='text-xs text-muted-foreground mt-2'>
-                                Created: {new Date(group.createdAt).toLocaleDateString()}
-                              </p>
-                            </div>
-                            <Checkbox
-                              checked={selectedGroups.includes(group.id)}
-                              onCheckedChange={() => toggleGroup(group.id)}
-                              onClick={e => e.stopPropagation()}
-                            />
+                        <Checkbox
+                          checked={selectedGroups.includes(group.id)}
+                          onCheckedChange={() => toggleGroup(group.id)}
+                          onClick={e => e.stopPropagation()}
+                        />
+                        <div className='flex-1 min-w-0'>
+                          <div className='font-medium text-sm truncate'>
+                            {group.name}
                           </div>
-                        </CardContent>
-                      </Card>
+                          <div className='text-xs text-muted-foreground truncate'>
+                            {group.description}
+                          </div>
+                        </div>
+                      </div>
                     ))
                   ) : (
                     <div className='text-center py-8 text-sm text-muted-foreground'>
                       No groups found
                     </div>
-                )}
-              </div>
+                  )}
+                </div>
               </TabsContent>
             </Tabs>
           </div>
