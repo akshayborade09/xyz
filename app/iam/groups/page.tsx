@@ -153,7 +153,7 @@ export default function GroupsPage() {
           <ActionMenu
             viewHref={`/iam/groups/${row.id}`}
             onEdit={() => handleEditClick(row)}
-            onDelete={() => handleDeleteClick(row)}
+            onCustomDelete={() => handleDeleteClick(row)}
             resourceName={row.name}
             resourceType='Group'
           />

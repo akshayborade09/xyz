@@ -66,11 +66,29 @@ export function DetachPolicyModal({
   };
 
   const handleBulkDetachRoles = () => {
-    setSelectedRoles(roles.map(r => r.id));
+    const allRoleIds = roles.map(r => r.id);
+    setLoading(true);
+    // Simulate API call
+    setTimeout(() => {
+      onDetach(allRoleIds, []);
+      setLoading(false);
+      onClose();
+      setSelectedRoles([]);
+      setSelectedGroups([]);
+    }, 1000);
   };
 
   const handleBulkDetachGroups = () => {
-    setSelectedGroups(groupsUsingPolicy.map(g => g.id));
+    const allGroupIds = groupsUsingPolicy.map(g => g.id);
+    setLoading(true);
+    // Simulate API call
+    setTimeout(() => {
+      onDetach([], allGroupIds);
+      setLoading(false);
+      onClose();
+      setSelectedRoles([]);
+      setSelectedGroups([]);
+    }, 1000);
   };
 
   const handleDetach = () => {
@@ -117,8 +135,9 @@ export function DetachPolicyModal({
                   variant='outline'
                   size='sm'
                   onClick={handleBulkDetachRoles}
+                  disabled={loading}
                 >
-                  Select All
+                  Bulk Detach
                 </Button>
               </div>
               <div className='max-h-[200px] overflow-y-auto space-y-2'>
@@ -168,8 +187,9 @@ export function DetachPolicyModal({
                   variant='outline'
                   size='sm'
                   onClick={handleBulkDetachGroups}
+                  disabled={loading}
                 >
-                  Select All
+                  Bulk Detach
                 </Button>
               </div>
               <div className='max-h-[200px] overflow-y-auto space-y-2'>

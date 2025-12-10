@@ -59,11 +59,29 @@ export function DetachRoleModal({
   };
 
   const handleBulkDetachGroups = () => {
-    setSelectedGroups(groups.map(g => g.id));
+    const allGroupIds = groups.map(g => g.id);
+    setLoading(true);
+    // Simulate API call
+    setTimeout(() => {
+      onDetach(allGroupIds, []);
+      setLoading(false);
+      onClose();
+      setSelectedGroups([]);
+      setSelectedUsers([]);
+    }, 1000);
   };
 
   const handleBulkDetachUsers = () => {
-    setSelectedUsers(users.map(u => u.id));
+    const allUserIds = users.map(u => u.id);
+    setLoading(true);
+    // Simulate API call
+    setTimeout(() => {
+      onDetach([], allUserIds);
+      setLoading(false);
+      onClose();
+      setSelectedGroups([]);
+      setSelectedUsers([]);
+    }, 1000);
   };
 
   const handleDetach = () => {
@@ -110,8 +128,9 @@ export function DetachRoleModal({
                   variant='outline'
                   size='sm'
                   onClick={handleBulkDetachGroups}
+                  disabled={loading}
                 >
-                  Select All
+                  Bulk Detach
                 </Button>
               </div>
               <div className='max-h-[200px] overflow-y-auto space-y-2'>
@@ -161,8 +180,9 @@ export function DetachRoleModal({
                   variant='outline'
                   size='sm'
                   onClick={handleBulkDetachUsers}
+                  disabled={loading}
                 >
-                  Select All
+                  Bulk Detach
                 </Button>
               </div>
               <div className='max-h-[200px] overflow-y-auto space-y-2'>

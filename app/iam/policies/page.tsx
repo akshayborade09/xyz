@@ -135,7 +135,7 @@ export default function PoliciesPage() {
         <div className='flex justify-end'>
           <ActionMenu
             viewHref={`/iam/policies/${row.id}`}
-            onDelete={() => handleDeleteClick(row)}
+            onCustomDelete={() => handleDeleteClick(row)}
             resourceName={row.name}
             resourceType='Policy'
           />

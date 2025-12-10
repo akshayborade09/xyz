@@ -153,6 +153,7 @@ export default function RolesPage() {
           <ActionMenu
             viewHref={`/iam/roles/${row.id}`}
             onEdit={() => handleEditClick(row)}
+            onCustomDelete={() => handleDeleteClick(row)}
             resourceName={row.name}
             resourceType='Role'
           />
