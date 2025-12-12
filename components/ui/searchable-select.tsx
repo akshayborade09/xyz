@@ -157,11 +157,14 @@ export function SearchableMultiSelect({
                 {filteredOptions.map(option => {
                   const isSelected = values.includes(option.value);
                   return (
-                    <CommandItem
+                    <div
                       key={option.value}
-                      value={option.value}
-                      onSelect={() => toggleValue(option.value)}
-                      className='cursor-pointer'
+                      className='relative flex cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none hover:bg-accent hover:text-accent-foreground'
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        toggleValue(option.value);
+                      }}
                     >
                       <Checkbox
                         checked={isSelected}
@@ -170,7 +173,7 @@ export function SearchableMultiSelect({
                         onClick={(e) => e.stopPropagation()}
                       />
                       <span>{option.label}</span>
-                    </CommandItem>
+                    </div>
                   );
                 })}
               </CommandGroup>
