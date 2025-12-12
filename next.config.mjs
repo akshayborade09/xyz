@@ -1,5 +1,5 @@
 /** @type {import('next').NextConfig} */
-// Force cache clear - Updated Nov 17, 2025
+// Force cache clear - Updated Dec 12, 2025
 const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
@@ -10,21 +10,29 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
+  // Optimize webpack for large client components
   webpack: (config, { isServer }) => {
-    // Optimize chunk loading
+    // Optimize chunk loading for better code splitting
     config.optimization = {
       ...config.optimization,
       splitChunks: {
         chunks: 'all',
         minSize: 20000,
-        maxSize: 244000,
+        maxSize: 150000, // Reduced for better splitting
         minChunks: 1,
-        maxAsyncRequests: 30,
-        maxInitialRequests: 30,
+        maxAsyncRequests: 50, // Increased for more parallel loading
+        maxInitialRequests: 50,
         cacheGroups: {
           defaultVendors: {
             test: /[\\/]node_modules[\\/]/,
             priority: -10,
+            reuseExistingChunk: true,
+            maxSize: 150000,
+          },
+          billingUsage: {
+            test: /[\\/]app[\\/]billing[\\/]usage[\\/]/,
+            name: 'billing-usage',
+            priority: 10,
             reuseExistingChunk: true,
           },
           default: {
@@ -36,6 +44,10 @@ const nextConfig = {
       },
     };
     return config;
+  },
+  // Experimental features for better performance
+  experimental: {
+    optimizePackageImports: ['@heroicons/react', 'highcharts', 'lucide-react'],
   },
 };
 
