@@ -276,6 +276,7 @@ export function MultiStepSignup() {
   };
 
   const handleSignupComplete = (formData: {
+    organisationName: string;
     fullName: string;
     email: string;
     mobile: string;

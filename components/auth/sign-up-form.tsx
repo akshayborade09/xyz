@@ -16,6 +16,7 @@ import { useAuth } from './auth-provider';
 
 interface SignUpFormProps {
   onNext?: (formData: {
+    organisationName: string;
     fullName: string;
     email: string;
     mobile: string;
@@ -27,6 +28,7 @@ export function SignUpForm({ onNext }: SignUpFormProps) {
   const { setUserData } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
+    organisationName: '',
     fullName: '',
     email: '',
     mobile: '',
@@ -37,6 +39,7 @@ export function SignUpForm({ onNext }: SignUpFormProps) {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [acceptTerms, setAcceptTerms] = useState(false);
   const [errors, setErrors] = useState<{
+    organisationName?: string;
     fullName?: string;
     email?: string;
     mobile?: string;
@@ -145,6 +148,7 @@ export function SignUpForm({ onNext }: SignUpFormProps) {
 
     // Validate form
     const newErrors: {
+      organisationName?: string;
       fullName?: string;
       email?: string;
       mobile?: string;
@@ -153,6 +157,10 @@ export function SignUpForm({ onNext }: SignUpFormProps) {
       terms?: string;
       general?: string;
     } = {};
+
+    if (!formData.organisationName.trim()) {
+      newErrors.organisationName = 'Organisation name is required';
+    }
 
     if (!formData.fullName.trim()) {
       newErrors.fullName = 'Full name is required';
@@ -205,6 +213,7 @@ export function SignUpForm({ onNext }: SignUpFormProps) {
       // For demo purposes, we'll just move to the next step
       if (onNext) {
         onNext({
+          organisationName: formData.organisationName,
           fullName: formData.fullName,
           email: formData.email,
           mobile: formData.mobile,
@@ -244,6 +253,30 @@ export function SignUpForm({ onNext }: SignUpFormProps) {
                 <p className='text-sm text-red-700'>{errors.general}</p>
               </div>
             )}
+            <div>
+              <Label
+                htmlFor='organisationName'
+                className='block text-sm font-medium text-gray-700'
+              >
+                Organisation name
+              </Label>
+              <Input
+                id='organisationName'
+                name='organisationName'
+                type='text'
+                autoComplete='organization'
+                value={formData.organisationName}
+                onChange={handleChange}
+                className={cn(
+                  'mt-1',
+                  errors.organisationName && 'border-red-300 focus-visible:ring-red-500'
+                )}
+                placeholder='Ola Krutim'
+              />
+              {errors.organisationName && (
+                <p className='mt-1 text-sm text-red-600'>{errors.organisationName}</p>
+              )}
+            </div>
             <div>
               <Label
                 htmlFor='fullName'
