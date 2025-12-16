@@ -121,7 +121,7 @@ export function NewUserSignIn() {
           </div>
 
           {/* Card Container */}
-          <div className='bg-white rounded-lg p-8'>
+          <div className='bg-white rounded-lg'>
             {/* Title and Description */}
             <div className='text-left mb-6'>
               <h2 className='text-2xl font-bold tracking-tight text-gray-900 mb-2'>
@@ -220,21 +220,21 @@ export function NewUserSignIn() {
             </form>
 
             {/* Footer Links */}
-            <div className='mt-6 text-left text-sm'>
+            <div className='mt-6 text-center text-sm'>
               <div>
-                <span className='text-gray-600'>Don&apos;t have an account? </span>
+                <span className='text-[#7F7F7F]'>Don&apos;t have an account? </span>
                 <Link
                   href='/auth/signup'
-                  className='font-medium text-primary hover:text-primary/80'
+                  className='font-medium text-[#4CAF50] hover:text-[#4CAF50]/80'
                 >
                   Sign Up
                 </Link>
               </div>
               <div className='mt-2'>
-                <span className='text-gray-600'>Contact </span>
+                <span className='text-[#7F7F7F]'>Contact </span>
                 <Link
                   href='/support'
-                  className='font-medium text-primary hover:text-primary/80'
+                  className='font-medium text-[#4CAF50] hover:text-[#4CAF50]/80'
                 >
                   Support
                 </Link>
