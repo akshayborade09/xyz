@@ -4,7 +4,7 @@ import { twMerge } from "tailwind-merge";
 
 const SwitchContext = createContext<{
   value: string | null;
-  setValue: React.Dispatch<React.SetStateAction<string | null>>;
+  setValue: (value: string) => void;
 } | null>(null);
 
 interface SwitchProps {
@@ -12,13 +12,21 @@ interface SwitchProps {
   name?: string;
   size?: "small" | "medium" | "large";
   style?: React.CSSProperties;
+  onValueChange?: (value: string) => void;
 }
 
-export const Switch = ({ children, name = "default", size = "medium", style }: SwitchProps) => {
+export const Switch = ({ children, name = "default", size = "medium", style, onValueChange }: SwitchProps) => {
   const [value, setValue] = useState<string | null>(null);
 
+  const handleSetValue = (newValue: string) => {
+    setValue(newValue);
+    if (onValueChange) {
+      onValueChange(newValue);
+    }
+  };
+
   return (
-    <SwitchContext.Provider value={{ value, setValue }}>
+    <SwitchContext.Provider value={{ value, setValue: handleSetValue }}>
       <div
         className={clsx(
           "flex bg-background-100 p-1 border border-gray-alpha-400",

@@ -16,10 +16,12 @@ export function NewUserSignIn() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [userType, setUserType] = useState<'root' | 'iam'>('root');
+  const [organisationId, setOrganisationId] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState<{
+    organisationId?: string;
     email?: string;
     password?: string;
     general?: string;
@@ -35,9 +37,14 @@ export function NewUserSignIn() {
     setErrors({});
 
     const newErrors: {
+      organisationId?: string;
       email?: string;
       password?: string;
     } = {};
+
+    if (userType === 'iam' && !organisationId.trim()) {
+      newErrors.organisationId = 'Organisation ID is required for IAM users';
+    }
 
     if (!email) {
       newErrors.email = 'Email is required';
@@ -144,7 +151,11 @@ export function NewUserSignIn() {
 
               {/* User Type Toggle */}
               <div>
-                <Switch name="userType" size="medium">
+                <Switch 
+                  name="userType" 
+                  size="medium"
+                  onValueChange={(value) => setUserType(value as 'root' | 'iam')}
+                >
                   <Switch.Control
                     label="Root User"
                     value="root"
@@ -156,6 +167,33 @@ export function NewUserSignIn() {
                   />
                 </Switch>
               </div>
+
+              {/* Organisation ID - Only for IAM Users */}
+              {userType === 'iam' && (
+                <div>
+                  <Label
+                    htmlFor='organisationId'
+                    className='block text-sm text-gray-500 mb-2'
+                  >
+                    Organisation ID
+                  </Label>
+                  <Input
+                    id='organisationId'
+                    name='organisationId'
+                    type='text'
+                    value={organisationId}
+                    onChange={e => setOrganisationId(e.target.value)}
+                    className={cn(
+                      'mt-1',
+                      errors.organisationId && 'border-red-300 focus-visible:ring-red-500'
+                    )}
+                    placeholder='Enter your organisation ID'
+                  />
+                  {errors.organisationId && (
+                    <p className='mt-1 text-sm text-red-600'>{errors.organisationId}</p>
+                  )}
+                </div>
+              )}
 
               {/* Email Address */}
               <div>
