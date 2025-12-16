@@ -229,13 +229,21 @@ export function SignInScreen() {
               </div>
             </div>
 
-            <div>
+            <div className='flex gap-3'>
               <Button
                 type='submit'
-                className='group relative flex w-full justify-center'
+                className='group relative flex-1 justify-center'
                 disabled={isLoading}
               >
-                {isLoading ? 'Signing in...' : 'Sign in'}
+                {isLoading ? 'Signing in...' : 'Sign In'}
+              </Button>
+              <Button
+                type='button'
+                variant='outline'
+                className='flex-1'
+                onClick={() => router.push('/auth/signup')}
+              >
+                New Sign In
               </Button>
             </div>
 

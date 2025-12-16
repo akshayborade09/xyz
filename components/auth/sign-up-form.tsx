@@ -271,7 +271,7 @@ export function SignUpForm({ onNext }: SignUpFormProps) {
                   'mt-1',
                   errors.organisationName && 'border-red-300 focus-visible:ring-red-500'
                 )}
-                placeholder='Ola Krutim'
+                placeholder='Your Organisation Name'
               />
               {errors.organisationName && (
                 <p className='mt-1 text-sm text-red-600'>{errors.organisationName}</p>
