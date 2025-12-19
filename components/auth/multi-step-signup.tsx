@@ -62,8 +62,6 @@ const getStepperConfig = (phase: 'signup' | 'profile') => {
     return [
       { name: 'Signup', status: 'current' },
       { name: 'Verify', status: 'upcoming' },
-      { name: 'Account Type', status: 'upcoming' },
-      { name: 'Address', status: 'upcoming' },
       { name: 'Complete', status: 'upcoming' },
     ];
   }
@@ -80,15 +78,13 @@ const flowConfig = {
   signup: [
     { step: 0, name: 'Signup', component: 'SignUpForm' },
     { step: 1, name: 'Verify', component: 'OTPVerificationForm' },
-    { step: 2, name: 'Account Type', component: 'AccountTypeSelection' },
-    { step: 3, name: 'Address', component: 'AddressCollection' },
-    { step: 4, name: 'Complete', component: 'SignupSuccess' },
+    { step: 2, name: 'Complete', component: 'SignupSuccess' },
   ],
   profile: [
-    { step: 5, name: 'Basic Info', component: 'BasicInfoCompletion' },
-    { step: 6, name: 'Identity', component: 'IdentityVerification' },
-    { step: 7, name: 'Payment', component: 'PaymentSetup' },
-    { step: 8, name: 'Payment Success', component: 'PaymentSetupSuccess' },
+    { step: 3, name: 'Basic Info', component: 'BasicInfoCompletion' },
+    { step: 4, name: 'Identity', component: 'IdentityVerification' },
+    { step: 5, name: 'Payment', component: 'PaymentSetup' },
+    { step: 6, name: 'Payment Success', component: 'PaymentSetupSuccess' },
   ],
 };
 
@@ -169,7 +165,7 @@ export function MultiStepSignup() {
     const nextStep = currentStep + 1;
 
     // Handle completion of main signup flow
-    if (currentStep === 4 && flowPhase === 'signup') {
+    if (currentStep === 2 && flowPhase === 'signup') {
       // Set limited access and navigate to dashboard
       setAccessLevel('limited');
       sessionStorage.setItem('newSignup', 'true');
@@ -178,7 +174,7 @@ export function MultiStepSignup() {
     }
 
     // Handle transition from signup to profile completion
-    if (nextStep === 5 && flowPhase === 'signup') {
+    if (nextStep === 3 && flowPhase === 'signup') {
       setCurrentStep(nextStep);
       setFlowPhase('profile');
       setVisibleSteps(getStepperConfig('profile'));
@@ -186,7 +182,7 @@ export function MultiStepSignup() {
     }
 
     // Handle completion of profile flow
-    if (currentStep === 7 && flowPhase === 'profile') {
+    if (currentStep === 5 && flowPhase === 'profile') {
       // Set full access and navigate to dashboard
       setAccessLevel('full');
       router.push('/dashboard');
@@ -196,7 +192,7 @@ export function MultiStepSignup() {
     setCurrentStep(nextStep);
 
     // Update step status for current phase
-    if (flowPhase === 'signup' && nextStep <= 4) {
+    if (flowPhase === 'signup' && nextStep <= 2) {
       const updatedSteps = visibleSteps.map((step, index) => ({
         ...step,
         status:
@@ -207,8 +203,8 @@ export function MultiStepSignup() {
               : 'upcoming',
       }));
       setVisibleSteps(updatedSteps);
-    } else if (flowPhase === 'profile' && nextStep >= 5 && nextStep <= 7) {
-      const profileStepIndex = nextStep - 5;
+    } else if (flowPhase === 'profile' && nextStep >= 3 && nextStep <= 5) {
+      const profileStepIndex = nextStep - 3;
       const updatedSteps = visibleSteps.map((step, index) => ({
         ...step,
         status:
@@ -226,14 +222,12 @@ export function MultiStepSignup() {
     const prevStep = currentStep - 1;
 
     // Handle transition back from profile to signup
-    if (prevStep === 4 && flowPhase === 'profile') {
+    if (prevStep === 2 && flowPhase === 'profile') {
       setCurrentStep(prevStep);
       setFlowPhase('signup');
       setVisibleSteps([
         { name: 'Signup', status: 'complete' },
         { name: 'Verify', status: 'complete' },
-        { name: 'Account Type', status: 'complete' },
-        { name: 'Address', status: 'complete' },
         { name: 'Complete', status: 'current' },
       ]);
       return;
@@ -253,8 +247,8 @@ export function MultiStepSignup() {
               : 'upcoming',
       }));
       setVisibleSteps(updatedSteps);
-    } else if (flowPhase === 'profile' && prevStep >= 5) {
-      const profileStepIndex = prevStep - 5;
+    } else if (flowPhase === 'profile' && prevStep >= 3) {
+      const profileStepIndex = prevStep - 3;
       const updatedSteps = visibleSteps.map((step, index) => ({
         ...step,
         status:
@@ -282,6 +276,7 @@ export function MultiStepSignup() {
   };
 
   const handleSignupComplete = (formData: {
+    organisationName: string;
     fullName: string;
     email: string;
     mobile: string;
@@ -321,31 +316,7 @@ export function MultiStepSignup() {
           </Suspense>
         );
 
-      case 2: // Account Type
-        return (
-          <Suspense fallback={<LoadingStep />}>
-            <AccountTypeSelection
-              userName={userData.name}
-              selectedType={accountType}
-              onSelectType={handleAccountTypeSelection}
-              onBack={goToPreviousStep}
-              onNext={() => {}} // Handled by onSelectType
-            />
-          </Suspense>
-        );
-
-      case 3: // Address
-        return (
-          <Suspense fallback={<LoadingStep />}>
-            <AddressCollection
-              accountType={accountType || 'individual'}
-              onBack={goToPreviousStep}
-              onNext={goToNextStep}
-            />
-          </Suspense>
-        );
-
-      case 4: // Complete (Signup Success)
+      case 2: // Complete (Signup Success)
         return (
           <Suspense fallback={<LoadingStep />}>
             <SignupSuccess
@@ -354,7 +325,7 @@ export function MultiStepSignup() {
                   console.log('Profile completion selected');
                   // Set user authentication data
                   setUserAuthData(userData, accountType || 'individual');
-                  setCurrentStep(5);
+                  setCurrentStep(3);
                   setFlowPhase('profile');
                   setVisibleSteps(getStepperConfig('profile'));
                 } catch (error) {
@@ -380,7 +351,7 @@ export function MultiStepSignup() {
           </Suspense>
         );
 
-      case 5: // Basic Info (Profile Completion)
+      case 3: // Basic Info (Profile Completion)
         return (
           <Suspense fallback={<LoadingStep />}>
             <BasicInfoCompletion
@@ -391,7 +362,7 @@ export function MultiStepSignup() {
           </Suspense>
         );
 
-      case 6: // Identity Verification
+      case 4: // Identity Verification
         return (
           <Suspense fallback={<LoadingStep />}>
             <IdentityVerification
@@ -401,7 +372,7 @@ export function MultiStepSignup() {
           </Suspense>
         );
 
-      case 7: // Payment Setup
+      case 5: // Payment Setup
         return (
           <Suspense fallback={<LoadingStep />}>
             <PaymentSetup
@@ -411,7 +382,7 @@ export function MultiStepSignup() {
           </Suspense>
         );
 
-      case 8: // Payment Setup Success
+      case 6: // Payment Setup Success
         return (
           <Suspense fallback={<LoadingStep />}>
             <PaymentSetupSuccess
@@ -436,7 +407,7 @@ export function MultiStepSignup() {
     if (flowPhase === 'signup') {
       return currentStep;
     } else {
-      return currentStep - 5; // Adjust for profile completion phase
+      return currentStep - 3; // Adjust for profile completion phase
     }
   };
 

@@ -1,29 +1,106 @@
-'use client';
+import React, { createContext, useContext, useEffect, useState } from "react";
+import clsx from "clsx";
+import { twMerge } from "tailwind-merge";
 
-import * as React from 'react';
-import * as SwitchPrimitives from '@radix-ui/react-switch';
+const SwitchContext = createContext<{
+  value: string | null;
+  setValue: (value: string) => void;
+} | null>(null);
 
-import { cn } from '@/lib/utils';
+interface SwitchProps {
+  children: React.ReactNode;
+  name?: string;
+  size?: "small" | "medium" | "large";
+  style?: React.CSSProperties;
+  onValueChange?: (value: string) => void;
+}
 
-const Switch = React.forwardRef<
-  React.ElementRef<typeof SwitchPrimitives.Root>,
-  React.ComponentPropsWithoutRef<typeof SwitchPrimitives.Root>
->(({ className, ...props }, ref) => (
-  <SwitchPrimitives.Root
-    className={cn(
-      'peer inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=unchecked]:bg-input',
-      className
-    )}
-    {...props}
-    ref={ref}
-  >
-    <SwitchPrimitives.Thumb
-      className={cn(
-        'pointer-events-none block h-5 w-5 rounded-full bg-background shadow-lg ring-0 transition-transform data-[state=checked]:translate-x-5 data-[state=unchecked]:translate-x-0'
-      )}
-    />
-  </SwitchPrimitives.Root>
-));
-Switch.displayName = SwitchPrimitives.Root.displayName;
+export const Switch = ({ children, name = "default", size = "medium", style, onValueChange }: SwitchProps) => {
+  const [value, setValue] = useState<string | null>(null);
 
-export { Switch };
+  const handleSetValue = (newValue: string) => {
+    setValue(newValue);
+    if (onValueChange) {
+      onValueChange(newValue);
+    }
+  };
+
+  return (
+    <SwitchContext.Provider value={{ value, setValue: handleSetValue }}>
+      <div
+        className={clsx(
+          "flex bg-background-100 p-1 border border-gray-alpha-400",
+          size === "small" && "h-8 rounded-md",
+          size === "medium" && "h-10 rounded-md",
+          size === "large" && "h-12 rounded-lg"
+        )}
+        style={style}>
+        {React.Children.map(children, (child) =>
+          React.cloneElement(child as React.ReactElement<SwitchControlProps>, { size, name }))}
+      </div>
+    </SwitchContext.Provider>
+  );
+};
+
+interface SwitchControlProps {
+  label?: string;
+  value: string;
+  defaultChecked?: boolean;
+  disabled?: boolean;
+  name?: string;
+  size?: "small" | "medium" | "large";
+  icon?: React.ReactNode;
+}
+
+const SwitchControl = ({
+  label,
+  value,
+  defaultChecked,
+  disabled = false,
+  name,
+  size = "medium",
+  icon
+}: SwitchControlProps) => {
+  const context = useContext(SwitchContext);
+  const checked = value === context?.value;
+
+  useEffect(() => {
+    if (defaultChecked) {
+      context?.setValue(value);
+    }
+  }, []);
+
+  return (
+    <label
+      className={clsx("flex flex-1 h-full", disabled && "cursor-not-allowed pointer-events-none")}
+      onClick={() => context?.setValue(value)}
+    >
+      <input
+        type="radio"
+        name={name}
+        value={value}
+        defaultChecked={defaultChecked}
+        disabled={disabled}
+        checked={checked}
+        className="hidden"
+      />
+      <span
+        className={twMerge(clsx(
+          "flex items-center justify-center flex-1 cursor-pointer font-medium font-sans duration-150",
+          checked ? "bg-gray-100 text-gray-1000 fill-gray-1000 rounded-sm" : "text-gray-900 hover:text-gray-1000 fill-gray-900 hover:fill-gray-1000",
+          disabled && "text-gray-800 fill-gray-800",
+          !icon && size === "small" && "text-sm px-3",
+          !icon && size === "medium" && "text-sm px-3",
+          !icon && size === "large" && "text-base px-4",
+          icon && size === "small" && "py-1 px-2",
+          icon && size === "medium" && "py-2 px-3",
+          icon && size === "large" && "p-3"
+        ))}
+      >
+        {icon ? <span className={clsx(size === "large" && "scale-125")}>{icon}</span> : label}
+      </span>
+    </label>
+  );
+};
+
+Switch.Control = SwitchControl;
