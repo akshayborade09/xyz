@@ -402,6 +402,12 @@ export function InviteUserModal({
                             {role.description}
                           </div>
                         </div>
+                        <Badge 
+                          variant={role.type === 'preset' ? 'secondary' : 'outline'}
+                          className='text-[10px] px-1.5 py-0 h-4 capitalize shrink-0'
+                        >
+                          {role.type}
+                        </Badge>
                       </div>
                     ))
                   ) : (

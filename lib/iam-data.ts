@@ -5,7 +5,7 @@ export type AccessType = 'console' | 'programmatic' | 'both';
 export type PolicyType = 'VM' | 'Storage' | 'Network' | 'Kubernetes' | 'Database' | 'Billing' | 'IAM';
 export type CRUDOperation = 'Create' | 'Read' | 'Update' | 'Delete';
 export type Effect = 'Allow' | 'Deny';
-export type RoleType = 'default' | 'custom';
+export type RoleType = 'preset' | 'custom';
 
 // Policy Access Rule
 export interface PolicyAccessRule {
@@ -277,7 +277,7 @@ export const mockRoles: Role[] = [
     id: 'role-1',
     name: 'Super Admin',
     description: 'Full system access and control',
-    type: 'default',
+    type: 'preset',
     policyIds: ['policy-1', 'policy-3', 'policy-4'],
     createdAt: '2024-01-15T10:00:00Z',
     createdBy: 'user-1',
@@ -295,7 +295,7 @@ export const mockRoles: Role[] = [
     id: 'role-3',
     name: 'Viewer',
     description: 'Read-only access to resources',
-    type: 'default',
+    type: 'preset',
     policyIds: ['policy-2', 'policy-5'],
     createdAt: '2024-02-01T09:30:00Z',
     createdBy: 'user-2',

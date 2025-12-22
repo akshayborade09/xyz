@@ -15,6 +15,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Card, CardContent } from '@/components/ui/card';
 import { Search } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
 import { mockRoles, type Role } from '@/lib/iam-data';
 
 interface CreateGroupModalProps {
@@ -152,6 +153,12 @@ export function CreateGroupModal({
                         {role.description}
                       </div>
                     </div>
+                    <Badge 
+                      variant={role.type === 'preset' ? 'secondary' : 'outline'}
+                      className='text-[10px] px-1.5 py-0 h-4 capitalize shrink-0'
+                    >
+                      {role.type}
+                    </Badge>
                   </div>
                 ))
               ) : (
