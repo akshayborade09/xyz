@@ -23,8 +23,8 @@ import {
   Activity,
   Lock,
   Unlock,
-  ShieldAlert,
 } from 'lucide-react';
+import Image from 'next/image';
 import { CpuPricingCards } from './cpu/components/pricing-cards';
 import { GpuPricingCards } from './gpu/components/pricing-cards';
 import { GpuBaremetalPricingCards } from './gpu/components/baremetal-pricing-cards';
@@ -163,9 +163,13 @@ function MyInstancesIAMSection() {
         description='You do not have permission to view or access VM instances. Please contact your root user to request access.'
         className='min-h-[400px]'
         icon={
-          <div className='bg-red-50 rounded-full p-4'>
-            <ShieldAlert className='h-16 w-16 text-red-500' />
-          </div>
+          <Image
+            src='/access-denied.svg'
+            alt='Access Denied'
+            width={215}
+            height={140}
+            priority
+          />
         }
       />
     </div>
