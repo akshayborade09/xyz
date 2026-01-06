@@ -3995,3 +3995,480 @@ export const autoScalingTemplates: AutoScalingTemplate[] = [
 export const getLoadBalancer = (id: string) => {
   return loadBalancers.find(lb => lb.id === id)
 }
+
+// Functions (FaaS) Interface
+export interface ServerlessFunction {
+  id: string
+  name: string
+  memory: string
+  runtime: string
+  status: "active" | "inactive" | "pending" | "failed"
+  region: string
+  createdOn: string
+  lastUpdated: string
+  description?: string
+  handler?: string
+  timeout?: number
+  environmentVariables?: Record<string, string>
+  triggers?: string[]
+}
+
+// Mock Serverless Functions Data
+export const serverlessFunctions: ServerlessFunction[] = [
+  {
+    id: "func-1",
+    name: "process-image-resize",
+    memory: "256 MB",
+    runtime: "Node.js 18",
+    status: "active",
+    region: "us-east-1",
+    createdOn: "2024-01-15T10:30:00Z",
+    lastUpdated: "2024-01-20T14:22:00Z",
+    description: "Resizes images uploaded to S3 bucket",
+    handler: "index.handler",
+    timeout: 30,
+    environmentVariables: {
+      BUCKET_NAME: "uploads",
+      MAX_WIDTH: "1920",
+      MAX_HEIGHT: "1080"
+    },
+    triggers: ["S3 Upload", "API Gateway"]
+  },
+  {
+    id: "func-2",
+    name: "send-welcome-email",
+    memory: "128 MB",
+    runtime: "Python 3.9",
+    status: "active",
+    region: "us-west-2",
+    createdOn: "2024-02-01T08:15:00Z",
+    lastUpdated: "2024-02-10T11:45:00Z",
+    description: "Sends welcome email to new users",
+    handler: "main.lambda_handler",
+    timeout: 15,
+    environmentVariables: {
+      SMTP_HOST: "smtp.example.com",
+      FROM_EMAIL: "noreply@example.com"
+    },
+    triggers: ["User Registration Event"]
+  },
+  {
+    id: "func-3",
+    name: "daily-report-gen",
+    memory: "512 MB",
+    runtime: "Go 1.20",
+    status: "inactive",
+    region: "eu-west-1",
+    createdOn: "2023-11-20T16:00:00Z",
+    lastUpdated: "2024-01-05T09:30:00Z",
+    description: "Generates daily analytics reports",
+    handler: "main",
+    timeout: 60,
+    environmentVariables: {
+      DB_HOST: "analytics-db.example.com",
+      REPORT_FORMAT: "PDF"
+    },
+    triggers: ["Cron Schedule (Daily 2 AM)"]
+  },
+  {
+    id: "func-4",
+    name: "payment-webhook-handler",
+    memory: "256 MB",
+    runtime: "Node.js 18",
+    status: "pending",
+    region: "us-east-1",
+    createdOn: "2024-01-25T13:45:00Z",
+    lastUpdated: "2024-01-25T13:48:00Z",
+    description: "Processes payment webhooks from Stripe",
+    handler: "webhook.handler",
+    timeout: 20,
+    environmentVariables: {
+      STRIPE_SECRET: "sk_live_***",
+      WEBHOOK_SECRET: "whsec_***"
+    },
+    triggers: ["API Gateway"]
+  },
+  {
+    id: "func-5",
+    name: "legacy-api-proxy",
+    memory: "128 MB",
+    runtime: "Python 3.8",
+    status: "failed",
+    region: "ap-south-1",
+    createdOn: "2023-09-10T07:20:00Z",
+    lastUpdated: "2024-01-18T15:10:00Z",
+    description: "Proxy for legacy API integration",
+    handler: "proxy.handler",
+    timeout: 25,
+    environmentVariables: {
+      LEGACY_API_URL: "https://legacy-api.example.com",
+      API_KEY: "***"
+    },
+    triggers: ["API Gateway"]
+  },
+  {
+    id: "func-6",
+    name: "video-transcoding",
+    memory: "1024 MB",
+    runtime: "Node.js 20",
+    status: "active",
+    region: "us-west-2",
+    createdOn: "2024-01-10T09:00:00Z",
+    lastUpdated: "2024-02-05T16:30:00Z",
+    description: "Transcodes uploaded videos to multiple formats",
+    handler: "transcode.handler",
+    timeout: 300,
+    environmentVariables: {
+      OUTPUT_FORMATS: "mp4,webm,hls",
+      QUALITY: "high"
+    },
+    triggers: ["S3 Upload"]
+  },
+  {
+    id: "func-7",
+    name: "user-notification",
+    memory: "256 MB",
+    runtime: "Python 3.11",
+    status: "active",
+    region: "us-east-1",
+    createdOn: "2024-02-15T11:20:00Z",
+    lastUpdated: "2024-02-20T09:15:00Z",
+    description: "Sends push notifications to mobile devices",
+    handler: "notify.lambda_handler",
+    timeout: 20,
+    environmentVariables: {
+      FCM_KEY: "***",
+      APNS_CERT: "***"
+    },
+    triggers: ["Event Queue", "API Gateway"]
+  },
+  {
+    id: "func-8",
+    name: "data-cleanup-job",
+    memory: "512 MB",
+    runtime: "Python 3.10",
+    status: "inactive",
+    region: "eu-west-1",
+    createdOn: "2023-12-05T14:30:00Z",
+    lastUpdated: "2024-01-10T08:00:00Z",
+    description: "Cleans up old data from database",
+    handler: "cleanup.handler",
+    timeout: 180,
+    environmentVariables: {
+      DB_CONNECTION: "postgresql://***",
+      RETENTION_DAYS: "90"
+    },
+    triggers: ["Cron Schedule (Weekly)"]
+  },
+  {
+    id: "func-9",
+    name: "api-rate-limiter",
+    memory: "128 MB",
+    runtime: "Go 1.21",
+    status: "active",
+    region: "us-east-1",
+    createdOn: "2024-01-22T10:45:00Z",
+    lastUpdated: "2024-02-12T14:20:00Z",
+    description: "Implements rate limiting for API endpoints",
+    handler: "main",
+    timeout: 10,
+    environmentVariables: {
+      REDIS_HOST: "cache.example.com",
+      RATE_LIMIT: "1000"
+    },
+    triggers: ["API Gateway"]
+  },
+  {
+    id: "func-10",
+    name: "pdf-generator",
+    memory: "512 MB",
+    runtime: "Node.js 18",
+    status: "active",
+    region: "us-west-2",
+    createdOn: "2024-02-01T13:00:00Z",
+    lastUpdated: "2024-02-18T11:30:00Z",
+    description: "Generates PDF documents from templates",
+    handler: "pdf.generate",
+    timeout: 60,
+    environmentVariables: {
+      TEMPLATE_BUCKET: "templates",
+      FONT_PATH: "/opt/fonts"
+    },
+    triggers: ["API Gateway", "Event Queue"]
+  },
+  {
+    id: "func-11",
+    name: "order-fulfillment",
+    memory: "256 MB",
+    runtime: "Python 3.9",
+    status: "active",
+    region: "us-east-1",
+    createdOn: "2024-01-18T08:30:00Z",
+    lastUpdated: "2024-02-14T16:45:00Z",
+    description: "Processes order fulfillment workflow",
+    handler: "fulfill.handler",
+    timeout: 45,
+    environmentVariables: {
+      WAREHOUSE_API: "https://warehouse.example.com",
+      SHIPPING_API: "https://shipping.example.com"
+    },
+    triggers: ["Order Created Event"]
+  },
+  {
+    id: "func-12",
+    name: "backup-s3-sync",
+    memory: "1024 MB",
+    runtime: "Go 1.20",
+    status: "pending",
+    region: "eu-west-1",
+    createdOn: "2024-02-20T07:00:00Z",
+    lastUpdated: "2024-02-20T07:05:00Z",
+    description: "Syncs backups to S3 storage",
+    handler: "main",
+    timeout: 900,
+    environmentVariables: {
+      SOURCE_BUCKET: "primary-backups",
+      DEST_BUCKET: "archive-backups"
+    },
+    triggers: ["Cron Schedule (Daily 3 AM)"]
+  },
+  {
+    id: "func-13",
+    name: "fraud-detection",
+    memory: "512 MB",
+    runtime: "Python 3.11",
+    status: "active",
+    region: "us-east-1",
+    createdOn: "2024-01-28T12:15:00Z",
+    lastUpdated: "2024-02-16T10:00:00Z",
+    description: "ML-based fraud detection for transactions",
+    handler: "detect.handler",
+    timeout: 30,
+    environmentVariables: {
+      MODEL_PATH: "/opt/ml-model",
+      THRESHOLD: "0.85"
+    },
+    triggers: ["Transaction Event"]
+  },
+  {
+    id: "func-14",
+    name: "log-aggregator",
+    memory: "256 MB",
+    runtime: "Node.js 20",
+    status: "active",
+    region: "us-west-2",
+    createdOn: "2024-02-05T15:30:00Z",
+    lastUpdated: "2024-02-19T09:45:00Z",
+    description: "Aggregates logs from multiple sources",
+    handler: "logs.aggregate",
+    timeout: 60,
+    environmentVariables: {
+      ELASTICSEARCH_URL: "https://logs.example.com",
+      INDEX_PREFIX: "app-logs"
+    },
+    triggers: ["CloudWatch Logs"]
+  },
+  {
+    id: "func-15",
+    name: "cache-warmer",
+    memory: "128 MB",
+    runtime: "Python 3.10",
+    status: "inactive",
+    region: "ap-south-1",
+    createdOn: "2023-11-15T06:00:00Z",
+    lastUpdated: "2024-01-20T11:00:00Z",
+    description: "Warms up application cache",
+    handler: "warm.handler",
+    timeout: 120,
+    environmentVariables: {
+      CACHE_ENDPOINTS: "api.example.com/cache",
+      WARMUP_URLS: "***"
+    },
+    triggers: ["Cron Schedule (Hourly)"]
+  },
+  {
+    id: "func-16",
+    name: "thumbnail-creator",
+    memory: "512 MB",
+    runtime: "Node.js 18",
+    status: "active",
+    region: "us-east-1",
+    createdOn: "2024-01-12T10:20:00Z",
+    lastUpdated: "2024-02-08T14:30:00Z",
+    description: "Creates thumbnails for uploaded images",
+    handler: "thumb.create",
+    timeout: 30,
+    environmentVariables: {
+      SIZES: "small,medium,large",
+      QUALITY: "80"
+    },
+    triggers: ["S3 Upload"]
+  },
+  {
+    id: "func-17",
+    name: "webhook-dispatcher",
+    memory: "256 MB",
+    runtime: "Go 1.21",
+    status: "active",
+    region: "us-west-2",
+    createdOn: "2024-02-10T09:00:00Z",
+    lastUpdated: "2024-02-17T13:15:00Z",
+    description: "Dispatches webhooks to registered endpoints",
+    handler: "main",
+    timeout: 20,
+    environmentVariables: {
+      MAX_RETRIES: "3",
+      TIMEOUT: "10s"
+    },
+    triggers: ["Event Queue"]
+  },
+  {
+    id: "func-18",
+    name: "seo-meta-updater",
+    memory: "128 MB",
+    runtime: "Python 3.9",
+    status: "failed",
+    region: "eu-west-1",
+    createdOn: "2024-01-05T11:30:00Z",
+    lastUpdated: "2024-02-01T08:45:00Z",
+    description: "Updates SEO metadata for pages",
+    handler: "seo.update",
+    timeout: 15,
+    environmentVariables: {
+      CMS_API: "https://cms.example.com",
+      API_TOKEN: "***"
+    },
+    triggers: ["Page Update Event"]
+  },
+  {
+    id: "func-19",
+    name: "analytics-tracker",
+    memory: "256 MB",
+    runtime: "Node.js 20",
+    status: "active",
+    region: "us-east-1",
+    createdOn: "2024-02-12T14:00:00Z",
+    lastUpdated: "2024-02-21T10:20:00Z",
+    description: "Tracks user analytics events",
+    handler: "analytics.track",
+    timeout: 10,
+    environmentVariables: {
+      ANALYTICS_DB: "analytics.example.com",
+      BATCH_SIZE: "100"
+    },
+    triggers: ["API Gateway"]
+  },
+  {
+    id: "func-20",
+    name: "invoice-generator",
+    memory: "512 MB",
+    runtime: "Python 3.11",
+    status: "active",
+    region: "us-west-2",
+    createdOn: "2024-01-20T13:45:00Z",
+    lastUpdated: "2024-02-15T09:30:00Z",
+    description: "Generates invoices for completed orders",
+    handler: "invoice.generate",
+    timeout: 45,
+    environmentVariables: {
+      TEMPLATE_ID: "invoice-v2",
+      CURRENCY: "USD"
+    },
+    triggers: ["Order Completed Event"]
+  },
+  {
+    id: "func-21",
+    name: "email-bouncer",
+    memory: "128 MB",
+    runtime: "Go 1.20",
+    status: "active",
+    region: "us-east-1",
+    createdOn: "2024-02-08T08:15:00Z",
+    lastUpdated: "2024-02-19T11:00:00Z",
+    description: "Handles email bounce notifications",
+    handler: "main",
+    timeout: 15,
+    environmentVariables: {
+      SNS_TOPIC: "email-bounces",
+      DB_TABLE: "email-status"
+    },
+    triggers: ["SNS Topic"]
+  },
+  {
+    id: "func-22",
+    name: "content-moderator",
+    memory: "256 MB",
+    runtime: "Python 3.10",
+    status: "pending",
+    region: "ap-south-1",
+    createdOn: "2024-02-18T10:30:00Z",
+    lastUpdated: "2024-02-18T10:35:00Z",
+    description: "Moderates user-generated content",
+    handler: "moderate.handler",
+    timeout: 30,
+    environmentVariables: {
+      ML_ENDPOINT: "https://ml-api.example.com",
+      CONFIDENCE_THRESHOLD: "0.9"
+    },
+    triggers: ["Content Submit Event"]
+  },
+  {
+    id: "func-23",
+    name: "database-seeder",
+    memory: "1024 MB",
+    runtime: "Node.js 18",
+    status: "inactive",
+    region: "eu-west-1",
+    createdOn: "2023-12-20T16:00:00Z",
+    lastUpdated: "2024-01-15T12:00:00Z",
+    description: "Seeds database with test data",
+    handler: "seed.handler",
+    timeout: 300,
+    environmentVariables: {
+      DB_HOST: "test-db.example.com",
+      SEED_SIZE: "large"
+    },
+    triggers: ["Manual Trigger"]
+  },
+  {
+    id: "func-24",
+    name: "api-gateway-auth",
+    memory: "128 MB",
+    runtime: "Go 1.21",
+    status: "active",
+    region: "us-east-1",
+    createdOn: "2024-01-30T09:20:00Z",
+    lastUpdated: "2024-02-20T15:45:00Z",
+    description: "Custom authorizer for API Gateway",
+    handler: "main",
+    timeout: 5,
+    environmentVariables: {
+      JWT_SECRET: "***",
+      TOKEN_EXPIRY: "3600"
+    },
+    triggers: ["API Gateway"]
+  },
+  {
+    id: "func-25",
+    name: "slack-notifier",
+    memory: "128 MB",
+    runtime: "Python 3.9",
+    status: "active",
+    region: "us-west-2",
+    createdOn: "2024-02-03T11:00:00Z",
+    lastUpdated: "2024-02-16T14:10:00Z",
+    description: "Sends notifications to Slack channels",
+    handler: "slack.notify",
+    timeout: 10,
+    environmentVariables: {
+      WEBHOOK_URL: "https://hooks.slack.com/***",
+      DEFAULT_CHANNEL: "#alerts"
+    },
+    triggers: ["Alert Event", "API Gateway"]
+  }
+]
+
+// Helper function for Functions
+export const getFunction = (id: string) => {
+  return serverlessFunctions.find(func => func.id === id)
+}

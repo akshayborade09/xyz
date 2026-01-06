@@ -368,7 +368,8 @@ export function getSectionFromPathname(pathname: string): string {
     pathname.startsWith("/network") ||
     pathname.startsWith("/networking") ||
     pathname.startsWith("/database") ||
-    pathname.startsWith("/infrastructure")
+    pathname.startsWith("/infrastructure") ||
+    pathname.startsWith("/functions")
   ) {
     return "infrastructure"
   } else if (

@@ -94,6 +94,11 @@ const navigationStructure: NavCategory[] = [
         icon: <Key className='h-5 w-5' />,
       },
       {
+        title: 'Functions',
+        href: '/compute/functions',
+        icon: <Zap className='h-5 w-5' />,
+      },
+      {
         title: 'Kubernetes Clusters',
         href: '/compute/kubernetes',
         icon: <Server className='h-5 w-5' />,

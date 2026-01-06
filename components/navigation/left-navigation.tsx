@@ -120,6 +120,10 @@ const navigationConfig = {
             href: '/compute/ssh-keys',
             label: 'SSH Keys',
           },
+          {
+            href: '/compute/functions',
+            label: 'Functions',
+          },
         ],
       },
       {
