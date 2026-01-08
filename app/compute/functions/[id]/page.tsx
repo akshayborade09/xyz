@@ -3,7 +3,7 @@
 import { useState, useRef } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { serverlessFunctions } from '@/lib/data';
-import { Edit, Trash2, Copy, Play, Maximize2, Plus, Upload } from 'lucide-react';
+import { Edit, Trash2, Copy, Play, Maximize2, Plus, Upload, Bookmark, Code } from 'lucide-react';
 import { PageLayout } from '@/components/page-layout';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -41,6 +41,8 @@ export default function ManageFunctionPage() {
   const [isDeleting, setIsDeleting] = useState(false);
   const [isAddTestEventModalOpen, setIsAddTestEventModalOpen] = useState(false);
   const [isUseTemplateModalOpen, setIsUseTemplateModalOpen] = useState(false);
+  const [isEditNameModalOpen, setIsEditNameModalOpen] = useState(false);
+  const [editedFunctionName, setEditedFunctionName] = useState('');
   const [newEventName, setNewEventName] = useState('');
   const [newEventJson, setNewEventJson] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -154,10 +156,25 @@ uvicorn==0.25.0`,
   };
 
   const handleEdit = () => {
+    setEditedFunctionName(functionData.name);
+    setIsEditNameModalOpen(true);
+  };
+
+  const handleSaveFunctionName = () => {
+    if (!editedFunctionName.trim()) {
+      toast({
+        title: 'Validation Error',
+        description: 'Please enter a function name',
+        variant: 'destructive',
+      });
+      return;
+    }
+
     toast({
-      title: 'Edit Function',
-      description: 'Function edit modal would open here',
+      title: 'Function Name Updated',
+      description: `Function name has been updated to "${editedFunctionName}".`,
     });
+    setIsEditNameModalOpen(false);
   };
 
   const handleDelete = async () => {
@@ -233,15 +250,6 @@ uvicorn==0.25.0`,
   };
 
   const handleSaveTestEvent = () => {
-    if (!newEventName.trim()) {
-      toast({
-        title: 'Validation Error',
-        description: 'Please enter an event name',
-        variant: 'destructive',
-      });
-      return;
-    }
-
     if (!newEventJson.trim()) {
       toast({
         title: 'Validation Error',
@@ -257,18 +265,17 @@ uvicorn==0.25.0`,
       
       const newEvent = {
         id: Date.now().toString(),
-        name: newEventName,
+        name: `Test Event ${testEvents.length + 1}`,
         config: newEventJson,
       };
 
       setTestEvents(prev => [...prev, newEvent]);
       setIsAddTestEventModalOpen(false);
-      setNewEventName('');
       setNewEventJson('');
 
       toast({
         title: 'Test Event Added',
-        description: `Test event "${newEventName}" has been added successfully.`,
+        description: `Test event has been added successfully.`,
       });
     } catch (error) {
       toast({
@@ -466,7 +473,7 @@ uvicorn==0.25.0`,
               </div>
             </div>
 
-            {/* Row 2: Runtime and Invocation Count */}
+            {/* Row 2: Runtime and Last Modified Time */}
             <div className='grid grid-cols-2 gap-6'>
               <div className='space-y-1'>
                 <label
@@ -484,41 +491,15 @@ uvicorn==0.25.0`,
                   className='text-sm font-normal text-gray-700'
                   style={{ fontSize: '13px' }}
                 >
-                  Invocation Count:
-                </label>
-                <div className='font-medium' style={{ fontSize: '14px' }}>
-                  0
-                </div>
-              </div>
-            </div>
-
-            {/* Row 3: Last Modified Time and Ephemeral Storage */}
-            <div className='grid grid-cols-2 gap-6'>
-              <div className='space-y-1'>
-                <label
-                  className='text-sm font-normal text-gray-700'
-                  style={{ fontSize: '13px' }}
-                >
                   Last Modified Time:
                 </label>
                 <div className='font-medium' style={{ fontSize: '14px' }}>
                   {formatDate(functionData.lastUpdated)}
                 </div>
               </div>
-              <div className='space-y-1'>
-                <label
-                  className='text-sm font-normal text-gray-700'
-                  style={{ fontSize: '13px' }}
-                >
-                  Ephemeral Storage:
-                </label>
-                <div className='font-medium' style={{ fontSize: '14px' }}>
-                  {ephemeralStorageGB} GB
-                </div>
-              </div>
             </div>
 
-            {/* Row 4: Execution Timeout and Memory */}
+            {/* Row 3: Execution Timeout and Memory */}
             <div className='grid grid-cols-2 gap-6'>
               <div className='space-y-1'>
                 <label
@@ -540,6 +521,21 @@ uvicorn==0.25.0`,
                 </label>
                 <div className='font-medium' style={{ fontSize: '14px' }}>
                   {functionData.memory}
+                </div>
+              </div>
+            </div>
+
+            {/* Row 4: Ephemeral Storage */}
+            <div className='grid grid-cols-2 gap-6'>
+              <div className='space-y-1'>
+                <label
+                  className='text-sm font-normal text-gray-700'
+                  style={{ fontSize: '13px' }}
+                >
+                  Ephemeral Storage:
+                </label>
+                <div className='font-medium' style={{ fontSize: '14px' }}>
+                  {ephemeralStorageGB} GB
                 </div>
               </div>
             </div>
@@ -653,12 +649,30 @@ uvicorn==0.25.0`,
                       <Button
                         variant='outline'
                         size='default'
-                        onClick={handleRunFunction}
-                        disabled={isRunning}
-                        className='bg-krutrim-green text-white hover:bg-krutrim-green/90 hover:text-white border-krutrim-green'
+                        onClick={() => {
+                          toast({
+                            title: 'Changes Saved',
+                            description: 'Your changes have been saved successfully.',
+                          });
+                        }}
+                        className='bg-white text-gray-900 hover:bg-gray-50 border-gray-300'
                       >
-                        <Play className='h-4 w-4 mr-2' />
-                        {isRunning ? 'Running...' : 'Run'}
+                        <Bookmark className='h-4 w-4 mr-2' />
+                        Save
+                      </Button>
+                      <Button
+                        variant='outline'
+                        size='default'
+                        onClick={() => {
+                          toast({
+                            title: 'Build Started',
+                            description: 'Your function is being built.',
+                          });
+                        }}
+                        className='bg-white text-gray-900 hover:bg-gray-50 border-gray-300'
+                      >
+                        <Code className='h-4 w-4 mr-2' />
+                        Build
                       </Button>
                       <Button
                         variant='default'
@@ -666,6 +680,7 @@ uvicorn==0.25.0`,
                         onClick={handleDeploy}
                         className='bg-black text-white hover:bg-black/90'
                       >
+                        <Play className='h-4 w-4 mr-2' />
                         Deploy
                       </Button>
                     </div>
@@ -802,7 +817,7 @@ uvicorn==0.25.0`,
                         tabs={[
                           { id: 'test-results', label: 'Test Results' },
                           { id: 'logs', label: 'Logs' },
-                          { id: 'test-events', label: 'Test Events' },
+                          // { id: 'test-events', label: 'Test Events' },
                         ]}
                         activeTab={testOutputTab}
                         onTabChange={setTestOutputTab}
@@ -827,7 +842,7 @@ uvicorn==0.25.0`,
                       </div>
                     )}
 
-                    {testOutputTab === 'test-events' && (
+                    {/* {testOutputTab === 'test-events' && (
                       <div className='p-6 bg-white min-h-[200px]'>
                           <div className='flex items-center justify-between mb-6'>
                             <h3 className='text-lg font-semibold'>
@@ -891,7 +906,7 @@ uvicorn==0.25.0`,
                             </div>
                           )}
                       </div>
-                    )}
+                    )} */}
                   </div>
                 </div>
               )}
@@ -1595,20 +1610,6 @@ uvicorn==0.25.0`,
             <DialogTitle className='text-2xl'>Add Test Event</DialogTitle>
           </DialogHeader>
           <div className='space-y-6 py-4'>
-            {/* Event Name */}
-            <div className='space-y-2'>
-              <Label htmlFor='event-name' className='text-base font-semibold'>
-                Event Name
-              </Label>
-              <Input
-                id='event-name'
-                placeholder='e.g., API Gateway Event'
-                value={newEventName}
-                onChange={e => setNewEventName(e.target.value)}
-                className='w-full'
-              />
-            </div>
-
             {/* Event JSON */}
             <div className='space-x-4'>
               <Label className='text-base font-semibold'>Event JSON</Label>
@@ -1671,6 +1672,43 @@ uvicorn==0.25.0`,
             </Button>
             <Button onClick={handleSaveTestEvent} className='bg-gray-200 text-gray-800 hover:bg-gray-300'>
               Save Event
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Edit Function Name Modal */}
+      <Dialog open={isEditNameModalOpen} onOpenChange={setIsEditNameModalOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Edit Function Name</DialogTitle>
+            <DialogDescription>
+              Update the name of your function.
+            </DialogDescription>
+          </DialogHeader>
+          <div className='space-y-4 py-4'>
+            <div className='space-y-2'>
+              <Label htmlFor='function-name'>Function Name</Label>
+              <Input
+                id='function-name'
+                value={editedFunctionName}
+                onChange={e => setEditedFunctionName(e.target.value)}
+                placeholder='Enter function name'
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button
+              variant='outline'
+              onClick={() => setIsEditNameModalOpen(false)}
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={handleSaveFunctionName}
+              className='bg-black text-white hover:bg-black/90'
+            >
+              Save
             </Button>
           </DialogFooter>
         </DialogContent>
