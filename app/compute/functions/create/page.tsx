@@ -5,7 +5,6 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Checkbox } from '@/components/ui/checkbox';
 import {
   Select,
   SelectContent,
@@ -14,7 +13,6 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { VercelTabs } from '@/components/ui/vercel-tabs';
 import {
   Tooltip,
@@ -23,19 +21,16 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { useToast } from '@/hooks/use-toast';
-import { vpcs } from '@/lib/data';
-import { HelpCircle, Play, Maximize2, Plus, Trash2, AlertTriangle } from 'lucide-react';
+import { HelpCircle, Maximize2, Plus, Trash2, AlertTriangle } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
 import { useRouter } from 'next/navigation';
-import { useState, useRef, useEffect } from 'react';
-import { Check, ChevronDown, Search } from 'lucide-react';
+import { useState } from 'react';
 
 interface FunctionFormData {
   region: string;
@@ -52,14 +47,7 @@ export default function CreateFunctionPage() {
   const router = useRouter();
   const { toast } = useToast();
   const [formTouched, setFormTouched] = useState(false);
-  const [vpcSelectorOpen, setVpcSelectorOpen] = useState(false);
-  const [vpcSearchTerm, setVpcSearchTerm] = useState('');
-  const vpcSelectorRef = useRef<HTMLDivElement>(null);
   const [activeTab, setActiveTab] = useState('func-py');
-  const [outputTab, setOutputTab] = useState('output');
-  const [isRunning, setIsRunning] = useState(false);
-  const [output, setOutput] = useState('');
-  const [logs, setLogs] = useState('');
   const [fontSize, setFontSize] = useState('14px');
   const [isUseTemplateModalOpen, setIsUseTemplateModalOpen] = useState(false);
 
@@ -67,7 +55,7 @@ export default function CreateFunctionPage() {
     region: '',
     runtime: '',
     functionName: '',
-    memory: '128 MB',
+    memory: '256 MB',
     timeout: 15,
     vpcs: [],
     handler: '',
@@ -138,22 +126,6 @@ uvicorn==0.25.0`,
     setEnvironmentVariables(prev => prev.filter(envVar => envVar.id !== id));
   };
 
-  const handleRunFunction = () => {
-    setIsRunning(true);
-    setOutput('');
-    setLogs('');
-
-    // Simulate function execution
-    setTimeout(() => {
-      setOutput('Run the function to see output here.');
-      setLogs(`[2024-02-22 10:30:15] Function started
-[2024-02-22 10:30:15] Loading dependencies...
-[2024-02-22 10:30:16] FastAPI application initialized
-[2024-02-22 10:30:16] Function ready`);
-      setIsRunning(false);
-    }, 1500);
-  };
-
   const handleSubmit = async () => {
     setFormTouched(true);
 
@@ -162,8 +134,7 @@ uvicorn==0.25.0`,
       !formData.region ||
       !formData.runtime ||
       !formData.functionName ||
-      !formData.memory ||
-      formData.vpcs.length === 0
+      !formData.memory
     ) {
       toast({
         title: 'Validation Error',
@@ -182,7 +153,8 @@ uvicorn==0.25.0`,
         description: `Function "${formData.functionName}" has been created successfully.`,
       });
 
-      router.push('/compute/functions');
+      // Redirect to manage function page (using existing function for prototype)
+      router.push('/compute/functions/func-1');
     } catch (error) {
       toast({
         title: 'Error',
@@ -196,23 +168,6 @@ uvicorn==0.25.0`,
     router.push('/compute/functions');
   };
 
-  // Close VPC selector when clicking outside
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (
-        vpcSelectorRef.current &&
-        !vpcSelectorRef.current.contains(event.target as Node)
-      ) {
-        setVpcSelectorOpen(false);
-      }
-    }
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
-
   const regions = [
     { value: 'bangalore', label: 'Bangalore' },
     { value: 'hyderabad', label: 'Hyderabad' },
@@ -225,11 +180,11 @@ uvicorn==0.25.0`,
   ];
 
   const memoryOptions = [
-    { value: '128 MB', label: '128 MB' },
     { value: '256 MB', label: '256 MB' },
     { value: '512 MB', label: '512 MB' },
     { value: '1024 MB', label: '1024 MB' },
     { value: '2048 MB', label: '2048 MB' },
+    { value: '4096 MB', label: '4096 MB' },
   ];
 
   const fontSizes = [
@@ -238,24 +193,6 @@ uvicorn==0.25.0`,
     { value: '16px', label: '16' },
     { value: '18px', label: '18' },
   ];
-
-  const filteredVPCs = vpcs.filter(
-    vpc =>
-      vpc.name.toLowerCase().includes(vpcSearchTerm.toLowerCase()) ||
-      vpc.id.toLowerCase().includes(vpcSearchTerm.toLowerCase())
-  );
-
-  const selectedVPCs = vpcs.filter(vpc => formData.vpcs.includes(vpc.id));
-
-  const toggleVPC = (vpcId: string) => {
-    setFormData(prev => ({
-      ...prev,
-      vpcs: prev.vpcs.includes(vpcId)
-        ? prev.vpcs.filter(id => id !== vpcId)
-        : [...prev.vpcs, vpcId]
-    }));
-    setFormTouched(true);
-  };
 
   return (
     <>
@@ -421,91 +358,6 @@ uvicorn==0.25.0`,
                     </p>
                   </div>
                 </div>
-
-                {/* VPC */}
-                <div className='space-y-2'>
-                  <div className='flex items-center gap-2'>
-                    <Label htmlFor='vpc'>
-                      VPC <span className='text-red-500'>*</span>
-                    </Label>
-                    <TooltipProvider>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <HelpCircle className='h-4 w-4 text-muted-foreground hover:text-foreground cursor-help' />
-                        </TooltipTrigger>
-                        <TooltipContent side='right' className='max-w-sm'>
-                          <p className='text-sm'>
-                            Select a VPC to provide your function access to resources
-                            within your virtual private cloud
-                          </p>
-                        </TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
-                  </div>
-                  <div className='relative' ref={vpcSelectorRef}>
-                    <button
-                      type='button'
-                      onClick={() => setVpcSelectorOpen(!vpcSelectorOpen)}
-                      className={`w-full flex items-center justify-between px-3 py-2 border border-input rounded-md text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 ${
-                        formTouched && formData.vpcs.length === 0
-                          ? 'border-red-300 bg-red-50'
-                          : 'bg-background'
-                      }`}
-                    >
-                      <span
-                        className={
-                          selectedVPCs.length > 0 ? 'text-foreground' : '!text-[#64748b]'
-                        }
-                      >
-                        {selectedVPCs.length > 0
-                          ? `${selectedVPCs.length} VPC${selectedVPCs.length > 1 ? 's' : ''} selected`
-                          : 'Select VPCs'}
-                      </span>
-                      <ChevronDown className='h-4 w-4 opacity-50' />
-                    </button>
-                    {vpcSelectorOpen && (
-                      <div className='absolute z-50 w-full mt-1 bg-popover border border-border rounded-md shadow-md'>
-                        <div className='p-2 border-b'>
-                          <div className='relative'>
-                            <Search className='absolute left-2 top-2.5 h-4 w-4 text-muted-foreground' />
-                            <Input
-                              placeholder='Search VPCs...'
-                              value={vpcSearchTerm}
-                              onChange={e => setVpcSearchTerm(e.target.value)}
-                              className='pl-8'
-                            />
-                          </div>
-                        </div>
-                        <div className='p-1 max-h-64 overflow-y-auto'>
-                          {filteredVPCs.map(vpc => (
-                            <div
-                              key={vpc.id}
-                              className='flex items-center gap-2 px-2 py-2 text-sm hover:bg-accent rounded-sm cursor-pointer'
-                              onClick={() => toggleVPC(vpc.id)}
-                            >
-                              <Checkbox
-                                checked={formData.vpcs.includes(vpc.id)}
-                                onCheckedChange={() => toggleVPC(vpc.id)}
-                                onClick={(e) => e.stopPropagation()}
-                              />
-                              <div className='flex flex-col items-start flex-1'>
-                                <span className='font-medium'>{vpc.name}</span>
-                                <span className='text-xs text-muted-foreground'>
-                                  {vpc.id} • {vpc.region}
-                                </span>
-                              </div>
-                            </div>
-                          ))}
-                          {filteredVPCs.length === 0 && vpcSearchTerm && (
-                            <div className='px-2 py-2 text-sm text-muted-foreground'>
-                              No VPCs found matching &quot;{vpcSearchTerm}&quot;
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </div>
               </div>
             </div>
           </CardContent>
@@ -521,8 +373,7 @@ uvicorn==0.25.0`,
                 <span className='font-semibold text-foreground'>
                   Function Configuration
                 </span>{' '}
-                tab after creation. You can add environment variables, attach a VPC
-                or enable code signing.
+                tab after creation.
               </p>
             </div>
 
@@ -549,16 +400,6 @@ uvicorn==0.25.0`,
                     className='bg-black text-white hover:bg-black/90 hover:text-white border-black'
                   >
                     Use Template
-                  </Button>
-                  <Button
-                    variant='outline'
-                    size='sm'
-                    onClick={handleRunFunction}
-                    disabled={isRunning}
-                    className='bg-krutrim-green text-white hover:bg-krutrim-green/90 hover:text-white border-krutrim-green'
-                  >
-                    <Play className='h-3 w-3 mr-1' />
-                    {isRunning ? 'Running...' : 'Run'}
                   </Button>
                   <Select value={fontSize} onValueChange={setFontSize}>
                     <SelectTrigger className='w-24 h-9 text-xs rounded-full'>
@@ -662,39 +503,6 @@ uvicorn==0.25.0`,
                 </div>
               )}
             </div>
-          </CardContent>
-        </Card>
-
-        {/* Section 3: Terminal Output and Logs */}
-        <Card>
-          <CardContent className='p-0'>
-            <div className='px-2 pt-4'>
-              <VercelTabs
-                tabs={[
-                  { id: 'output', label: 'Output' },
-                  { id: 'logs', label: 'Logs' },
-                ]}
-                activeTab={outputTab}
-                onTabChange={setOutputTab}
-                size='md'
-              />
-            </div>
-
-            {outputTab === 'output' && (
-              <div className='p-6'>
-                <p className='text-sm text-muted-foreground font-mono'>
-                  {output || 'Run the function to see output here.'}
-                </p>
-              </div>
-            )}
-
-            {outputTab === 'logs' && (
-              <div className='p-6'>
-                <pre className='text-sm text-muted-foreground font-mono whitespace-pre-wrap'>
-                  {logs || 'No logs available yet. Run the function to see logs.'}
-                </pre>
-              </div>
-            )}
           </CardContent>
         </Card>
 
